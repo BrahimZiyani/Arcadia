@@ -1,0 +1,108 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block body %}
+    <div class="container">
+
+
+        <!-- Hero Section -->
+        <div class="jumbotron text-center bg-dark text-white mt-4">
+            <h1 class="display-4">Bienvenue au Zoo Arcadia</h1>
+            <p class="lead">Découvrez la beauté sauvage de la forêt de biodiversité du Zoo Arcadia. Plongez dans un univers de merveilles, explorez nos habitats et rencontrez les animaux fascinants que nous abritons.</p>
+            <a class="btn btn-primary btn-lg" href="#" role="button">Explorez !</a>
+        </div>
+
+        <!-- Animals Section -->
+        <div class="row text-center">
+            <div class="col-3">
+                <img src="https://via.placeholder.com/100" alt="Singes" class="rounded-circle">
+                <h5>Singes</h5>
+            </div>
+            <div class="col-3">
+                <img src="https://via.placeholder.com/100" alt="Paresseux" class="rounded-circle">
+                <h5>Paresseux</h5>
+            </div>
+            <div class="col-3">
+                <img src="https://via.placeholder.com/100" alt="Perroquets" class="rounded-circle">
+                <h5>Perroquets</h5>
+            </div>
+            <div class="col-3">
+                <img src="https://via.placeholder.com/100" alt="Aras" class="rounded-circle">
+                <h5>Aras</h5>
+            </div>
+        </div>
+
+        <!-- Visitors' Reviews Section -->
+        <div class="mt-5">
+            <h2 class="text-center">Avis des visiteurs</h2>
+            <p class="text-center">Retour en direct de nos visiteurs !</p>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Emily</h5>
+                            <p class="card-text">J'ai adoré ma visite au Zoo Arcadia. Les animaux étaient bien soignés.</p>
+                            <p class="card-text"><small class="text-muted">★★★★★</small></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Jack</h5>
+                            <p class="card-text">Le zoo est un endroit idéal pour la famille. Mes enfants se sont éclatés !</p>
+                            <p class="card-text"><small class="text-muted">★★★★☆</small></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Sophia</h5>
+                            <p class="card-text">Impressionnée par les efforts de conservation au Zoo Arcadia !</p>
+                            <p class="card-text"><small class="text-muted">★★★★★</small></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Newsletter Section -->
+        <div class="mt-5 text-center">
+            <h2>Inscrivez-vous à notre newsletter</h2>
+            <p>Pour ne rien rater des actualités du Zoo !</p>
+            <form class="form-inline justify-content-center">
+                <div class="form-group mb-2">
+                    <label for="email" class="sr-only">Email</label>
+                    <input type="email" class="form-control" id="email" placeholder="Entrez votre email">
+                </div>
+                <div class="form-group mx-sm-3 mb-2">
+                    <label for="name" class="sr-only">Nom</label>
+                    <input type="text" class="form-control" id="name" placeholder="Entrez votre nom">
+                </div>
+                <button type="submit" class="btn btn-primary mb-2">Inscription</button>
+            </form>
+        </div>
+
+        <!-- Footer -->
+        <footer class="mt-5 text-center">
+            <div class="row">
+                <div class="col">
+                    <p>Nous contacter</p>
+                </div>
+                <div class="col">
+                    <p>Conditions d'utilisation</p>
+                </div>
+                <div class="col">
+                    <p>Politique de confidentialité</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <p>&copy; 2024 Arcadia Zoo</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+{% endblock %}

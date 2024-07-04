@@ -1,0 +1,133 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Services{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <!-- Header Section -->
+        <div class="text-center mb-4">
+            <h1>Nos services</h1>
+            <p>Voici ce que Arcadia propose</p>
+        </div>
+
+        <!-- Services Section -->
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card mb-4 shadow-sm">
+                    <img src="https://via.placeholder.com/300x200" class="card-img-top" alt="Loups">
+                    <div class="card-body">
+                        <span class="badge badge-primary">Expérience Interactive</span>
+                        <h5 class="card-title mt-2">Loups</h5>
+                        <p class="card-text">Discussions sur la Conservation</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card mb-4 shadow-sm">
+                    <img src="https://via.placeholder.com/300x200" class="card-img-top" alt="Perroquets">
+                    <div class="card-body">
+                        <span class="badge badge-secondary">Pour Toute la Famille</span>
+                        <h5 class="card-title mt-2">Perroquets</h5>
+                        <p class="card-text">Interactions Supervisées</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card mb-4 shadow-sm">
+                    <img src="https://via.placeholder.com/300x200" class="card-img-top" alt="Singes Capucins">
+                    <div class="card-body">
+                        <span class="badge badge-primary">Divertissement</span>
+                        <h5 class="card-title mt-2">Singes Capucins</h5>
+                        <p class="card-text">Enrichissement Alimentaire</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Additional Services Section -->
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Nourrir nos animaux</h5>
+                        <p class="card-text">Tentez votre chance pour nourrir certains animaux !</p>
+                        <span class="badge badge-info">Interactivité</span>
+                        <span class="badge badge-warning">Éducation</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Discussions avec nos soigneurs</h5>
+                        <p class="card-text">Écoutez nos soigneurs experts partager des faits fascinants sur les animaux.</p>
+                        <span class="badge badge-success">Chef Soigneur</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Photo du Zoo</h5>
+                        <p class="card-text">Faites vous guider dans notre Zoo et prenez vos meilleures photos !</p>
+                        <span class="badge badge-primary">Photographie</span>
+                        <span class="badge badge-secondary">Aventure</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Leave a Review Section -->
+        <div class="row mt-5">
+            <div class="col-md-6">
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Laissez un avis !</h5>
+                        <p class="card-text">Il sera visible sur la page d'accueil !</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="name">Nom</label>
+                                <input type="text" class="form-control" id="name" placeholder="Entrez votre nom">
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" class="form-control" id="email" placeholder="Entrez votre email">
+                            </div>
+                            <div class="form-group">
+                                <label for="message">Avis</label>
+                                <textarea class="form-control" id="message" rows="3" placeholder="Écrivez votre message"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Envoyer</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Section -->
+        <footer class="mt-5 text-center">
+            <div class="row">
+                <div class="col">
+                    <p>Nous contacter</p>
+                </div>
+                <div class="col">
+                    <p>Conditions d'utilisation</p>
+                </div>
+                <div class="col">
+                    <p>Politique de confidentialité</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <p>&copy; 2024 Arcadia Zoo</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+{% endblock %}
