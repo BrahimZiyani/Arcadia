@@ -15,30 +15,31 @@
 <body>
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#">Arcadia</a>
+    <a class="navbar-brand" href="{{ path('app_home') }}">Arcadia</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ml-auto">
             <li class="nav-item active">
-                <a class="nav-link" href="{{ path("app_habitats") }}">Accueil <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="{{ path('app_home') }}">Accueil <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ path("app_habitats") }}">Nos Habitats</a>
+                <a class="nav-link" href="{{ path('app_habitats') }}">Nos Habitats</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ path("app_services") }}">Nos Services</a>
+                <a class="nav-link" href="{{ path('app_services') }}">Nos Services</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#">Contact</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link btn btn-dark" href="#">Connexion Staff</a>
+                <a class="nav-link btn btn-warning text-white" href="/">Connexion Staff</a>
             </li>
         </ul>
     </div>
 </nav>
+
 
 <div class="container mt-4">
     {% block body %}{% endblock %}
