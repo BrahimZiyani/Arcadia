@@ -9,27 +9,32 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 
     {% block stylesheets %}
+            {{ encore_entry_link_tags('app') }}
     {% endblock %}
 </head>
 <body>
+<!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#">Zoo Arcadia</a>
+    <a class="navbar-brand" href="#">Arcadia</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ml-auto">
             <li class="nav-item active">
-                <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="{{ path("app_habitats") }}">Accueil <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Animals</a>
+                <a class="nav-link" href="{{ path("app_habitats") }}">Nos Habitats</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Visit Us</a>
+                <a class="nav-link" href="{{ path("app_services") }}">Nos Services</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#">Contact</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link btn btn-dark" href="#">Connexion Staff</a>
             </li>
         </ul>
     </div>
@@ -45,6 +50,7 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 {% block javascripts %}
+            {{ encore_entry_script_tags('app') }}
     {% block importmap %}{{ importmap('app') }}{% endblock %}
 {% endblock %}
 </body>
