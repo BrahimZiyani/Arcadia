@@ -1,0 +1,102 @@
+{# templates/habitats/voliere_tropicale.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Volière Tropicale{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1 class="text-center mb-4">Volière Tropicale</h1>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <img src="{{ asset('build/images/voliere_tropicale.jpg') }}" class="img-fluid mb-4" alt="Volière Tropicale">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12 mb-4">
+                <h2>Les Animaux</h2>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Perroquet -->
+            <div class="col-lg-4 mb-4">
+                <div class="card">
+                    <img src="{{ asset('build/images/Perroquets/Perroquet.jpg') }}" class="card-img-top" alt="Perroquet" style="height: 200px; width: 100%; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">Perroquet</h5>
+                        <p class="card-text">Espèce: Ara</p>
+                        <p class="card-text">État: En bonne santé</p>
+                        <p class="card-text">Nourriture: Fruits, Graines</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Toucan -->
+            <div class="col-lg-4 mb-4">
+                <div class="card">
+                    <img src="{{ asset('build/images/Toucan/Toucan.jpg') }}" class="card-img-top" alt="Toucan" style="height: 200px; width: 100%; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">Toucan</h5>
+                        <p class="card-text">Espèce: Ramphastidae</p>
+                        <p class="card-text">État: En bonne santé</p>
+                        <p class="card-text">Nourriture: Fruits, Insectes</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Colibri -->
+            <div class="col-lg-4 mb-4">
+                <div class="card">
+                    <img src="{{ asset('build/images/Colibri/Colibri.jpg') }}" class="card-img-top" alt="Colibri" style="height: 200px; width: 100%; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">Colibri</h5>
+                        <p class="card-text">Espèce: Trochilidae</p>
+                        <p class="card-text">État: En bonne santé</p>
+                        <p class="card-text">Nourriture: Nectar, Petits Insectes</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Perroquet Eclectus -->
+            <div class="col-lg-4 mb-4">
+                <div class="card">
+                    <img src="{{ asset('build/images/Perroquets/PerroquetEcletus.jpg') }}" class="card-img-top" alt="Perroquet Eclectus" style="height: 200px; width: 100%; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">Perroquet Eclectus</h5>
+                        <p class="card-text">Espèce: Eclectus roratus</p>
+                        <p class="card-text">État: En bonne santé</p>
+                        <p class="card-text">Nourriture: Fruits, Noix, Graines</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kakapo -->
+            <div class="col-lg-4 mb-4">
+                <div class="card">
+                    <img src="{{ asset('build/images/Kakapo/Kakapo.jpg') }}" class="card-img-top" alt="Kakapo" style="height: 200px; width: 100%; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">Kakapo</h5>
+                        <p class="card-text">Espèce: Strigops habroptilus</p>
+                        <p class="card-text">État: En bonne santé</p>
+                        <p class="card-text">Nourriture: Fruits, Graines, Plantes</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Araçari -->
+            <div class="col-lg-4 mb-4">
+                <div class="card">
+                    <img src="{{ asset('build/images/Araçari/Araçari.jpg') }}" class="card-img-top" alt="Araçari" style="height: 200px; width: 100%; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">Araçari</h5>
+                        <p class="card-text">Espèce: Pteroglossus</p>
+                        <p class="card-text">État: En bonne santé</p>
+                        <p class="card-text">Nourriture: Fruits, Insectes</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

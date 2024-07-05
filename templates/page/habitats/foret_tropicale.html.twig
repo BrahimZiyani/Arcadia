@@ -1,0 +1,48 @@
+{# templates/habitats/foret_tropicale.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Forêt Tropicale{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1 class="text-center mb-4">Forêt Tropicale</h1>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <img src="{{ asset('build/images/foret_tropicale.jpg') }}" class="img-fluid mb-4" alt="Forêt Tropicale">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12 mb-4">
+                <h2>Les Animaux</h2>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-4 mb-4">
+                <div class="card">
+                    <img src="{{ asset('build/images/singe.jpg') }}" class="card-img-top" alt="Singe Capucin">
+                    <div class="card-body">
+                        <h5 class="card-title">Singe Capucin</h5>
+                        <p class="card-text">Espèce: Cebinae</p>
+                        <p class="card-text">État: En bonne santé</p>
+                        <p class="card-text">Nourriture: Fruits, Insectes</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 mb-4">
+                <div class="card">
+                    <img src="{{ asset('build/images/paresseux.jpg') }}" class="card-img-top" alt="Paresseux">
+                    <div class="card-body">
+                        <h5 class="card-title">Paresseux</h5>
+                        <p class="card-text">Espèce: Bradypodidae</p>
+                        <p class="card-text">État: En bonne santé</p>
+                        <p class="card-text">Nourriture: Feuilles, Fruits</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Répétez les blocs suivants pour chaque animal -->
+        </div>
+    </div>
+{% endblock %}

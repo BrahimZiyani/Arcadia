@@ -1,0 +1,59 @@
+{# templates/habitats/enclos_rehabilitation.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Enclos de Réhabilitation{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1 class="text-center mb-4">Enclos de Réhabilitation</h1>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <img src="{{ asset('build/images/enclos_rehabilitation.jpg') }}" class="img-fluid mb-4" alt="Enclos de Réhabilitation">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12 mb-4">
+                <h2>Les Animaux</h2>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-4 mb-4">
+                <div class="card">
+                    <img src="{{ asset('build/images/loup.jpg') }}" class="card-img-top" alt="Loup">
+                    <div class="card-body">
+                        <h5 class="card-title">Loup</h5>
+                        <p class="card-text">Espèce: Canis lupus</p>
+                        <p class="card-text">État: En bonne santé</p>
+                        <p class="card-text">Nourriture: Viande</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 mb-4">
+                <div class="card">
+                    <img src="{{ asset('build/images/lynx.jpg') }}" class="card-img-top" alt="Lynx">
+                    <div class="card-body">
+                        <h5 class="card-title">Lynx</h5>
+                        <p class="card-text">Espèce: Lynx lynx</p>
+                        <p class="card-text">État: En bonne santé</p>
+                        <p class="card-text">Nourriture: Viande</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 mb-4">
+                <div class="card">
+                    <img src="{{ asset('build/images/ours.jpg') }}" class="card-img-top" alt="Ours">
+                    <div class="card-body">
+                        <h5 class="card-title">Ours</h5>
+                        <p class="card-text">Espèce: Ursidae</p>
+                        <p class="card-text">État: En bonne santé</p>
+                        <p class="card-text">Nourriture: Poisson, Baies</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Répétez les blocs suivants pour chaque animal -->
+        </div>
+    </div>
+{% endblock %}
