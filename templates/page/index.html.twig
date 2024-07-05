@@ -11,7 +11,7 @@
             <h1 class="display-4 text-white">Bienvenue au Zoo Arcadia</h1>
             <p class="lead text-white">Découvrez la beauté sauvage de la forêt de biodiversité du Zoo Arcadia. Plongez dans un univers de merveilles, explorez nos habitats et rencontrez les animaux fascinants que nous abritons.</p>
             <button type="button" class="btn btn-warning">
-                <a href="/">Explorez !</a>
+                <a href="{{ path('app_habitats') }}">Explorez !</a>
             </button>
         </div>
 
@@ -87,25 +87,5 @@
                 <button type="submit" class="btn btn-primary mb-2">Inscription</button>
             </form>
         </div>
-
-        <!-- Footer -->
-        <footer class="mt-5 text-center">
-            <div class="row">
-                <div class="col">
-                    <p>Nous contacter</p>
-                </div>
-                <div class="col">
-                    <p>Conditions d'utilisation</p>
-                </div>
-                <div class="col">
-                    <p>Politique de confidentialité</p>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col">
-                    <p>&copy; 2024 Arcadia Zoo</p>
-                </div>
-            </div>
-        </footer>
     </div>
 {% endblock %}
