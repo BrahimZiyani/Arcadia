@@ -1,15 +1,17 @@
 {# templates/habitats/enclos_rehabilitation.html.twig #}
 {% extends 'base.html.twig' %}
 
-{% block title %}Enclos de Réhabilitation{% endblock %}
+{% block title %}Forêt Tropicale{% endblock %}
 
 {% block body %}
     <div class="container mt-4">
-        <h1 class="text-center mb-4">Enclos de Réhabilitation</h1>
-
-        <div class="row">
-            <div class="col-lg-12">
-                <img src="{{ asset('build/images/enclos_rehabilitation.jpg') }}" class="img-fluid mb-4" alt="Enclos de Réhabilitation">
+        <div class="hero-banner d-flex align-items-center justify-content-between p-5 bg-light" style="height: 400px;">
+            <div class="hero-text">
+                <h1 class="display-4">Enclos de Réhabilitation</h1>
+                <p class="lead">Découvrez nos efforts pour réhabiliter les animaux et leur offrir une seconde chance.</p>
+            </div>
+            <div class="hero-image">
+                <img src="{{ asset('build/images/Enclos de réhabilitation/enclos_rehabilitation.jpg') }}" class="img-fluid" alt="Enclos de Réhabilitation" style="height: 300px; object-fit: cover;">
             </div>
         </div>
 
@@ -20,10 +22,11 @@
         </div>
 
         <div class="row">
+            <!-- Loup -->
             <div class="col-lg-4 mb-4">
-                <div class="card">
-                    <img src="{{ asset('build/images/loup.jpg') }}" class="card-img-top" alt="Loup">
-                    <div class="card-body">
+                <div class="card h-100">
+                    <img src="{{ asset('build/images/Enclos de réhabilitation/Loups/Loup.jpg') }}" class="card-img-top" alt="Loup" style="height: 500px; width: 100%; object-fit: cover;">
+                    <div class="card-body d-flex flex-column">
                         <h5 class="card-title">Loup</h5>
                         <p class="card-text">Espèce: Canis lupus</p>
                         <p class="card-text">État: En bonne santé</p>
@@ -31,29 +34,32 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Lynx -->
             <div class="col-lg-4 mb-4">
-                <div class="card">
-                    <img src="{{ asset('build/images/lynx.jpg') }}" class="card-img-top" alt="Lynx">
-                    <div class="card-body">
+                <div class="card h-100">
+                    <img src="{{ asset('build/images/Enclos de réhabilitation/Lynx/Lynx.jpg') }}" class="card-img-top" alt="Lynx" style="height: 500px; width: 100%; object-fit: cover;">
+                    <div class="card-body d-flex flex-column">
                         <h5 class="card-title">Lynx</h5>
                         <p class="card-text">Espèce: Lynx lynx</p>
                         <p class="card-text">État: En bonne santé</p>
-                        <p class="card-text">Nourriture: Viande</p>
+                        <p class="card-text">Nourriture: Viande, petits animaux</p>
                     </div>
                 </div>
             </div>
+
+            <!-- Ours -->
             <div class="col-lg-4 mb-4">
-                <div class="card">
-                    <img src="{{ asset('build/images/ours.jpg') }}" class="card-img-top" alt="Ours">
-                    <div class="card-body">
+                <div class="card h-100">
+                    <img src="{{ asset('build/images/Enclos de réhabilitation/Ours/Ours.jpg') }}" class="card-img-top" alt="Ours" style="height: 500px; width: 100%; object-fit: cover;">
+                    <div class="card-body d-flex flex-column">
                         <h5 class="card-title">Ours</h5>
-                        <p class="card-text">Espèce: Ursidae</p>
+                        <p class="card-text">Espèce: Ursus arctos</p>
                         <p class="card-text">État: En bonne santé</p>
-                        <p class="card-text">Nourriture: Poisson, Baies</p>
+                        <p class="card-text">Nourriture: Viande, poissons, baies</p>
                     </div>
                 </div>
             </div>
-            <!-- Répétez les blocs suivants pour chaque animal -->
         </div>
     </div>
 {% endblock %}
