@@ -5,32 +5,13 @@
 {% block body %}
     <div class="container">
 
-
         <!-- Hero Section -->
-        <div class="jumbotron text-center bg-dark text-white mt-4">
-            <h1 class="display-4">Bienvenue au Zoo Arcadia</h1>
-            <p class="lead">Découvrez la beauté sauvage de la forêt de biodiversité du Zoo Arcadia. Plongez dans un univers de merveilles, explorez nos habitats et rencontrez les animaux fascinants que nous abritons.</p>
-            <a class="btn btn-primary btn-lg" href="#" role="button">Explorez !</a>
-        </div>
-
-        <!-- Animals Section -->
-        <div class="row text-center">
-            <div class="col-3">
-                <img src="https://via.placeholder.com/100" alt="Singes" class="rounded-circle">
-                <h5>Singes</h5>
-            </div>
-            <div class="col-3">
-                <img src="https://via.placeholder.com/100" alt="Paresseux" class="rounded-circle">
-                <h5>Paresseux</h5>
-            </div>
-            <div class="col-3">
-                <img src="https://via.placeholder.com/100" alt="Perroquets" class="rounded-circle">
-                <h5>Perroquets</h5>
-            </div>
-            <div class="col-3">
-                <img src="https://via.placeholder.com/100" alt="Aras" class="rounded-circle">
-                <h5>Aras</h5>
-            </div>
+        <div class="jumbotron text-center custom-jumbotron">
+            <h1 class="display-4 text-white">Bienvenue au Zoo Arcadia</h1>
+            <p class="lead text-white">Découvrez la beauté sauvage de la forêt de biodiversité du Zoo Arcadia. Plongez dans un univers de merveilles, explorez nos habitats et rencontrez les animaux fascinants que nous abritons.</p>
+            <button type="button" class="btn btn-warning">
+                <a href="{{ path('app_habitats') }}">Explorez !</a>
+            </button>
         </div>
 
         <!-- Visitors' Reviews Section -->
@@ -84,25 +65,5 @@
                 <button type="submit" class="btn btn-primary mb-2">Inscription</button>
             </form>
         </div>
-
-        <!-- Footer -->
-        <footer class="mt-5 text-center">
-            <div class="row">
-                <div class="col">
-                    <p>Nous contacter</p>
-                </div>
-                <div class="col">
-                    <p>Conditions d'utilisation</p>
-                </div>
-                <div class="col">
-                    <p>Politique de confidentialité</p>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col">
-                    <p>&copy; 2024 Arcadia Zoo</p>
-                </div>
-            </div>
-        </footer>
     </div>
 {% endblock %}

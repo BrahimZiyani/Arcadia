@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Contact{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1 class="mb-4">Contactez-nous</h1>
+        <p>Envoyez-nous un message</p>
+        <form>
+            <div class="mb-3">
+                <label for="name" class="form-label">Nom</label>
+                <input type="text" class="form-control" id="name" placeholder="Entrez votre nom">
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" placeholder="Entrez votre email">
+            </div>
+            <div class="mb-3">
+                <label for="message" class="form-label">Message</label>
+                <textarea class="form-control" id="message" rows="4" placeholder="Entrez votre message"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Envoyer</button>
+        </form>
+        <div class="mt-5">
+            <h2 class="mb-4">Trouvez-nous sur la carte!</h2>
+            <div class="map-placeholder" style="background-color: #e9ecef; height: 300px; display: flex; align-items: center; justify-content: center;">
+                <p style="color: #6c757d;">Carte ici</p>
+            </div>
+        </div>
+    </div>
+{% endblock %}
