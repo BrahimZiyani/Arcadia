@@ -44,12 +44,11 @@ p {
     color: #2A9D8F !important;
 }
 
-.custom-jumbotron{
-    background-image: url('/public/build/images/Banniere4.png');
-    background-size: cover;
-    background-position: center;
-    color: white;
-    padding: 2rem 1rem;
-    margin-top: 1rem;
-    text-align: center;
-}
+ .custom-jumbotron {
+     background-size: cover;
+     background-position: center;
+     color: white;
+     padding: 2rem 1rem;
+     margin-top: 1rem;
+     text-align: center;
+ }
