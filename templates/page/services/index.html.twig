@@ -1,0 +1,49 @@
+{# templates/page/services/index.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Nos Services{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1 class="text-center mb-4">Nos services</h1>
+        <p class="text-center">Voici ce que Arcadia propose</p>
+
+        <div class="row">
+            <!-- Restauration -->
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <img src="{{ asset('/images/Services/300x200/restauration.png') }}" class="card-img-top" alt="Restauration" style="height: 200px; width: 100%; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">Restauration</h5>
+                        <p class="card-text">Profitez d'une variété de plats délicieux dans nos restaurants et stands de nourriture situés à divers endroits du zoo.</p>
+                        <a href="{{ path('app_restauration') }}" class="btn btn-primary">En savoir plus</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Visite des habitats avec un guide -->
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <img src="{{ asset('/images/Services/300x200/visite.png') }}" class="card-img-top" alt="Visite des habitats avec un guide" style="height: 200px; width: 100%; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">Visite des habitats avec un guide</h5>
+                        <p class="card-text">Découvrez les secrets de nos habitats avec l'aide de nos guides expérimentés. Cette visite est gratuite et disponible à différents moments de la journée.</p>
+                        <a href="{{ path('app_visite') }}" class="btn btn-primary">En savoir plus</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Visite du zoo en petit train -->
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <img src="{{ asset('/images/Services/300x200/train.png') }}" class="card-img-top" alt="Visite du zoo en petit train" style="height: 200px; width: 100%; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">Visite du zoo en petit train</h5>
+                        <p class="card-text">Embarquez dans notre petit train pour une visite guidée confortable et panoramique de tout le zoo.</p>
+                        <a href="{{ path('app_train') }}" class="btn btn-primary">En savoir plus</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
