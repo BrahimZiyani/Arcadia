@@ -51,7 +51,15 @@ class PageController extends AbstractController
     #[Route('/services', name: 'app_services')]
     public function services(): Response
     {
-        return $this->render('page/services.html.twig', [
+        return $this->render('page/services/index.html.twig', [
+            'controller_name' => 'PageController',
+        ]);
+    }
+
+    #[Route('/avis', name: 'app_avis')]
+    public function avis(): Response
+    {
+        return $this->render('page/avis.html.twig', [
             'controller_name' => 'PageController',
         ]);
     }
