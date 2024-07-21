@@ -1,0 +1,45 @@
+{# templates/habitats/index.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Nos Habitats{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1 class="text-center mb-4">Nos habitats</h1>
+        <div class="row">
+            <div class="col-lg-4 mb-4">
+                <div class="card">
+                    <img src="{{ asset('/images/VoliereTropicale/voliere_tropicale.jpg') }}" class="card-img-top" alt="Volière Tropicale" style="width: 100%; height: 300px">
+                    <div class="card-body">
+                        <span class="badge bg-primary">Populaire</span>
+                        <h5 class="card-title">Volière Tropicale</h5>
+                        <p class="card-text">Perroquets, Toucans et Aras</p>
+                        <a href="{{ path('app_habitat_voliere_tropicale') }}" class="btn btn-primary">Voir les détails</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 mb-4">
+                <div class="card">
+                    <img src="{{ asset('/images/ForetTropicale/foret_tropicale.jpg') }}" class="card-img-top" alt="Forêt Tropicale" style="width: 100%; height: 300px">
+                    <div class="card-body">
+                        <span class="badge bg-secondary">Endémique</span>
+                        <h5 class="card-title">Forêt Tropicale</h5>
+                        <p class="card-text">Singes Capucins et Paresseux</p>
+                        <a href="{{ path('app_habitat_foret_tropicale') }}" class="btn btn-secondary">Voir les détails</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 mb-4">
+                <div class="card">
+                    <img src="{{ asset('/images/EnclosRéhabilitation/enclos_rehabilitation.jpg') }}" class="card-img-top" alt="Enclos de Réhabilitation" style="width: 100%; height: 300px">
+                    <div class="card-body">
+                        <span class="badge bg-primary">Populaire</span>
+                        <h5 class="card-title">Enclos de Réhabilitation</h5>
+                        <p class="card-text">Loups</p>
+                        <a href="{{ path('app_habitat_enclos_rehabilitation') }}" class="btn btn-primary">Voir les détails</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

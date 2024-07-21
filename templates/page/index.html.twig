@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block body %}
+
+    <!-- Swiper-->
+    <div id="react-root"></div>
+    <div class="container">
+        
+        <!-- Visitors' Reviews Section -->
+        <div class="mt-5">
+            <h2 class="text-center">Avis des visiteurs</h2>
+            <p class="text-center">Retour en direct de nos visiteurs !</p>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Emily</h5>
+                            <p class="card-text">J'ai adoré ma visite au Zoo Arcadia. Les animaux étaient bien soignés.</p>
+                            <p class="card-text"><small class="text-muted">★★★★★</small></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Jack</h5>
+                            <p class="card-text">Le zoo est un endroit idéal pour la famille. Mes enfants se sont éclatés !</p>
+                            <p class="card-text"><small class="text-muted">★★★★☆</small></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Sophia</h5>
+                            <p class="card-text">Impressionnée par les efforts de conservation au Zoo Arcadia !</p>
+                            <p class="card-text"><small class="text-muted">★★★★★</small></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Newsletter Section -->
+        <div class="mt-5 text-center">
+            <h2>Inscrivez-vous à notre newsletter</h2>
+            <p>Pour ne rien rater des actualités du Zoo !</p>
+            <form class="form-inline justify-content-center">
+                <div class="form-group mb-2">
+                    <label for="email" class="sr-only">Email</label>
+                    <input type="email" class="form-control" id="email" placeholder="Entrez votre email">
+                </div>
+                <div class="form-group mx-sm-3 mb-2">
+                    <label for="name" class="sr-only">Nom</label>
+                    <input type="text" class="form-control" id="name" placeholder="Entrez votre nom">
+                </div>
+                <button type="submit" class="btn btn-primary mb-2">Inscription</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

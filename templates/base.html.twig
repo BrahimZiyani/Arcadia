@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/x-icon" href="{{ asset('/images/LogoArcadia.png') }}">
+    <title>Arcadia</title>
+
+    <!-- Add Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Add Bootstrap CSS from CDN -->
+    <!-- Add Bootstrap CSS from CDN -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    {% block stylesheets %}
+        {{ encore_entry_link_tags('app') }}
+    {% endblock %}
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light">
+    <div class="logo">
+    <a class="navbar-brand" href="{{ path('app_home') }}">
+        <img src="{{ asset('/images/LogoArcadia.png') }}" height="60px">
+    </a>
+
+    <a class="navbar-brand" href="{{ path('app_home') }}">
+    <h3 href="{{ path('app_home') }}">ARCADIA</h3>
+    </a>
+    </div>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="{{ path('app_home') }}">Accueil <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ path('app_habitats') }}">Nos Habitats</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ path('app_services') }}">Nos Services</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ path('app_avis') }}">Avis</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ path('app_contact') }}">Contact</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link btn btn-warning text-white" href="{{ path('app_login') }}">Connexion Staff</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    {% block body %}{% endblock %}
+</div>
+
+<!-- Footer Section -->
+<footer class="mt-5 text-center">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <p>Nous contacter</p>
+            </div>
+            <div class="col">
+                <p>Conditions d'utilisation</p>
+            </div>
+            <div class="col">
+                <p>Politique de confidentialité</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <p>&copy; 2024 Arcadia Zoo</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Add jQuery, Popper.js, and Bootstrap JS from CDN -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('app') }}
+{% endblock %}
+</body>
+</html>
