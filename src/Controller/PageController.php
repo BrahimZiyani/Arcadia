@@ -75,7 +75,37 @@ class PageController extends AbstractController
     #[Route('/login', name: 'app_login')]
     public function login(): Response
     {
-        return $this->render('page/login.html.twig', [
+        return $this->render('security/login.html.twig', [
+            'controller_name' => 'PageController',
+        ]);
+    }
+
+    #[Route('/admin', name: 'admin_dashboard')]
+    public function adminDashboard(): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
+        return $this->render('admin/dashboard.html.twig', [
+            'controller_name' => 'PageController',
+        ]);
+    }
+
+    #[Route('/user/profile', name: 'user_profile')]
+    public function userProfile(): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
+        return $this->render('user/profile.html.twig', [
+            'controller_name' => 'PageController',
+        ]);
+    }
+
+    #[Route('/vet/reports', name: 'vet_reports')]
+    public function vetReports(): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_VETERINARY');
+
+        return $this->render('vet/reports.html.twig', [
             'controller_name' => 'PageController',
         ]);
     }

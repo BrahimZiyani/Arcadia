@@ -1,5 +1,6 @@
+# config/packages/security.yaml
 security:
-    encoders:
+    password_hashers:
         App\Entity\User:
             algorithm: auto
 
@@ -15,29 +16,17 @@ security:
             security: false
 
         main:
-            anonymous: true
             lazy: true
             provider: app_user_provider
             form_login:
-                login_path: login
-                check_path: login
-                username_parameter: email
-                password_parameter: password
+                login_path: app_login
+                check_path: app_login
+                default_target_path: app_home
+                success_handler: App\Security\LoginSuccessHandler
+
             logout:
-                path: logout
-                target: /
+                path: app_logout
+                target: app_home
 
     access_control:
-        # Pages accessibles à tout le monde, y compris les visiteurs non authentifiés
-        - { path: ^/public, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/register, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-
-        # Pages accessibles uniquement aux utilisateurs authentifiés avec le rôle ROLE_USER
-        - { path: ^/user, roles: ROLE_USER }
-
-        # Pages accessibles uniquement aux utilisateurs authentifiés avec le rôle ROLE_ADMIN
         - { path: ^/admin, roles: ROLE_ADMIN }
-
-        # Le reste du site est accessible à tout le monde
-        - { path: ^/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
