@@ -83,11 +83,69 @@ class PageController extends AbstractController
     #[Route('/admin', name: 'admin_dashboard')]
     public function adminDashboard(): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
-
         return $this->render('admin/dashboard.html.twig', [
             'controller_name' => 'PageController',
         ]);
+    }
+
+    #[Route('/admin/users', name: 'admin_users')]
+    public function manageUsers(EntityManagerInterface $entityManager): Response
+    {
+        $users = $entityManager->getRepository(User::class)->findAll();
+        return $this->render('admin/users/index.html.twig', [
+            'users' => $users,
+        ]);
+    }
+
+    #[Route('/admin/users/new', name: 'admin_users_new')]
+    public function newUser(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $user = new User();
+        $form = $this->createForm(UserType::class, $user);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $user->setPassword(
+                $this->passwordHasher->hashPassword(
+                    $user,
+                    $user->getPassword()
+                )
+            );
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('admin_users');
+        }
+
+        return $this->render('admin/users/new.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    #[Route('/admin/users/{id}/edit', name: 'admin_users_edit')]
+    public function editUser(Request $request, User $user, EntityManagerInterface $entityManager): Response
+    {
+        $form = $this->createForm(UserType::class, $user);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+            return $this->redirectToRoute('admin_users');
+        }
+
+        return $this->render('admin/users/edit.html.twig', [
+            'form' => $form->createView(),
+            'user' => $user,
+        ]);
+    }
+
+    #[Route('/admin/users/{id}/delete', name: 'admin_users_delete')]
+    public function deleteUser(User $user, EntityManagerInterface $entityManager): Response
+    {
+        $entityManager->remove($user);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('admin_users');
     }
 
     #[Route('/user/profile', name: 'user_profile')]
