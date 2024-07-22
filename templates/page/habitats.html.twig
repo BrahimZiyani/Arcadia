@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1>Nos Habitats</h1>
+        <div class="row">
+            {% for habitat in habitats %}
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <img src="{{ asset('images/habitats/' ~ habitat.image) }}" class="card-img-top" alt="{{ habitat.nom }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ habitat.nom }}</h5>
+                            <p class="card-text">{{ habitat.description }}</p>
+                            <a href="{{ path('public_habitat_detail', {'id': habitat.id}) }}" class="btn btn-primary">Voir les détails</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

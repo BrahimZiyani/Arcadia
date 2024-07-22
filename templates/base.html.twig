@@ -34,7 +34,7 @@
                 <a class="nav-link" href="{{ path('app_home') }}">Accueil <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ path('app_habitats') }}">Nos Habitats</a>
+                <a class="nav-link" href="{{ path('public_habitats') }}">Nos Habitats</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{{ path('app_services') }}">Nos Services</a>
@@ -56,6 +56,9 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ path('animals_index') }}">Gérer Animaux</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('app_habitats') }}">Gérer Habitats</a>
                 </li>
             {% endif %}
             {% if is_granted('IS_AUTHENTICATED_FULLY') %}

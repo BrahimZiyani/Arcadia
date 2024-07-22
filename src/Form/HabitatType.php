@@ -6,6 +6,7 @@ use App\Entity\Habitat;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class HabitatType extends AbstractType
 {
@@ -14,7 +15,11 @@ class HabitatType extends AbstractType
         $builder
             ->add('nom')
             ->add('description')
-            ->add('images')
+            ->add('imageFile', VichImageType::class, [
+                'required' => false,
+                'allow_delete' => true, // not mandatory, allows you to delete the image
+                'download_uri' => true, // not mandatory, allows you to download the image
+            ])
         ;
     }
 

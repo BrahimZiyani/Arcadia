@@ -9,9 +9,11 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\User;
 use App\Entity\Animal;
 use App\Entity\CompteRendu;
+use App\Entity\Habitat;
 use App\Form\UserType;
 use App\Form\AnimalType;
 use App\Form\CompteRenduType;
+use App\Form\HabitatType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\String\Slugger\SluggerInterface;
@@ -34,36 +36,77 @@ class PageController extends AbstractController
         ]);
     }
 
+    #[Route('/page/habitats', name: 'public_habitats')]
+public function publicHabitats(EntityManagerInterface $entityManager): Response
+{
+    $habitats = $entityManager->getRepository(Habitat::class)->findAll();
+    return $this->render('page/habitats.html.twig', [
+        'habitats' => $habitats,
+    ]);
+}
+
+
     #[Route('/habitats', name: 'app_habitats')]
-    public function habitats(): Response
+    public function habitats(EntityManagerInterface $entityManager): Response
     {
-        return $this->render('page/habitats/index.html.twig', [
-            'controller_name' => 'PageController',
+        $habitats = $entityManager->getRepository(Habitat::class)->findAll();
+        return $this->render('habitats/index.html.twig', [
+            'habitats' => $habitats,
         ]);
     }
 
-    #[Route('/habitats/voliere-tropicale', name: 'app_habitat_voliere_tropicale')]
-    public function voliereTropicale(): Response
+    #[Route('/habitats/new', name: 'habitats_new')]
+    public function newHabitat(Request $request, EntityManagerInterface $entityManager): Response
     {
-        return $this->render('page/habitats/voliere_tropicale.html.twig', [
-            'controller_name' => 'PageController',
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
+        $habitat = new Habitat();
+        $form = $this->createForm(HabitatType::class, $habitat);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($habitat);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_habitats');
+        }
+
+        return $this->render('habitats/habitat_form.html.twig', [
+            'form' => $form->createView(),
+            'button_label' => 'Créer',
         ]);
     }
 
-    #[Route('/habitats/foret-tropicale', name: 'app_habitat_foret_tropicale')]
-    public function foretTropicale(): Response
+    #[Route('/habitats/{id}/edit', name: 'habitats_edit')]
+    public function editHabitat(Request $request, Habitat $habitat, EntityManagerInterface $entityManager): Response
     {
-        return $this->render('page/habitats/foret_tropicale.html.twig', [
-            'controller_name' => 'PageController',
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
+        $form = $this->createForm(HabitatType::class, $habitat);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+            return $this->redirectToRoute('app_habitats');
+        }
+
+        return $this->render('habitats/habitat_form.html.twig', [
+            'form' => $form->createView(),
+            'button_label' => 'Modifier',
         ]);
     }
 
-    #[Route('/habitats/enclos-rehabilitation', name: 'app_habitat_enclos_rehabilitation')]
-    public function enclosRehabilitation(): Response
+    #[Route('/habitats/{id}/delete', name: 'habitats_delete', methods: ['POST'])]
+    public function deleteHabitat(Request $request, Habitat $habitat, EntityManagerInterface $entityManager): Response
     {
-        return $this->render('page/habitats/enclos_rehabilitation.html.twig', [
-            'controller_name' => 'PageController',
-        ]);
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
+        if ($this->isCsrfTokenValid('delete' . $habitat->getId(), $request->request->get('_token'))) {
+            $entityManager->remove($habitat);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('app_habitats');
     }
 
     #[Route('/services', name: 'app_services')]
@@ -227,7 +270,7 @@ class PageController extends AbstractController
     #[Route('/vet/reports/{id}/delete', name: 'vet_reports_delete', methods: ['POST'])]
     public function deleteReport(Request $request, CompteRendu $report, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$report->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $report->getId(), $request->request->get('_token'))) {
             $entityManager->remove($report);
             $entityManager->flush();
         }
@@ -245,10 +288,15 @@ class PageController extends AbstractController
     }
 
     #[Route('/animals/new', name: 'animals_new')]
-    public function new(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
+    public function newAnimal(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
     {
         $animal = new Animal();
-        $form = $this->createForm(AnimalType::class, $animal);
+
+        // Charger les habitats spécifiques
+        $habitatRepository = $entityManager->getRepository(Habitat::class);
+        $habitats = $habitatRepository->findBy(['nom' => ['Volière Tropicale', 'Forêt Tropicale', 'Enclos de Réhabilitation']]);
+
+        $form = $this->createForm(AnimalType::class, $animal, ['habitat_choices' => $habitats]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -278,13 +326,17 @@ class PageController extends AbstractController
 
         return $this->render('animals/animal_form.html.twig', [
             'form' => $form->createView(),
+            'button_label' => 'Créer',
         ]);
     }
 
     #[Route('/animals/{id}/edit', name: 'animals_edit')]
     public function editAnimal(Request $request, Animal $animal, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createForm(AnimalType::class, $animal);
+        $habitatRepository = $entityManager->getRepository(Habitat::class);
+        $habitats = $habitatRepository->findBy(['nom' => ['Volière Tropicale', 'Forêt Tropicale', 'Enclos de Réhabilitation']]);
+
+        $form = $this->createForm(AnimalType::class, $animal, ['habitat_choices' => $habitats]);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -301,7 +353,7 @@ class PageController extends AbstractController
     #[Route('/animals/{id}/delete', name: 'animals_delete', methods: ['POST'])]
     public function deleteAnimal(Request $request, Animal $animal, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$animal->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $animal->getId(), $request->request->get('_token'))) {
             $entityManager->remove($animal);
             $entityManager->flush();
         }
