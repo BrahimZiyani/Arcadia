@@ -1,12 +1,2 @@
-Pour assurer la sécurité de l'application Arcadia, nous avons implémenté plusieurs mécanismes de sécurité sur les formulaires, les composants front-end et back-end :
-
-    Authentification :
-        Nous avons mis en place un système d'authentification basé sur les sessions, permettant de vérifier l'identité des utilisateurs lorsqu'ils se connectent. Les utilisateurs doivent fournir des informations d'identification valides pour accéder aux fonctionnalités de l'application.
-
-    Contrôle d'Accès :
-        L'application utilise un système de rôles (e.g., ROLE_USER, ROLE_ADMIN, ROLE_VETERINARY) pour contrôler l'accès aux différentes parties de l'application. Les annotations comme denyAccessUnlessGranted sont utilisées dans les contrôleurs pour restreindre l'accès aux actions en fonction des rôles des utilisateurs, garantissant que seules les personnes autorisées peuvent effectuer certaines opérations.
-
-    Hachage des Mots de Passe :
-        Nous avons utilisé le UserPasswordHasherInterface de Symfony pour hacher les mots de passe des utilisateurs avant de les stocker dans la base de données. Cela garantit que même en cas de violation de la base de données, les mots de passe ne seront pas directement accessibles, ajoutant ainsi une couche de sécurité supplémentaire pour protéger les informations sensibles des utilisateurs.
-
-Ces mécanismes combinés contribuent à renforcer la sécurité de l'application Arcadia, protégeant ainsi les données des utilisateurs et l'intégrité du système.
+Hébergement Local du Projet Arcadia
+	Pour héberger localement le projet Arcadia, nous avons utilisé un serveur PHP 	intégré. Tout d'abord, nous avons cloné le dépôt du projet depuis GitHub sur notre 	machine locale. Ensuite, nous avons navigué vers le répertoire racine du projet 	dans notre terminal. Nous avons vérifié que PHP était installé sur notre système, 	puis nous avons démarré le serveur en exécutant la commande php -S 	localhost:8000 -t public dans le terminal. Cette commande a lancé un 	serveur PHP local en définissant le répertoire public comme racine du serveur, 	rendant l'application accessible via l'URL http://localhost:8000 dans un 	navigateur web. Grâce à ce serveur, nous avons pu tester et développer 	l'application localement avant de la déployer sur un serveur de production.
