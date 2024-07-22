@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1>Liste des animaux</h1>
+        <a href="{{ path('animals_new') }}" class="btn btn-primary mb-3">Ajouter un nouvel animal</a>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Prénom</th>
+                    <th>Race</th>
+                    <th>État de Santé</th>
+                    <th>Habitat</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for animal in animals %}
+                    <tr>
+                        <td>{{ animal.id }}</td>
+                        <td>{{ animal.prenom }}</td>
+                        <td>{{ animal.race }}</td>
+                        <td>{{ animal.etatDeSante }}</td>
+                        <td>{{ animal.habitat.id }}</td>
+                        <td>
+                            <a href="{{ path('animals_edit', {'id': animal.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
+                            <form method="post" action="{{ path('animals_delete', {'id': animal.id}) }}" style="display:inline-block;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet animal ?');">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ animal.id) }}">
+                                <button class="btn btn-danger btn-sm">Supprimer</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

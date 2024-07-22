@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1>{{ button_label }} un rapport</h1>
+
+        {{ form_start(form) }}
+
+        <div class="form-group">
+            {{ form_label(form.date) }}
+            {{ form_widget(form.date, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.date) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.etat) }}
+            {{ form_widget(form.etat, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.etat) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.animal) }}
+            {{ form_widget(form.animal, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.animal) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.utilisateur) }}
+            {{ form_widget(form.utilisateur, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.utilisateur) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.details) }}
+            {{ form_widget(form.details, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.details) }}
+        </div>
+
+        <button type="submit" class="btn btn-primary">{{ button_label }}</button>
+
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

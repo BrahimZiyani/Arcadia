@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1>{{ button_label }} un animal</h1>
+
+        {{ form_start(form) }}
+        
+        <div class="form-group">
+            {{ form_label(form.prenom) }}
+            {{ form_widget(form.prenom, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        
+        <div class="form-group">
+            {{ form_label(form.race) }}
+            {{ form_widget(form.race, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        
+        <div class="form-group">
+            {{ form_label(form.images) }}
+            {{ form_widget(form.images, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        
+        <div class="form-group">
+            {{ form_label(form.etatDeSante) }}
+            {{ form_widget(form.etatDeSante, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        
+        <div class="form-group">
+            {{ form_label(form.alimentation) }}
+            {{ form_widget(form.alimentation, {'attr': {'class': 'form-control'}}) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.habitat) }}
+            {{ form_widget(form.habitat, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        
+        <button type="submit" class="btn btn-primary">{{ button_label }}</button>
+        
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

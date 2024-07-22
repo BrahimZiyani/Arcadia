@@ -9,7 +9,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 
     <!-- Add Bootstrap CSS from CDN -->
-    <!-- Add Bootstrap CSS from CDN -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 
     {% block stylesheets %}
@@ -19,13 +18,12 @@
 <body>
 <nav class="navbar navbar-expand-lg navbar-light">
     <div class="logo">
-    <a class="navbar-brand" href="{{ path('app_home') }}">
-        <img src="{{ asset('/images/LogoArcadia.png') }}" height="60px">
-    </a>
-
-    <a class="navbar-brand" href="{{ path('app_home') }}">
-    <h3 href="{{ path('app_home') }}">ARCADIA</h3>
-    </a>
+        <a class="navbar-brand" href="{{ path('app_home') }}">
+            <img src="{{ asset('/images/LogoArcadia.png') }}" height="60px">
+        </a>
+        <a class="navbar-brand" href="{{ path('app_home') }}">
+            <h3>ARCADIA</h3>
+        </a>
     </div>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -47,9 +45,31 @@
             <li class="nav-item">
                 <a class="nav-link" href="{{ path('app_contact') }}">Contact</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link btn btn-warning text-white" href="{{ path('app_login') }}">Connexion Staff</a>
-            </li>
+            {% if is_granted('ROLE_ADMIN') %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('admin_dashboard') }}">Gérer Staff</a>
+                </li>
+            {% endif %}
+            {% if is_granted('ROLE_VETERINARY') or is_granted('ROLE_ADMIN') %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('vet_reports') }}">Rapports</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('animals_index') }}">Gérer Animaux</a>
+                </li>
+            {% endif %}
+            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('user_profile') }}">Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('app_logout') }}">Logout</a>
+                </li>
+            {% else %}
+                <li class="nav-item">
+                    <a class="nav-link btn btn-warning text-white" href="{{ path('app_login') }}">Connexion Staff</a>
+                </li>
+            {% endif %}
         </ul>
     </div>
 </nav>

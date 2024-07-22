@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1>Liste des rapports</h1>
+        <a href="{{ path('vet_reports_new') }}" class="btn btn-primary mb-3">Créer un nouveau rapport</a>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Date</th>
+                    <th>État</th>
+                    <th>Animal</th>
+                    <th>Utilisateur</th>
+                    <th>Détails</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for report in reports %}
+                    <tr>
+                        <td>{{ report.id }}</td>
+                        <td>{{ report.date|date('Y-m-d') }}</td>
+                        <td>{{ report.etat }}</td>
+                        <td>{{ report.animal.nom }}</td>
+                        <td>{{ report.utilisateur.nom }}</td>
+                        <td>{{ report.details }}</td>
+                        <td>
+                            <a href="{{ path('vet_reports_edit', {'id': report.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
+                            <form method="post" action="{{ path('vet_reports_delete', {'id': report.id}) }}" style="display:inline-block;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce rapport ?');">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ report.id) }}">
+                                <button class="btn btn-danger btn-sm">Supprimer</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

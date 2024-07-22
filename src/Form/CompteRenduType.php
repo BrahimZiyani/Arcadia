@@ -2,32 +2,30 @@
 
 namespace App\Form;
 
-use App\Entity\Animal;
 use App\Entity\CompteRendu;
-use App\Entity\User;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use App\Entity\User;
+use App\Entity\Animal;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 class CompteRenduType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('date', null, [
-                'widget' => 'single_text',
-            ])
+            ->add('date')
             ->add('etat')
-            ->add('details')
             ->add('animal', EntityType::class, [
                 'class' => Animal::class,
-                'choice_label' => 'id',
+                'choice_label' => 'nom', // assuming 'nom' is a property of Animal
             ])
             ->add('utilisateur', EntityType::class, [
                 'class' => User::class,
-                'choice_label' => 'id',
+                'choice_label' => 'email', // assuming 'email' is a property of User
             ])
+            ->add('details')
         ;
     }
 
