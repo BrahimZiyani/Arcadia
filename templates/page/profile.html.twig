@@ -103,33 +103,30 @@
 
             <!-- Section de gestion des employés pour l'admin -->
             {% if is_granted('ROLE_ADMIN') %}
-                <h2 class="mt-5">Gestion des employés</h2>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 mt-5">
+                <h1 class="display-4">Gestion des comptes employés</h1>
+                <p class="lead">Gérer les comptes employés et vétérinaires</p>
+            </div>
+        </div>
 
-                <!-- Formulaire pour créer un nouvel employé -->
-                <form action="{{ path('user_new') }}" method="post">
-                    <div class="form-group">
-                        <label for="email">Email de l'employé</label>
-                        <input type="email" class="form-control" id="email" name="email" placeholder="Entrez l'email de l'employé" required>
+        <!-- Cartes pour la gestion des comptes -->
+        <div class="row mt-4">
+            <!-- Carte Employé -->
+            <div class="col-md-6">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title">Employé</h5>
+                        <p class="card-text">Créer/Gérer un compte Employé</p>
+                        <a href="{{ path('user_new') }}" class="btn btn-primary">Créer un employé</a>
                     </div>
-                    <div class="form-group">
-                        <label for="nom">Nom</label>
-                        <input type="text" class="form-control" id="nom" name="nom" placeholder="Entrez le nom" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="prenom">Prénom</label>
-                        <input type="text" class="form-control" id="prenom" name="prenom" placeholder="Entrez le prénom" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="role">Rôle</label>
-                        <select class="form-control" id="role" name="role">
-                            <option value="ROLE_USER">Employé</option>
-                            <option value="ROLE_ADMIN">Administrateur</option>
-                        </select>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Créer un employé</button>
-                </form>
+                </div>
+            </div>
 
-                <!-- Liste des employés avec options de modification et suppression -->
+        <!-- Liste des employés avec options de modification et suppression -->
+        <div class="row mt-5">
+            <div class="col-md-12">
                 <h3 class="mt-5">Liste des employés</h3>
                 <table class="table table-striped">
                     <thead>
@@ -149,14 +146,17 @@
                                 <td>{{ employee.prenom }}</td>
                                 <td>{{ employee.roles | json_encode }}</td>
                                 <td>
-                                    <a href="{{ path('employee_edit', {'id': employee.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
-                                    <a href="{{ path('employee_delete', {'id': employee.id}) }}" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet employé ?');">Supprimer</a>
+                                    <a href="{{ path('user_edit', {'id': employee.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
+                                    <a href="{{ path('user_delete', {'id': employee.id}) }}" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet employé ?');">Supprimer</a>
                                 </td>
                             </tr>
                         {% endfor %}
                     </tbody>
                 </table>
-            {% endif %}
+            </div>
+        </div>
+    </div>
+{% endif %}
         </div>
     </div>
 </div>
