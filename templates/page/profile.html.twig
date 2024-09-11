@@ -4,14 +4,13 @@
 
 {% block body %}
 <div class="container mt-5">
-    {{ dump(app.user) }}  <!-- Débogage : voir le contenu de app.user -->
     <div class="row">
         <div class="col-md-3 text-center">
             <h4 class="mt-3">{{ app.user.nom }} {{ app.user.prenom }}</h4>
             <p class="text-muted">
-                {% if 'ROLE_ADMIN' in user.roles %}
+                {% if 'ROLE_ADMIN' in app.user.roles %}
                     Administrateur
-                {% elseif 'ROLE_USER' in user.roles %}
+                {% elseif 'ROLE_USER' in app.user.roles %}
                     Vétérinaire
                 {% else %}
                     Aucun rôle défini

@@ -90,14 +90,15 @@ class PageController extends AbstractController
         ]);
 }
 
-    #[Route('/profile', name: 'app_profile')]
+#[Route('/profile', name: 'app_profile')]
     public function profile(UserRepository $userRepository): Response
     {
-        // Récupérer tous les utilisateurs
-        $users = $userRepository->findAll();
+        // Récupère tous les utilisateurs ou employés depuis le repository
+        $users = $userRepository->findAll(); 
 
+        // Passe les utilisateurs au template Twig
         return $this->render('page/profile.html.twig', [
-            'users' => $users, // Passe la liste des utilisateurs à la vue
+            'users' => $users,  // Passe la variable 'users' au template
         ]);
     }
 }
