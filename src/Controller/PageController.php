@@ -6,6 +6,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\Security\Core\User\UserInterface;
+use App\Repository\UserRepository;
 
 class PageController extends AbstractController
 {
@@ -79,19 +81,23 @@ class PageController extends AbstractController
         // Récupérer les erreurs d'authentification, s'il y en a
         $error = $authenticationUtils->getLastAuthenticationError();
 
-        // Dernier nom d'utilisateur saisi
-        $lastUsername = $authenticationUtils->getLastUsername();
+        // Dernier email saisi
+        $lastEmail = $authenticationUtils->getLastUsername();
 
         return $this->render('page/login.html.twig', [
-            'last_username' => $lastUsername,
+            'last_email' => $lastEmail,  // Changement de la variable pour plus de clarté
             'error' => $error,
         ]);
-    }
+}
 
-    #[Route('/logout', name: 'app_logout')]
-    public function logout(): void
+    #[Route('/profile', name: 'app_profile')]
+    public function profile(UserRepository $userRepository): Response
     {
-        // Symfony gère automatiquement la déconnexion
-        throw new \Exception('This should never be reached!');
+        // Récupérer tous les utilisateurs
+        $users = $userRepository->findAll();
+
+        return $this->render('page/profile.html.twig', [
+            'users' => $users, // Passe la liste des utilisateurs à la vue
+        ]);
     }
 }
