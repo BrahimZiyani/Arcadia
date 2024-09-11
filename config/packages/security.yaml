@@ -34,9 +34,6 @@ security:
                 path: logout
                 target: homepage  # Redirection après la déconnexion
 
-            # Activation de l'authentification anonyme pour certaines routes publiques (si nécessaire)
-            anonymous: lazy
-
     # Règles d'accès
     access_control:
         # Seuls les administrateurs ont accès à /admin et ses sous-routes
@@ -46,6 +43,8 @@ security:
         - { path: ^/profile, roles: ROLE_USER }
 
         # Optionnel : si tu veux autoriser certaines routes publiques, tu peux ajouter d'autres règles ici
+        # Par exemple : rendre la page d'accueil accessible sans connexion
+        - { path: ^/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
 
 when@test:
     security:
