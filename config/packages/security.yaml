@@ -1,57 +1,34 @@
 security:
-    # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
-    password_hashers:
-        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
-
-    # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
-    providers:
-        # Utilise l'entité User pour charger les utilisateurs (admin inclus)
-        app_user_provider:
-            entity:
-                class: App\Entity\User
-                property: email
-
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
-
-        # Le firewall principal pour l'application
+        
         main:
             lazy: true
             provider: app_user_provider
 
-            # Activation du formulaire de login
             form_login:
-                login_path: login   # La route vers la page de connexion (ajuster selon ton projet)
-                check_path: login   # Route qui vérifie les identifiants (généralement la même)
-                default_target_path: /dashboard  # Redirection après connexion (ajuster selon ton projet)
-                username_parameter: email  # Le champ utilisé pour l'email
-                password_parameter: password  # Le champ utilisé pour le mot de passe
+                login_path: app_login
+                check_path: login_check
+                default_target_path: /dashboard  # La page à laquelle rediriger après connexion
 
-            # Gestion de la déconnexion
             logout:
-                path: logout
-                target: homepage  # Redirection après la déconnexion
+                path: app_logout
+                target: app_home
 
-    # Règles d'accès
+            stateless: false
+
+    password_hashers:
+        # On configure le hasher pour l'entité User
+        App\Entity\User:
+            algorithm: auto  # Symfony choisit automatiquement le meilleur algorithme (bcrypt/argon2i, etc.)
+
+
+    providers:
+        app_user_provider:
+            entity:
+                class: App\Entity\User
+                property: email  # L'authentification se fait via l'email
+
     access_control:
-        # Seuls les administrateurs ont accès à /admin et ses sous-routes
-        - { path: ^/admin, roles: ROLE_ADMIN }
-        
-        # Les utilisateurs réguliers peuvent accéder aux routes /profile
-        - { path: ^/profile, roles: ROLE_USER }
-
-        # Optionnel : si tu veux autoriser certaines routes publiques, tu peux ajouter d'autres règles ici
-        # Par exemple : rendre la page d'accueil accessible sans connexion
-        - { path: ^/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-
-when@test:
-    security:
-        password_hashers:
-            # Configuration pour les tests (réduction des coûts des hashers pour accélérer les tests)
-            Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface:
-                algorithm: auto
-                cost: 4
-                time_cost: 3
-                memory_cost: 10
