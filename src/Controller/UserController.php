@@ -18,6 +18,8 @@ class UserController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
     {
         $user = new User();
+
+        // On crée le formulaire sans avoir besoin du service Security
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
@@ -44,11 +46,12 @@ class UserController extends AbstractController
     #[Route('/edit/{id}', name: 'user_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, User $user, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
     {
+        // Création du formulaire sans passer explicitement Security
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Si le mot de passe a été modifié, le ré-hacher
+            // Si le mot de passe a été modifié, on le ré-hache
             if ($form->get('password')->getData()) {
                 $hashedPassword = $passwordHasher->hashPassword(
                     $user,
@@ -68,7 +71,6 @@ class UserController extends AbstractController
         ]);
     }
 
-    // Supprimer un utilisateur
     #[Route('/delete/{id}', name: 'user_delete', methods: ['POST'])]
     public function delete(Request $request, User $user, EntityManagerInterface $entityManager): Response
     {

@@ -1,0 +1,58 @@
+{# templates/user/new.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer un nouvel utilisateur{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Créer un nouvel utilisateur</h1>
+
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h4>Formulaire d'inscription</h4>
+                </div>
+
+                <div class="card-body">
+                    {# Début du formulaire #}
+                    {{ form_start(form) }}
+
+                    <div class="form-group mb-3">
+                        {{ form_label(form.nom, 'Nom', {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(form.nom, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(form.nom) }}
+                    </div>
+
+                    <div class="form-group mb-3">
+                        {{ form_label(form.prenom, 'Prénom', {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(form.prenom, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(form.prenom) }}
+                    </div>
+
+                    <div class="form-group mb-3">
+                        {{ form_label(form.email, 'Email', {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(form.email) }}
+                    </div>
+
+                    <div class="form-group mb-3">
+                        {{ form_label(form.password, 'Mot de passe', {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(form.password, {'attr': {'class': 'form-control', 'type': 'password'}}) }}
+                        {{ form_errors(form.password) }}
+                    </div>
+
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary">Créer</button>
+                        <a href="{{ path('app_home') }}" class="btn btn-secondary">Annuler</a>
+                    </div>
+                    
+                    {{ form_end(form) }}
+                    {# Fin du formulaire #}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
