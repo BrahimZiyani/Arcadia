@@ -11,7 +11,7 @@ security:
             form_login:
                 login_path: app_login
                 check_path: login_check
-                default_target_path: /dashboard  # La page à laquelle rediriger après connexion
+                default_target_path: /profile  # La page à laquelle rediriger après connexion
 
             logout:
                 path: app_logout

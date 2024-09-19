@@ -33,7 +33,6 @@ class UserType extends AbstractType
         // pour afficher les rôles uniquement si c'est un administrateur.
         $builder->add('roles', ChoiceType::class, [
             'choices' => [
-                'Utilisateur' => 'ROLE_USER',
                 'Administrateur' => 'ROLE_ADMIN',
             ],
             'multiple' => true,  // Permet plusieurs rôles

@@ -88,7 +88,14 @@ class PageController extends AbstractController
             'last_email' => $lastEmail,  // Changement de la variable pour plus de clarté
             'error' => $error,
         ]);
-}
+    }
+
+    #[Route('/logout', name: 'app_logout')]
+    public function logout(AuthenticationUtils $authenticationUtils): Response
+    {
+        // Cette méthode peut rester vide : le processus de déconnexion est géré par Symfony
+        throw new \Exception('Ne sera jamais atteinte car la déconnexion est gérée par Symfony.');
+    }
 
 #[Route('/profile', name: 'app_profile')]
     public function profile(UserRepository $userRepository): Response
