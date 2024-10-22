@@ -6,8 +6,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
-use Symfony\Component\Security\Core\User\UserInterface;
 use App\Repository\UserRepository;
+use App\Repository\HabitatRepository;
+use App\Repository\AnimalRepository;  // Ajout de l'import du repository Animal
 
 class PageController extends AbstractController
 {
@@ -22,31 +23,7 @@ class PageController extends AbstractController
     #[Route('/habitats', name: 'app_habitats')]
     public function habitats(): Response
     {
-        return $this->render('page/habitats/index.html.twig', [
-            'controller_name' => 'PageController',
-        ]);
-    }
-
-    #[Route('/habitats/voliere-tropicale', name: 'app_habitat_voliere_tropicale')]
-    public function voliereTropicale(): Response
-    {
-        return $this->render('page/habitats/voliere_tropicale.html.twig', [
-            'controller_name' => 'PageController',
-        ]);
-    }
-
-    #[Route('/habitats/foret-tropicale', name: 'app_habitat_foret_tropicale')]
-    public function foretTropicale(): Response
-    {
-        return $this->render('page/habitats/foret_tropicale.html.twig', [
-            'controller_name' => 'PageController',
-        ]);
-    }
-
-    #[Route('/habitats/enclos-rehabilitation', name: 'app_habitat_enclos_rehabilitation')]
-    public function enclosRehabilitation(): Response
-    {
-        return $this->render('page/habitats/enclos_rehabilitation.html.twig', [
+        return $this->render('page/habitats/show.html.twig', [
             'controller_name' => 'PageController',
         ]);
     }
@@ -97,15 +74,23 @@ class PageController extends AbstractController
         throw new \Exception('Ne sera jamais atteinte car la déconnexion est gérée par Symfony.');
     }
 
-#[Route('/profile', name: 'app_profile')]
-    public function profile(UserRepository $userRepository): Response
+    #[Route('/profile', name: 'app_profile')]
+    public function profile(UserRepository $userRepository, HabitatRepository $habitatRepository, AnimalRepository $animalRepository): Response
     {
-        // Récupère tous les utilisateurs ou employés depuis le repository
-        $users = $userRepository->findAll(); 
+        // Récupérer tous les utilisateurs
+        $users = $userRepository->findAll();
 
-        // Passe les utilisateurs au template Twig
+        // Récupérer tous les habitats
+        $habitats = $habitatRepository->findAll();
+
+        // Récupérer tous les animaux
+        $animals = $animalRepository->findAll();
+
+        // Passe les utilisateurs, habitats et animaux au template Twig
         return $this->render('page/profile.html.twig', [
-            'users' => $users,  // Passe la variable 'users' au template
+            'users' => $users,
+            'habitats' => $habitats,
+            'animals' => $animals,  // Passe les animaux à la vue
         ]);
     }
 }

@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails de l'Habitat : {{ habitat.nom }}{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h2 class="mb-4">Détails de l'Habitat : {{ habitat.nom }}</h2>
+
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">{{ habitat.nom }}</h4>
+            <p class="card-text">{{ habitat.description }}</p>
+        </div>
+    </div>
+
+    <h3 class="mt-5">Liste des Animaux dans cet Habitat</h3>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Race</th>
+                <th>État de santé</th>
+                <th>Alimentation</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for animal in animals %}
+                <tr>
+                    <td>{{ animal.prenom }}</td>
+                    <td>{{ animal.race }}</td>
+                    <td>{{ animal.etatDeSante }}</td>
+                    <td>{{ animal.alimentation }}</td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4" class="text-center">Aucun animal trouvé</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('habitat_index') }}" class="btn btn-dark mt-3">Retour à la liste des habitats</a>
+</div>
+{% endblock %}

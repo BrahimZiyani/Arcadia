@@ -20,8 +20,10 @@ class AnimalType extends AbstractType
             ->add('etatDeSante')
             ->add('alimentation')
             ->add('habitat', EntityType::class, [
-                'class' => Habitat::class,
-                'choice_label' => 'id',
+                'class' => Habitat::class,  // On associe le champ avec l'entité Habitat
+                'choice_label' => 'nom',    // On affiche le nom des habitats dans le champ de sélection
+                'placeholder' => 'Choisissez un habitat',  // Un texte par défaut
+                'required' => true,  // Le champ est obligatoire
             ])
         ;
     }

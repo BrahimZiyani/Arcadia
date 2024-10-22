@@ -17,8 +17,6 @@
                         Aucun rôle défini
                     {% endif %}
                 </p>
-                <a href="#" class="btn btn-outline-secondary btn-sm mb-2">Contact</a>
-                <a href="#" class="btn btn-dark btn-sm">Voir le profil</a>
             {% else %}
                 <p>Utilisateur non connecté.</p>
             {% endif %}
@@ -85,9 +83,9 @@
             
             <!-- Section de gestion des employés pour l'admin -->
             {% if is_granted('ROLE_ADMIN') %}
-                <div class="container">
+                <div class="container mt-5">
                     <div class="row">
-                        <div class="col-md-12 mt-5">
+                        <div class="col-md-12">
                             <h1 class="display-4">Gestion des comptes employés</h1>
                             <p class="lead">Gérer les comptes employés et vétérinaires</p>
                         </div>
@@ -95,7 +93,6 @@
 
                     <!-- Cartes pour la gestion des comptes -->
                     <div class="row mt-4">
-                        <!-- Carte Employé -->
                         <div class="col-md-6">
                             <div class="card text-center">
                                 <div class="card-body">
@@ -105,6 +102,7 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
 
                     <!-- Liste des employés avec options de modification et suppression -->
                     <div class="row mt-5">
@@ -127,11 +125,9 @@
                                             <td>{{ employee.prenom }}</td>
                                             <td>
                                                 <a href="{{ path('user_edit', {'id': employee.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
-                                                
-                                                <!-- Formulaire de suppression -->
                                                 <form action="{{ path('user_delete', {'id': employee.id}) }}" method="post" style="display: inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet employé ?');">
-                                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ employee.id) }}">
-                                                <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ employee.id) }}">
+                                                    <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
                                                 </form>
                                             </td>
                                         </tr>
@@ -139,6 +135,103 @@
                                 </tbody>
                             </table>
                         </div>
+                    </div>
+
+                    <!-- Section de gestion des animaux -->
+                    <div class="mt-5">
+                        <h2 class="mb-4">Gestion des Animaux</h2>
+                        <form action="{{ path('animal_new') }}" method="post">
+                            <div class="form-group">
+                                <label for="animal-name">Nom de l'animal</label>
+                                <input type="text" class="form-control" id="animal-name" name="prenom" placeholder="Entrez le nom de l'animal" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="race">Race</label>
+                                <input type="text" class="form-control" id="race" name="race" placeholder="Entrez la race de l'animal" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="habitat">Habitat</label>
+                                <select class="form-control" id="habitat" name="habitat_id" required>
+                                    {% for habitat in habitats %}
+                                        <option value="{{ habitat.id }}">{{ habitat.nom }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-dark">Ajouter un animal</button>
+                        </form>
+
+                        <h3 class="mt-5">Liste des Animaux</h3>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Nom</th>
+                                    <th>Race</th>
+                                    <th>Habitat</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for animal in animals %}
+                                    <tr>
+                                        <td>{{ animal.prenom }}</td>
+                                        <td>{{ animal.race }}</td>
+                                        <td>{{ animal.habitat.nom }}</td>
+                                        <td>
+                                            <a href="{{ path('animal_edit', {'id': animal.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
+                                            <form action="{{ path('animal_delete', {'id': animal.id}) }}" method="post" style="display:inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet animal ?');">
+                                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ animal.id) }}">
+                                                <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Section de gestion des habitats -->
+                    <div class="mt-5">
+                        <h2 class="mb-4">Gestion des Habitats</h2>
+                        <form action="{{ path('habitat_new') }}" method="post">
+                            <div class="form-group">
+                                <label for="habitat-name">Nom de l'Habitat</label>
+                                <input type="text" class="form-control" id="habitat-name" name="nom" placeholder="Entrez le nom de l'habitat" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="habitat-description">Description</label>
+                                <textarea class="form-control" id="habitat-description" name="description" rows="3" placeholder="Entrez la description de l'habitat" required></textarea>
+                            </Voici la suite et la fin du fichier `profile.html.twig` avec la gestion des **utilisateurs**, **animaux**, et **habitats** que seuls les administrateurs peuvent gérer :
+
+```twig
+                            </div>
+                            <button type="submit" class="btn btn-dark">Ajouter un habitat</button>
+                        </form>
+
+                        <h3 class="mt-5">Liste des Habitats</h3>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Nom</th>
+                                    <th>Description</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for habitat in habitats %}
+                                    <tr>
+                                        <td>{{ habitat.nom }}</td>
+                                        <td>{{ habitat.description }}</td>
+                                        <td>
+                                            <a href="{{ path('habitat_edit', {'id': habitat.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
+                                            <form action="{{ path('habitat_delete', {'id': habitat.id}) }}" method="post" style="display:inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet habitat ?');">
+                                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ habitat.id) }}">
+                                                <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             {% endif %}

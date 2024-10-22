@@ -3,8 +3,9 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\AnimalRepository;
 
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: AnimalRepository::class)]
 class Animal
 {
     #[ORM\Id]
@@ -18,7 +19,7 @@ class Animal
     #[ORM\Column(length: 255)]
     private ?string $race = null;
 
-    #[ORM\Column(type: "json")]
+    #[ORM\Column(type: "json", nullable: true)]
     private array $images = [];
 
     #[ORM\ManyToOne(targetEntity: Habitat::class)]
