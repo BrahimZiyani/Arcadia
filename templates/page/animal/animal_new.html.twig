@@ -8,18 +8,18 @@
 
     <form method="post" action="{{ path('animal_new') }}">
         <div class="form-group">
-            <label for="animal_prenom">Prénom de l'animal</label>
-            <input type="text" class="form-control" id="animal_prenom" name="animal_prenom" required>
+            <label for="animal_nom">Nom de l'animal</label>
+            <input type="text" class="form-control" id="animal_nom" name="animal[nom]" required>
         </div>
         
         <div class="form-group">
             <label for="animal_race">Race</label>
-            <input type="text" class="form-control" id="animal_race" name="animal_race" required>
+            <input type="text" class="form-control" id="animal_race" name="animal[race]" required>
         </div>
 
         <div class="form-group">
             <label for="habitat">Habitat</label>
-            <select class="form-control" id="habitat" name="habitat_id" required>
+            <select class="form-control" id="habitat" name="animal[habitat]" required>
                 {% for habitat in habitats %}
                     <option value="{{ habitat.id }}">{{ habitat.nom }}</option>
                 {% endfor %}
@@ -28,12 +28,12 @@
 
         <div class="form-group">
             <label for="animal_sante">État de santé</label>
-            <input type="text" class="form-control" id="animal_sante" name="etat_de_sante" required>
+            <input type="text" class="form-control" id="animal_sante" name="animal[etatDeSante]" required>
         </div>
 
         <div class="form-group">
             <label for="animal_alimentation">Alimentation</label>
-            <input type="text" class="form-control" id="animal_alimentation" name="alimentation" required>
+            <input type="text" class="form-control" id="animal_alimentation" name="animal[alimentation]" required>
         </div>
 
         <div class="d-flex justify-content-between">

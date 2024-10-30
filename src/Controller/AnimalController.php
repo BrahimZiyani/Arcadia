@@ -19,51 +19,47 @@ class AnimalController extends AbstractController
     {
         $animal = new Animal();
 
-        // Récupérer tous les habitats
-        $habitats = $entityManager->getRepository(Habitat::class)->findAll();
-
-        // On passe les habitats au formulaire
-        $form = $this->createForm(AnimalType::class, $animal, [
-            'habitats' => $habitats,
-        ]);
-
+        // Création du formulaire
+        $form = $this->createForm(AnimalType::class, $animal);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($animal);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_profile');  // Redirige vers le profil après l'ajout
+            return $this->redirectToRoute('app_profile');  // Redirection vers le profil après l'ajout
         }
 
-        return $this->render('animal/new.html.twig', [
+        // Rendu du formulaire avec la liste des habitats pour le template
+        $habitats = $entityManager->getRepository(Habitat::class)->findAll();
+
+        return $this->render('page/animal/animal_new.html.twig', [
             'form' => $form->createView(),
             'habitats' => $habitats,
+            'animal' => $animal, // Ajout de la variable animal pour le template
         ]);
     }
 
     #[Route('/{id}/edit', name: 'animal_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Animal $animal, EntityManagerInterface $entityManager): Response
     {
-        // Récupérer tous les habitats
-        $habitats = $entityManager->getRepository(Habitat::class)->findAll();
-
-        // On passe les habitats au formulaire
-        $form = $this->createForm(AnimalType::class, $animal, [
-            'habitats' => $habitats,
-        ]);
-
+        // Création du formulaire
+        $form = $this->createForm(AnimalType::class, $animal);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_profile');  // Redirige vers le profil après modification
+            return $this->redirectToRoute('app_profile');  // Redirection vers le profil après modification
         }
 
-        return $this->render('animal/edit.html.twig', [
+        // Rendu du formulaire avec la liste des habitats pour le template
+        $habitats = $entityManager->getRepository(Habitat::class)->findAll();
+
+        return $this->render('page/animal/animal_edit.html.twig', [
             'form' => $form->createView(),
             'habitats' => $habitats,
+            'animal' => $animal, // Ajout de la variable animal pour le template
         ]);
     }
 
@@ -75,6 +71,6 @@ class AnimalController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_profile');  // Redirige vers le profil après suppression
+        return $this->redirectToRoute('app_profile');  // Redirection vers le profil après suppression
     }
 }

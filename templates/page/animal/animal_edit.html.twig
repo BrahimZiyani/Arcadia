@@ -4,42 +4,56 @@
 
 {% block body %}
 <div class="container mt-5">
-    <h1>Modifier l'animal : {{ animal.prenom }}</h1>
+    <h1>Modifier l'animal : {{ animal.nom }}</h1>
 
-    <form method="post" action="{{ path('animal_edit', {'id': animal.id}) }}">
+    {{ form_start(form) }}  {# Utilise form_start pour débuter le formulaire #}
+    
         <div class="form-group">
-            <label for="animal_prenom">Prénom de l'animal</label>
-            <input type="text" class="form-control" id="animal_prenom" name="animal_prenom" value="{{ animal.prenom }}" required>
+            <label for="animal_nom">Nom de l'animal</label>
+            {{ form_widget(form.nom, {'attr': {'class': 'form-control'}}) }}
         </div>
 
         <div class="form-group">
             <label for="animal_race">Race</label>
-            <input type="text" class="form-control" id="animal_race" name="animal_race" value="{{ animal.race }}" required>
+            {{ form_widget(form.race, {'attr': {'class': 'form-control'}}) }}
         </div>
 
         <div class="form-group">
             <label for="habitat">Habitat</label>
-            <select class="form-control" id="habitat" name="habitat_id" required>
-                {% for habitat in habitats %}
-                    <option value="{{ habitat.id }}" {% if habitat.id == animal.habitat.id %}selected{% endif %}>{{ habitat.nom }}</option>
-                {% endfor %}
-            </select>
+            {{ form_widget(form.habitat, {'attr': {'class': 'form-control'}}) }}
         </div>
 
         <div class="form-group">
             <label for="animal_sante">État de santé</label>
-            <input type="text" class="form-control" id="animal_sante" name="etat_de_sante" value="{{ animal.etat_de_sante }}" required>
+            {{ form_widget(form.etatDeSante, {'attr': {'class': 'form-control'}}) }}
         </div>
 
         <div class="form-group">
             <label for="animal_alimentation">Alimentation</label>
-            <input type="text" class="form-control" id="animal_alimentation" name="alimentation" value="{{ animal.alimentation }}" required>
+            {{ form_widget(form.alimentation, {'attr': {'class': 'form-control'}}) }}
         </div>
 
-        <div class="d-flex justify-content-between">
+        <div class="form-group">
+        <label for="animal_images">Images</label>
+        <div id="image-collection">
+            {% for imageField in form.images %}
+                <div class="input-group mb-2">
+                    {{ form_widget(imageField, {'attr': {'class': 'form-control'}}) }}
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-danger" type="button" onclick="removeImageField(this)">Supprimer</button>
+                    </div>
+                </div>
+        {% endfor %}
+        <button class="btn btn-outline-primary mt-2" type="button" onclick="addImageField()">Ajouter une image</button>
+        </div>
+        </div>
+
+
+        <div class="d-flex justify-content-between mt-3">
             <button type="reset" class="btn btn-outline-secondary">Réinitialiser</button>
             <button type="submit" class="btn btn-warning">Modifier</button>
         </div>
-    </form>
+
+    {{ form_end(form) }} {# Utilise form_end pour clôturer le formulaire #}
 </div>
 {% endblock %}

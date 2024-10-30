@@ -1,14 +1,14 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Détails de l'Animal - {{ animal.prenom }}{% endblock %}
+{% block title %}Détails de l'Animal - {{ animal.nom }}{% endblock %}
 
 {% block body %}
     <div class="container">
-        <h1>Détails de {{ animal.prenom }}</h1>
+        <h1>Détails de {{ animal.nom }}</h1>
         <p><strong>Race :</strong> {{ animal.race }}</p>
         <p><strong>État de santé :</strong> {{ animal.etatDeSante }}</p>
         <p><strong>Alimentation :</strong> {{ animal.alimentation }}</p>
         <p><strong>Habitat :</strong> {{ animal.habitat.nom }}</p>
-        <img src="{{ asset('images/animals/' ~ animal.images) }}" alt="{{ animal.prenom }}">
+        <img src="{{ asset('images/animals/' ~ animal.images) }}" alt="{{ animal.nom }}">
     </div>
 {% endblock %}
