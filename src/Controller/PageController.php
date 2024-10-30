@@ -2,13 +2,19 @@
 
 namespace App\Controller;
 
+use App\Entity\CompteRendu;
+use App\Form\CompteRenduType;
+use App\Repository\UserRepository;
+use App\Repository\HabitatRepository;
+use App\Repository\AnimalRepository;
+use App\Repository\CompteRenduRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
-use App\Repository\UserRepository;
-use App\Repository\HabitatRepository;
-use App\Repository\AnimalRepository;  // Ajout de l'import du repository Animal
+
 
 class PageController extends AbstractController
 {
@@ -75,22 +81,47 @@ class PageController extends AbstractController
     }
 
     #[Route('/profile', name: 'app_profile')]
-    public function profile(UserRepository $userRepository, HabitatRepository $habitatRepository, AnimalRepository $animalRepository): Response
-    {
-        // Récupérer tous les utilisateurs
+    public function profile(
+        UserRepository $userRepository,
+        HabitatRepository $habitatRepository,
+        AnimalRepository $animalRepository,
+        CompteRenduRepository $compteRenduRepository,
+        Request $request,
+        EntityManagerInterface $entityManager
+    ): Response {
+        // Récupération des utilisateurs, habitats, animaux, et comptes rendus existants
         $users = $userRepository->findAll();
-
-        // Récupérer tous les habitats
         $habitats = $habitatRepository->findAll();
-
-        // Récupérer tous les animaux
         $animals = $animalRepository->findAll();
+        $compteRendus = $compteRenduRepository->findAll();
 
-        // Passe les utilisateurs, habitats et animaux au template Twig
+        // Ajoute un dump pour vérifier les données
+        dump($compteRendus);
+
+        // Création d'un nouveau compte rendu
+        $compteRendu = new CompteRendu();
+        $form = $this->createForm(CompteRenduType::class, $compteRendu);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Associe l'utilisateur connecté au compte rendu
+            $compteRendu->setUtilisateur($this->getUser());
+            
+            // Enregistre le compte rendu en base de données
+            $entityManager->persist($compteRendu);
+            $entityManager->flush();
+
+            // Redirection pour éviter la resoumission du formulaire
+            return $this->redirectToRoute('app_profile');
+        }
+
+        // Envoi des données au template Twig
         return $this->render('page/profile.html.twig', [
             'users' => $users,
             'habitats' => $habitats,
-            'animals' => $animals,  // Passe les animaux à la vue
+            'animals' => $animals,
+            'compteRendus' => $compteRendus,
+            'form' => $form->createView(),
         ]);
     }
 }

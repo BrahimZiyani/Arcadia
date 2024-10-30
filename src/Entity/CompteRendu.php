@@ -3,9 +3,9 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use App\Entity\Animal;
+use App\Repository\CompteRenduRepository;
 
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: CompteRenduRepository::class)]
 class CompteRendu
 {
     #[ORM\Id]
@@ -30,6 +30,7 @@ class CompteRendu
     #[ORM\Column(type: "text", nullable: true)]
     private ?string $details = null;
 
+    // Getters et setters
     public function getId(): ?int
     {
         return $this->id;

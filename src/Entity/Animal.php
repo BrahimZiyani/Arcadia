@@ -14,7 +14,7 @@ class Animal
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $prenom = null;
+    private ?string $nom = null; // Champ renommé en 'nom'
 
     #[ORM\Column(length: 255)]
     private ?string $race = null;
@@ -37,14 +37,14 @@ class Animal
         return $this->id;
     }
 
-    public function getPrenom(): ?string
+    public function getNom(): ?string // Getter modifié
     {
-        return $this->prenom;
+        return $this->nom;
     }
 
-    public function setPrenom(string $prenom): self
+    public function setNom(string $nom): self // Setter modifié
     {
-        $this->prenom = $prenom;
+        $this->nom = $nom;
 
         return $this;
     }

@@ -23,218 +23,138 @@
         </div>
 
         <div class="col-md-9">
-            <!-- Section de statistiques -->
+            <!-- Section de statistiques avec design amélioré -->
             <h2 class="mb-4">Rapports Vétérinaire</h2>
             <div class="row text-center mb-4">
                 <div class="col-md-3">
-                    <div class="card">
+                    <div class="card shadow-sm border-0">
                         <div class="card-body">
-                            <h4>100</h4>
-                            <p>Nombre de rapports</p>
+                            <h4 class="text-primary">{{ compteRendus|length }}</h4>
+                            <p class="text-muted">Nombre de rapports</p>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <div class="card">
+                    <div class="card shadow-sm border-0">
                         <div class="card-body">
-                            <h4>60</h4>
-                            <p>Filtrer par Habitats</p>
+                            <h4 class="text-success">{{ habitats|length }}</h4>
+                            <p class="text-muted">Nombre d'Habitats</p>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <div class="card">
+                    <div class="card shadow-sm border-0">
                         <div class="card-body">
-                            <h4>30</h4>
-                            <p>Filtrer par Animal</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card">
-                        <div class="card-body">
-                            <h4>40</h4>
-                            <p>Filtrer par Date</p>
+                            <h4 class="text-warning">{{ animals|length }}</h4>
+                            <p class="text-muted">Nombre d'Animaux</p>
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- Section de création de rapport -->
-            <h2 class="mb-4">Rapport</h2>
-            <form>
-                <div class="form-group">
-                    <label for="animal-name">Nom de l'animal</label>
-                    <input type="text" class="form-control" id="animal-name" placeholder="Entrez le nom de l'animal">
+            <h2 class="mb-4">Créer un rapport</h2>
+            <div class="card p-4 shadow-sm">
+                {{ form_start(form) }}
+                <div class="row">
+                    <div class="col-md-6">
+                        {{ form_row(form.animal, {'attr': {'class': 'form-control', 'placeholder': 'Sélectionnez un animal'}}) }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form_row(form.date, {'attr': {'class': 'form-control', 'placeholder': 'jj/mm/aaaa'}}) }}
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="date">Date</label>
-                    <input type="date" class="form-control" id="date">
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        {{ form_row(form.etat, {'attr': {'class': 'form-control', 'placeholder': 'État de santé'}}) }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form_row(form.details, {'attr': {'class': 'form-control', 'placeholder': 'Détails du rapport'}}) }}
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="report">Compte rendu</label>
-                    <textarea class="form-control" id="report" rows="4" placeholder="Entrez le compte rendu"></textarea>
+                <div class="d-flex justify-content-between mt-4">
+                    <button type="reset" class="btn btn-outline-secondary px-4">Recommencer</button>
+                    <button type="submit" class="btn btn-dark px-4">Créer</button>
                 </div>
-                <div class="d-flex justify-content-between">
-                    <button type="reset" class="btn btn-outline-secondary">Recommencer</button>
-                    <button type="submit" class="btn btn-dark">Créer</button>
-                </div>
-            </form>
-            
-            <!-- Section de gestion des employés pour l'admin -->
-            {% if is_granted('ROLE_ADMIN') %}
-                <div class="container mt-5">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <h1 class="display-4">Gestion des comptes employés</h1>
-                            <p class="lead">Gérer les comptes employés et vétérinaires</p>
+                {{ form_end(form) }}
+            </div>
+
+            <!-- Section de liste des comptes rendus existants -->
+            <h3 class="mt-5">Liste des Comptes Rendus</h3>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Animal</th>
+                        <th>Date</th>
+                        <th>État</th>
+                        <th>Détails</th>
+                        <th>Utilisateur</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for compteRendu in compteRendus %}
+                        <tr>
+                            <td>{{ compteRendu.animal.nom }}</td>
+                            <td>{{ compteRendu.date|date('d/m/Y') }}</td>
+                            <td>{{ compteRendu.etat }}</td>
+                            <td>{{ compteRendu.details }}</td>
+                            <td>{{ compteRendu.utilisateur.nom ?? 'Non spécifié' }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <!-- Section de gestion des animaux -->
+            <h3 class="mt-5">Gestion des Animaux</h3>
+            <div class="card p-4 shadow-sm mb-4">
+                <form action="{{ path('animal_new') }}" method="post">
+                    <div class="form-row">
+                        <div class="col">
+                            <input type="text" class="form-control" name="nom" placeholder="Nom de l'animal" required>
                         </div>
-                    </div>
-
-                    <!-- Cartes pour la gestion des comptes -->
-                    <div class="row mt-4">
-                        <div class="col-md-6">
-                            <div class="card text-center">
-                                <div class="card-body">
-                                    <h5 class="card-title">Employé</h5>
-                                    <p class="card-text">Créer/Gérer un compte Employé</p>
-                                    <a href="{{ path('user_new') }}" class="btn btn-primary">Créer un employé</a>
-                                </div>
-                            </div>
+                        <div class="col">
+                            <input type="text" class="form-control" name="race" placeholder="Race de l'animal" required>
                         </div>
-                    </div>
-
-                    <!-- Liste des employés avec options de modification et suppression -->
-                    <div class="row mt-5">
-                        <div class="col-md-12">
-                            <h3 class="mt-5">Liste des employés</h3>
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Email</th>
-                                        <th>Nom</th>
-                                        <th>Prénom</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for employee in users %}
-                                        <tr>
-                                            <td>{{ employee.email }}</td>
-                                            <td>{{ employee.nom }}</td>
-                                            <td>{{ employee.prenom }}</td>
-                                            <td>
-                                                <a href="{{ path('user_edit', {'id': employee.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
-                                                <form action="{{ path('user_delete', {'id': employee.id}) }}" method="post" style="display: inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet employé ?');">
-                                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ employee.id) }}">
-                                                    <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
-                                                </form>
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <!-- Section de gestion des animaux -->
-                    <div class="mt-5">
-                        <h2 class="mb-4">Gestion des Animaux</h2>
-                        <form action="{{ path('animal_new') }}" method="post">
-                            <div class="form-group">
-                                <label for="animal-name">Nom de l'animal</label>
-                                <input type="text" class="form-control" id="animal-name" name="prenom" placeholder="Entrez le nom de l'animal" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="race">Race</label>
-                                <input type="text" class="form-control" id="race" name="race" placeholder="Entrez la race de l'animal" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="habitat">Habitat</label>
-                                <select class="form-control" id="habitat" name="habitat_id" required>
-                                    {% for habitat in habitats %}
-                                        <option value="{{ habitat.id }}">{{ habitat.nom }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                            <button type="submit" class="btn btn-dark">Ajouter un animal</button>
-                        </form>
-
-                        <h3 class="mt-5">Liste des Animaux</h3>
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Nom</th>
-                                    <th>Race</th>
-                                    <th>Habitat</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for animal in animals %}
-                                    <tr>
-                                        <td>{{ animal.prenom }}</td>
-                                        <td>{{ animal.race }}</td>
-                                        <td>{{ animal.habitat.nom }}</td>
-                                        <td>
-                                            <a href="{{ path('animal_edit', {'id': animal.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
-                                            <form action="{{ path('animal_delete', {'id': animal.id}) }}" method="post" style="display:inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet animal ?');">
-                                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ animal.id) }}">
-                                                <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <!-- Section de gestion des habitats -->
-                    <div class="mt-5">
-                        <h2 class="mb-4">Gestion des Habitats</h2>
-                        <form action="{{ path('habitat_new') }}" method="post">
-                            <div class="form-group">
-                                <label for="habitat-name">Nom de l'Habitat</label>
-                                <input type="text" class="form-control" id="habitat-name" name="nom" placeholder="Entrez le nom de l'habitat" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="habitat-description">Description</label>
-                                <textarea class="form-control" id="habitat-description" name="description" rows="3" placeholder="Entrez la description de l'habitat" required></textarea>
-                            </Voici la suite et la fin du fichier `profile.html.twig` avec la gestion des **utilisateurs**, **animaux**, et **habitats** que seuls les administrateurs peuvent gérer :
-
-```twig
-                            </div>
-                            <button type="submit" class="btn btn-dark">Ajouter un habitat</button>
-                        </form>
-
-                        <h3 class="mt-5">Liste des Habitats</h3>
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Nom</th>
-                                    <th>Description</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
+                        <div class="col">
+                            <select class="form-control" name="habitat_id" required>
+                                <option value="">Sélectionner un habitat</option>
                                 {% for habitat in habitats %}
-                                    <tr>
-                                        <td>{{ habitat.nom }}</td>
-                                        <td>{{ habitat.description }}</td>
-                                        <td>
-                                            <a href="{{ path('habitat_edit', {'id': habitat.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
-                                            <form action="{{ path('habitat_delete', {'id': habitat.id}) }}" method="post" style="display:inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet habitat ?');">
-                                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ habitat.id) }}">
-                                                <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
-                                            </form>
-                                        </td>
-                                    </tr>
+                                    <option value="{{ habitat.id }}">{{ habitat.nom }}</option>
                                 {% endfor %}
-                            </tbody>
-                        </table>
+                            </select>
+                        </div>
+                        <div class="col">
+                            <button type="submit" class="btn btn-dark">Ajouter un animal</button>
+                        </div>
                     </div>
-                </div>
-            {% endif %}
+                </form>
+            </div>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Nom</th>
+                        <th>Race</th>
+                        <th>Habitat</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for animal in animals %}
+                        <tr>
+                            <td>{{ animal.nom }}</td>
+                            <td>{{ animal.race }}</td>
+                            <td>{{ animal.habitat.nom }}</td>
+                            <td>
+                                <a href="{{ path('animal_edit', {'id': animal.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
+                                <form action="{{ path('animal_delete', {'id': animal.id}) }}" method="post" style="display:inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet animal ?');">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ animal.id) }}">
+                                    <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
 </div>

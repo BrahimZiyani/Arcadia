@@ -34,6 +34,8 @@ class UserType extends AbstractType
         $builder->add('roles', ChoiceType::class, [
             'choices' => [
                 'Administrateur' => 'ROLE_ADMIN',
+                'Vétérinaire' => 'ROLE_VETERINAIRE',
+                'Employé' => 'ROLE_EMPLOYE',
             ],
             'multiple' => true,  // Permet plusieurs rôles
             'expanded' => true,  // Affiche des cases à cocher

@@ -10,9 +10,9 @@
 
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="card shadow-sm">
-                <div class="card-header bg-primary text-white">
-                    <h4>Formulaire d'inscription</h4>
+            <div class="card shadow-lg rounded">
+                <div class="card-header bg-primary text-white text-center">
+                    <h4 class="mb-0">Formulaire d'inscription</h4>
                 </div>
 
                 <div class="card-body">
@@ -43,11 +43,28 @@
                         {{ form_errors(form.password) }}
                     </div>
 
-                    <div class="text-center">
-                        <button type="submit" class="btn btn-primary">Créer</button>
-                        <a href="{{ path('app_home') }}" class="btn btn-secondary">Annuler</a>
+                    <div class="form-group mb-3">
+                        {{ form_label(form.roles, 'Rôles', {'label_attr': {'class': 'form-label'}}) }}
+                        <div class="form-check mb-2">
+                            {{ form_widget(form.roles.0, {'attr': {'class': 'form-check-input'}}) }}
+                            {{ form_label(form.roles.0, 'Administrateur', {'label_attr': {'class': 'form-check-label'}}) }}
+                        </div>
+                        <div class="form-check mb-2">
+                            {{ form_widget(form.roles.1, {'attr': {'class': 'form-check-input'}}) }}
+                            {{ form_label(form.roles.1, 'Vétérinaire', {'label_attr': {'class': 'form-check-label'}}) }}
+                        </div>
+                        <div class="form-check mb-2">
+                            {{ form_widget(form.roles.2, {'attr': {'class': 'form-check-input'}}) }}
+                            {{ form_label(form.roles.2, 'Employé', {'label_attr': {'class': 'form-check-label'}}) }}
+                        </div>
+                        {{ form_errors(form.roles) }}
                     </div>
-                    
+
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary w-50">Créer</button>
+                        <a href="{{ path('app_home') }}" class="btn btn-secondary w-50 mt-2">Annuler</a>
+                    </div>
+
                     {{ form_end(form) }}
                     {# Fin du formulaire #}
                 </div>
