@@ -82,46 +82,45 @@ class PageController extends AbstractController
 
     #[Route('/profile', name: 'app_profile')]
     public function profile(
-        UserRepository $userRepository,
-        HabitatRepository $habitatRepository,
-        AnimalRepository $animalRepository,
-        CompteRenduRepository $compteRenduRepository,
-        Request $request,
-        EntityManagerInterface $entityManager
+    UserRepository $userRepository,
+    HabitatRepository $habitatRepository,
+    AnimalRepository $animalRepository,
+    CompteRenduRepository $compteRenduRepository,
+    Request $request,
+    EntityManagerInterface $entityManager
     ): Response {
-        // Récupération des utilisateurs, habitats, animaux, et comptes rendus existants
-        $users = $userRepository->findAll();
-        $habitats = $habitatRepository->findAll();
-        $animals = $animalRepository->findAll();
-        $compteRendus = $compteRenduRepository->findAll();
+    // Récupération des utilisateurs, habitats, animaux, et comptes rendus existants
+    $users = $userRepository->findAll();
+    $habitats = $habitatRepository->findAll();
+    $animals = $animalRepository->findAll();
+    
+    // Récupération des comptes rendus triés par date décroissante
+    $compteRendus = $compteRenduRepository->findBy([], ['date' => 'DESC']);
 
-        // Ajoute un dump pour vérifier les données
-        dump($compteRendus);
+    // Création d'un nouveau compte rendu
+    $compteRendu = new CompteRendu();
+    $form = $this->createForm(CompteRenduType::class, $compteRendu);
+    $form->handleRequest($request);
 
-        // Création d'un nouveau compte rendu
-        $compteRendu = new CompteRendu();
-        $form = $this->createForm(CompteRenduType::class, $compteRendu);
-        $form->handleRequest($request);
+    if ($form->isSubmitted() && $form->isValid()) {
+        // Associe l'utilisateur connecté au compte rendu
+        $compteRendu->setUtilisateur($this->getUser());
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            // Associe l'utilisateur connecté au compte rendu
-            $compteRendu->setUtilisateur($this->getUser());
-            
-            // Enregistre le compte rendu en base de données
-            $entityManager->persist($compteRendu);
-            $entityManager->flush();
+        // Enregistre le compte rendu en base de données
+        $entityManager->persist($compteRendu);
+        $entityManager->flush();
 
-            // Redirection pour éviter la resoumission du formulaire
-            return $this->redirectToRoute('app_profile');
-        }
-
-        // Envoi des données au template Twig
-        return $this->render('page/profile.html.twig', [
-            'users' => $users,
-            'habitats' => $habitats,
-            'animals' => $animals,
-            'compteRendus' => $compteRendus,
-            'form' => $form->createView(),
-        ]);
+        // Redirection pour éviter la resoumission du formulaire
+        return $this->redirectToRoute('app_profile');
     }
+
+    // Envoi des données au template Twig
+    return $this->render('page/profile.html.twig', [
+        'users' => $users,
+        'habitats' => $habitats,
+        'animals' => $animals,
+        'compteRendus' => $compteRendus, // Rapport trié par date décroissante
+        'form' => $form->createView(),
+    ]);
+}
 }

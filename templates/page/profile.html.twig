@@ -11,7 +11,7 @@
                 <p class="text-muted">
                     {% if 'ROLE_ADMIN' in app.user.roles %}
                         Administrateur
-                    {% elseif 'ROLE_USER' in app.user.roles %}
+                    {% elseif 'ROLE_VETERINAIRE' in app.user.roles %}
                         Vétérinaire
                     {% else %}
                         Aucun rôle défini
@@ -23,7 +23,7 @@
         </div>
 
         <div class="col-md-9">
-            <!-- Section de statistiques avec design amélioré -->
+            <!-- Section de statistiques -->
             <h2 class="mb-4">Rapports Vétérinaire</h2>
             <div class="row text-center mb-4">
                 <div class="col-md-3">
@@ -53,31 +53,33 @@
             </div>
 
             <!-- Section de création de rapport -->
-            <h2 class="mb-4">Créer un rapport</h2>
-            <div class="card p-4 shadow-sm">
-                {{ form_start(form) }}
-                <div class="row">
-                    <div class="col-md-6">
-                        {{ form_row(form.animal, {'attr': {'class': 'form-control', 'placeholder': 'Sélectionnez un animal'}}) }}
+            {% if 'ROLE_ADMIN' in app.user.roles or 'ROLE_VETERINAIRE' in app.user.roles %}
+                <h2 class="mb-4">Créer un rapport</h2>
+                <div class="card p-4 shadow-sm">
+                    {{ form_start(form) }}
+                    <div class="row">
+                        <div class="col-md-6">
+                            {{ form_row(form.animal, {'attr': {'class': 'form-control', 'placeholder': 'Sélectionnez un animal'}}) }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form_row(form.date, {'attr': {'class': 'form-control', 'placeholder': 'jj/mm/aaaa'}}) }}
+                        </div>
                     </div>
-                    <div class="col-md-6">
-                        {{ form_row(form.date, {'attr': {'class': 'form-control', 'placeholder': 'jj/mm/aaaa'}}) }}
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            {{ form_row(form.etat, {'attr': {'class': 'form-control', 'placeholder': 'État de santé'}}) }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form_row(form.details, {'attr': {'class': 'form-control', 'placeholder': 'Détails du rapport'}}) }}
+                        </div>
                     </div>
+                    <div class="d-flex justify-content-between mt-4">
+                        <button type="reset" class="btn btn-outline-secondary px-4">Recommencer</button>
+                        <button type="submit" class="btn btn-dark px-4">Créer</button>
+                    </div>
+                    {{ form_end(form) }}
                 </div>
-                <div class="row mt-3">
-                    <div class="col-md-6">
-                        {{ form_row(form.etat, {'attr': {'class': 'form-control', 'placeholder': 'État de santé'}}) }}
-                    </div>
-                    <div class="col-md-6">
-                        {{ form_row(form.details, {'attr': {'class': 'form-control', 'placeholder': 'Détails du rapport'}}) }}
-                    </div>
-                </div>
-                <div class="d-flex justify-content-between mt-4">
-                    <button type="reset" class="btn btn-outline-secondary px-4">Recommencer</button>
-                    <button type="submit" class="btn btn-dark px-4">Créer</button>
-                </div>
-                {{ form_end(form) }}
-            </div>
+            {% endif %}
 
             <!-- Section de liste des comptes rendus existants -->
             <h3 class="mt-5">Liste des Comptes Rendus</h3>
@@ -89,16 +91,27 @@
                         <th>État</th>
                         <th>Détails</th>
                         <th>Utilisateur</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for compteRendu in compteRendus %}
+                    {% for compteRendu in compteRendus|sort((a, b) => b.date <=> a.date) %}
                         <tr>
                             <td>{{ compteRendu.animal.nom }}</td>
                             <td>{{ compteRendu.date|date('d/m/Y') }}</td>
                             <td>{{ compteRendu.etat }}</td>
                             <td>{{ compteRendu.details }}</td>
                             <td>{{ compteRendu.utilisateur.nom ?? 'Non spécifié' }}</td>
+                            <td>
+                                {% if 'ROLE_ADMIN' in app.user.roles or 'ROLE_VETERINAIRE' in app.user.roles %}
+                                    <form action="{{ path('compterendu_delete', {'id': compteRendu.id}) }}" method="post" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce rapport ?');">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ compteRendu.id) }}">
+                                        <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                                    </form>
+                                {% else %}
+                                    <button class="btn btn-danger btn-sm" disabled>Supprimer</button>
+                                {% endif %}
+                            </td>
                         </tr>
                     {% endfor %}
                 </tbody>
@@ -106,29 +119,6 @@
 
             <!-- Section de gestion des animaux -->
             <h3 class="mt-5">Gestion des Animaux</h3>
-            <div class="card p-4 shadow-sm mb-4">
-                <form action="{{ path('animal_new') }}" method="post">
-                    <div class="form-row">
-                        <div class="col">
-                            <input type="text" class="form-control" name="nom" placeholder="Nom de l'animal" required>
-                        </div>
-                        <div class="col">
-                            <input type="text" class="form-control" name="race" placeholder="Race de l'animal" required>
-                        </div>
-                        <div class="col">
-                            <select class="form-control" name="habitat_id" required>
-                                <option value="">Sélectionner un habitat</option>
-                                {% for habitat in habitats %}
-                                    <option value="{{ habitat.id }}">{{ habitat.nom }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="col">
-                            <button type="submit" class="btn btn-dark">Ajouter un animal</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
             <table class="table table-striped">
                 <thead>
                     <tr>
@@ -145,16 +135,70 @@
                             <td>{{ animal.race }}</td>
                             <td>{{ animal.habitat.nom }}</td>
                             <td>
-                                <a href="{{ path('animal_edit', {'id': animal.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
-                                <form action="{{ path('animal_delete', {'id': animal.id}) }}" method="post" style="display:inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet animal ?');">
-                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ animal.id) }}">
-                                    <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
-                                </form>
+                                {% if 'ROLE_ADMIN' in app.user.roles or 'ROLE_VETERINAIRE' in app.user.roles %}
+                                    <a href="{{ path('animal_edit', {'id': animal.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
+                                    <form action="{{ path('animal_delete', {'id': animal.id}) }}" method="post" style="display:inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet animal ?');">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ animal.id) }}">
+                                        <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                                    </form>
+                                {% else %}
+                                    <button class="btn btn-warning btn-sm" disabled>Modifier</button>
+                                    <button class="btn btn-danger btn-sm" disabled>Supprimer</button>
+                                {% endif %}
                             </td>
                         </tr>
                     {% endfor %}
                 </tbody>
             </table>
+
+            <!-- Section de gestion des employés -->
+            <h3 class="mt-5">Gestion des Employés</h3>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Nom</th>
+                        <th>Prénom</th>
+                        <th>Email</th>
+                        <th>Rôle</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                        <tr>
+                            <td>{{ user.nom }}</td>
+                            <td>{{ user.prenom }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>
+                                {% if 'ROLE_ADMIN' in user.roles %}
+                                    Administrateur
+                                {% elseif 'ROLE_VETERINAIRE' in user.roles %}
+                                    Vétérinaire
+                                {% else %}
+                                    Employé
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if 'ROLE_ADMIN' in app.user.roles %}
+                                    <a href="{{ path('user_edit', {'id': user.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
+                                    <form action="{{ path('user_delete', {'id': user.id}) }}" method="post" style="display:inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet employé ?');">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
+                                        <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                                    </form>
+                                {% else %}
+                                    <button class="btn btn-warning btn-sm" disabled>Modifier</button>
+                                    <button class="btn btn-danger btn-sm" disabled>Supprimer</button>
+                                {% endif %}
+                            </td> 
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% if 'ROLE_ADMIN' in app.user.roles %}
+                <div class="mt-3">
+                    <a href="{{ path('user_new') }}" class="btn btn-dark">Ajouter un employé</a>
+                </div>
+            {% endif %}
         </div>
     </div>
 </div>
