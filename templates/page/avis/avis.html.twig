@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Avis{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1 class="mb-4">Avis des visiteurs</h1>
+        
+        <h2 class="mb-4">Laissez votre avis</h2>
+        {{ form_start(form) }}
+            {{ form_row(form.prenom) }}
+            {{ form_row(form.dateVisite) }}
+            {{ form_row(form.contenu) }}
+            <button type="submit" class="btn btn-primary">Envoyer</button>
+        {{ form_end(form) }}
+
+        <hr>
+
+        <h2 class="mt-5">Avis des visiteurs validés</h2>
+        <ul class="list-group mt-3">
+            {% for avis in avisValides %}
+                <li class="list-group-item">
+                    <strong>{{ avis.prenom }}</strong> (visité le {{ avis.dateVisite|date('d/m/Y') }}) : {{ avis.contenu }}
+                </li>
+            {% else %}
+                <li class="list-group-item">Aucun avis pour le moment.</li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}

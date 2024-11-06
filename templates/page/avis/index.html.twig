@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des avis{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1>Liste des avis</h1>
+        <div class="row mt-4">
+            <div class="col-md-8 offset-md-2">
+                {% for avis in avisValides %}
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ avis.pseudo }}</h5>
+                            <p class="card-text">{{ avis.texte }}</p>
+                            <form method="post" action="{{ path('avis_index') }}">
+                                <input type="hidden" name="avis_id" value="{{ avis.id }}">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="is_valid" id="valid{{ avis.id }}" value="1" {% if avis.isValid %}checked{% endif %}>
+                                    <label class="form-check-label" for="valid{{ avis.id }}">
+                                        Valider
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="is_valid" id="invalid{{ avis.id }}" value="0" {% if not avis.isValid %}checked{% endif %}>
+                                    <label class="form-check-label" for="invalid{{ avis.id }}">
+                                        Invalider
+                                    </label>
+                                </div>
+                                <button type="submit" class="btn btn-primary mt-2">Mettre à jour</button>
+                            </form>
+                        </div>
+                    </div>
+                {% else %}
+                    <p>Aucun avis n'a été trouvé.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

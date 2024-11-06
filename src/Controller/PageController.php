@@ -3,11 +3,14 @@
 namespace App\Controller;
 
 use App\Entity\CompteRendu;
+use App\Entity\Avis;
 use App\Form\CompteRenduType;
+use App\Form\AvisType;
 use App\Repository\UserRepository;
 use App\Repository\HabitatRepository;
 use App\Repository\AnimalRepository;
 use App\Repository\CompteRenduRepository;
+use App\Repository\AvisRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,21 +18,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
-
 class PageController extends AbstractController
 {
     #[Route('/', name: 'app_home')]
     public function index(): Response
     {
         return $this->render('page/index.html.twig', [
-            'controller_name' => 'PageController',
-        ]);
-    }
-
-    #[Route('/habitats', name: 'app_habitats')]
-    public function habitats(): Response
-    {
-        return $this->render('page/habitats/show.html.twig', [
             'controller_name' => 'PageController',
         ]);
     }
@@ -42,11 +36,40 @@ class PageController extends AbstractController
         ]);
     }
 
-    #[Route('/avis', name: 'app_avis')]
-    public function avis(): Response
+    #[Route('/habitats', name: 'app_habitats')]
+    public function habitats(): Response
     {
-        return $this->render('page/avis.html.twig', [
+        return $this->render('page/habitats/index.html.twig', [
             'controller_name' => 'PageController',
+        ]);
+    }
+
+    #[Route('/avis', name: 'app_avis')]
+    public function avis(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $avis = new Avis();
+        $form = $this->createForm(AvisType::class, $avis);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $avis->setValide(false); // L'avis est créé mais non validé
+            $entityManager->persist($avis);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Votre avis a été soumis et est en attente de validation.');
+
+            return $this->redirectToRoute('app_avis');
+        }
+
+        if ($form->isSubmitted() && !$form->isValid()) {
+            $this->addFlash('error', 'Le formulaire contient des erreurs.');
+            foreach ($form->getErrors(true) as $error) {
+                $this->addFlash('error', $error->getMessage());
+            }
+        }
+
+        return $this->render('page/avis/avis.html.twig', [
+            'form' => $form->createView(),
         ]);
     }
 
@@ -61,14 +84,11 @@ class PageController extends AbstractController
     #[Route('/login', name: 'app_login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
-        // Récupérer les erreurs d'authentification, s'il y en a
         $error = $authenticationUtils->getLastAuthenticationError();
-
-        // Dernier email saisi
         $lastEmail = $authenticationUtils->getLastUsername();
 
         return $this->render('page/login.html.twig', [
-            'last_email' => $lastEmail,  // Changement de la variable pour plus de clarté
+            'last_email' => $lastEmail,
             'error' => $error,
         ]);
     }
@@ -76,51 +96,52 @@ class PageController extends AbstractController
     #[Route('/logout', name: 'app_logout')]
     public function logout(AuthenticationUtils $authenticationUtils): Response
     {
-        // Cette méthode peut rester vide : le processus de déconnexion est géré par Symfony
         throw new \Exception('Ne sera jamais atteinte car la déconnexion est gérée par Symfony.');
     }
 
     #[Route('/profile', name: 'app_profile')]
     public function profile(
-    UserRepository $userRepository,
-    HabitatRepository $habitatRepository,
-    AnimalRepository $animalRepository,
-    CompteRenduRepository $compteRenduRepository,
-    Request $request,
-    EntityManagerInterface $entityManager
+        UserRepository $userRepository,
+        HabitatRepository $habitatRepository,
+        AnimalRepository $animalRepository,
+        CompteRenduRepository $compteRenduRepository,
+        AvisRepository $avisRepository,
+        Request $request,
+        EntityManagerInterface $entityManager
     ): Response {
-    // Récupération des utilisateurs, habitats, animaux, et comptes rendus existants
-    $users = $userRepository->findAll();
-    $habitats = $habitatRepository->findAll();
-    $animals = $animalRepository->findAll();
-    
-    // Récupération des comptes rendus triés par date décroissante
-    $compteRendus = $compteRenduRepository->findBy([], ['date' => 'DESC']);
+        // Récupération des utilisateurs, habitats, animaux, et comptes rendus existants
+        $users = $userRepository->findAll();
+        $habitats = $habitatRepository->findAll();
+        $animals = $animalRepository->findAll();
+        
+        // Récupération des comptes rendus triés par date décroissante
+        $compteRendus = $compteRenduRepository->findBy([], ['date' => 'DESC']);
 
-    // Création d'un nouveau compte rendu
-    $compteRendu = new CompteRendu();
-    $form = $this->createForm(CompteRenduType::class, $compteRendu);
-    $form->handleRequest($request);
+        // Création d'un nouveau compte rendu
+        $compteRendu = new CompteRendu();
+        $form = $this->createForm(CompteRenduType::class, $compteRendu);
+        $form->handleRequest($request);
 
-    if ($form->isSubmitted() && $form->isValid()) {
-        // Associe l'utilisateur connecté au compte rendu
-        $compteRendu->setUtilisateur($this->getUser());
+        if ($form->isSubmitted() && $form->isValid()) {
+            $compteRendu->setUtilisateur($this->getUser());
+            $entityManager->persist($compteRendu);
+            $entityManager->flush();
+            return $this->redirectToRoute('app_profile');
+        }
 
-        // Enregistre le compte rendu en base de données
-        $entityManager->persist($compteRendu);
-        $entityManager->flush();
+        // Récupération des avis validés et non validés
+        $avisValides = $avisRepository->findBy(['valide' => true]);
+        $avisNonValides = $avisRepository->findBy(['valide' => false]);
 
-        // Redirection pour éviter la resoumission du formulaire
-        return $this->redirectToRoute('app_profile');
+        // Envoi des données au template Twig
+        return $this->render('page/profile.html.twig', [
+            'users' => $users,
+            'habitats' => $habitats,
+            'animals' => $animals,
+            'compteRendus' => $compteRendus,
+            'form' => $form->createView(),
+            'avisValides' => $avisValides,
+            'avisNonValides' => $avisNonValides,
+        ]);
     }
-
-    // Envoi des données au template Twig
-    return $this->render('page/profile.html.twig', [
-        'users' => $users,
-        'habitats' => $habitats,
-        'animals' => $animals,
-        'compteRendus' => $compteRendus, // Rapport trié par date décroissante
-        'form' => $form->createView(),
-    ]);
-}
 }
