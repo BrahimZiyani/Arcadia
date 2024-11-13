@@ -1,40 +1,25 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Liste des Habitats{% endblock %}
+{% block title %}Tous les Habitats{% endblock %}
 
 {% block body %}
 <div class="container mt-5">
-    <h2 class="mb-4">Liste des Habitats</h2>
-
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Nom</th>
-                <th>Description</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for habitat in habitats %}
-                <tr>
-                    <td>{{ habitat.nom }}</td>
-                    <td>{{ habitat.description }}</td>
-                    <td>
-                        <a href="{{ path('habitat_edit', {'id': habitat.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
-                        <form action="{{ path('habitat_delete', {'id': habitat.id}) }}" method="post" style="display:inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet habitat ?');">
-                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ habitat.id) }}">
-                            <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
-                        </form>
-                    </td>
-                </tr>
-            {% else %}
-                <tr>
-                    <td colspan="3" class="text-center">Aucun habitat trouvé</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-
-    <a href="{{ path('habitat_new') }}" class="btn btn-dark">Ajouter un nouvel habitat</a>
+    <h2 class="mb-4 text-center">Découvrez Nos Habitats</h2>
+    
+    <div class="row">
+        {% for habitat in habitats %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm">
+                    {% if habitat.images is not empty %}
+                        <img src="{{ asset('uploads/habitats/' ~ habitat.images[0]) }}" class="card-img-top" alt="{{ habitat.nom }}">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ habitat.nom }}</h5>
+                        <p class="card-text">{{ habitat.description }}</p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
 </div>
 {% endblock %}

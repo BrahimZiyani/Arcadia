@@ -12,34 +12,21 @@
         <div class="mt-5">
             <h2 class="text-center">Avis des visiteurs</h2>
             <p class="text-center">Retour en direct de nos visiteurs !</p>
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Emily</h5>
-                            <p class="card-text">J'ai adoré ma visite au Zoo Arcadia. Les animaux étaient bien soignés.</p>
-                            <p class="card-text"><small class="text-muted">★★★★★</small></p>
+            <div class="row justify-content-center">
+                {% if avisList is defined and avisList|length > 0 %}
+                    {% for avis in avisList %}
+                        <div class="col-md-4 mb-3 d-flex align-items-stretch">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ avis.prenom }}</h5>
+                                    <p class="card-text">{{ avis.contenu }}</p>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Jack</h5>
-                            <p class="card-text">Le zoo est un endroit idéal pour la famille. Mes enfants se sont éclatés !</p>
-                            <p class="card-text"><small class="text-muted">★★★★☆</small></p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Sophia</h5>
-                            <p class="card-text">Impressionnée par les efforts de conservation au Zoo Arcadia !</p>
-                            <p class="card-text"><small class="text-muted">★★★★★</small></p>
-                        </div>
-                    </div>
-                </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-center">Aucun avis disponible pour le moment.</p>
+                {% endif %}
             </div>
         </div>
 

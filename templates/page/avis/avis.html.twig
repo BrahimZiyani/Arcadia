@@ -1,30 +1,86 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Avis{% endblock %}
+{% block title %}Avis des visiteurs - Arcadia{% endblock %}
 
 {% block body %}
-    <div class="container mt-5">
-        <h1 class="mb-4">Avis des visiteurs</h1>
-        
-        <h2 class="mb-4">Laissez votre avis</h2>
-        {{ form_start(form) }}
-            {{ form_row(form.prenom) }}
-            {{ form_row(form.dateVisite) }}
-            {{ form_row(form.contenu) }}
-            <button type="submit" class="btn btn-primary">Envoyer</button>
-        {{ form_end(form) }}
+    <div class="row">
+        <div class="col-lg-8 mb-4">
+            <h1 class="border-bottom pb-2 mb-4">Avis des visiteurs</h1>
+            
+            {# Liste des avis validés #}
+            <div class="row">
+                {% for avis in avisValides %}
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100 shadow-sm">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <h5 class="card-title mb-0">{{ avis.prenom }}</h5>
+                                    <small class="text-muted">
+                                        <i class="far fa-calendar-alt me-1"></i>
+                                        {{ avis.dateVisite|date('d/m/Y') }}
+                                    </small>
+                                </div>
+                                <p class="card-text">{{ avis.contenu }}</p>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="col">
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i>
+                            Aucun avis n'a encore été publié.
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
 
-        <hr>
+            {# Pagination #}
+            <div class="d-flex justify-content-center mt-4">
+                {{ knp_pagination_render(avisValides, '@KnpPaginator/Pagination/bootstrap_v5_pagination.html.twig') }}
+            </div>
+        </div>
 
-        <h2 class="mt-5">Avis des visiteurs validés</h2>
-        <ul class="list-group mt-3">
-            {% for avis in avisValides %}
-                <li class="list-group-item">
-                    <strong>{{ avis.prenom }}</strong> (visité le {{ avis.dateVisite|date('d/m/Y') }}) : {{ avis.contenu }}
-                </li>
-            {% else %}
-                <li class="list-group-item">Aucun avis pour le moment.</li>
-            {% endfor %}
-        </ul>
+        <div class="col-lg-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="card-title h5 mb-0">
+                        <i class="fas fa-pen me-2"></i>
+                        Partagez votre expérience
+                    </h3>
+                </div>
+                <div class="card-body">
+                    {{ form_start(form) }}
+                        <div class="mb-3">
+                            {{ form_label(form.prenom) }}
+                            {{ form_widget(form.prenom, {'attr': {'class': 'form-control'}}) }}
+                            {{ form_errors(form.prenom) }}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form_label(form.dateVisite) }}
+                            {{ form_widget(form.dateVisite, {'attr': {'class': 'form-control'}}) }}
+                            {{ form_errors(form.dateVisite) }}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form_label(form.contenu) }}
+                            {{ form_widget(form.contenu, {'attr': {'class': 'form-control', 'rows': '5'}}) }}
+                            {{ form_errors(form.contenu) }}
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="fas fa-paper-plane me-2"></i>
+                            Envoyer mon avis
+                        </button>
+                    {{ form_end(form) }}
+                </div>
+                <div class="card-footer text-muted">
+                    <small>
+                        <i class="fas fa-info-circle me-1"></i>
+                        Votre avis sera publié après validation par notre équipe.
+                    </small>
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock %}

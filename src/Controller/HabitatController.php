@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\Habitat;
 use App\Form\HabitatType;
-use App\Entity\Animal;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,7 +13,6 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/habitat')]
 class HabitatController extends AbstractController
 {
-    // Création d'un nouvel habitat
     #[Route('/new', name: 'habitat_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -26,7 +24,7 @@ class HabitatController extends AbstractController
             $entityManager->persist($habitat);
             $entityManager->flush();
 
-            return $this->redirectToRoute('habitat_index');
+            return $this->redirectToRoute('app_habitats'); // Redirection vers la liste dans PageController
         }
 
         return $this->render('page/habitats/habitat_new.html.twig', [
@@ -34,31 +32,6 @@ class HabitatController extends AbstractController
         ]);
     }
 
-    // Liste des habitats
-    #[Route('/', name: 'habitat_index', methods: ['GET'])]
-    public function index(EntityManagerInterface $entityManager): Response
-    {
-        $habitats = $entityManager->getRepository(Habitat::class)->findAll();
-
-        return $this->render('page/habitats/index.html.twig', [
-            'habitats' => $habitats,
-        ]);
-    }
-
-    // Détails d'un habitat avec la liste des animaux
-    #[Route('/{id}', name: 'habitat_show', methods: ['GET'])]
-    public function show(Habitat $habitat, EntityManagerInterface $entityManager): Response
-    {
-        // Récupérer les animaux associés à cet habitat
-        $animals = $entityManager->getRepository(Animal::class)->findBy(['habitat' => $habitat]);
-
-        return $this->render('page/habitats/show.html.twig', [
-            'habitat' => $habitat,
-            'animals' => $animals,
-        ]);
-    }
-
-    // Édition d'un habitat
     #[Route('/{id}/edit', name: 'habitat_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Habitat $habitat, EntityManagerInterface $entityManager): Response
     {
@@ -68,7 +41,7 @@ class HabitatController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('habitat_index');
+            return $this->redirectToRoute('app_habitats'); // Redirection vers la liste dans PageController
         }
 
         return $this->render('page/habitats/habitat_edit.html.twig', [
@@ -77,7 +50,6 @@ class HabitatController extends AbstractController
         ]);
     }
 
-    // Suppression d'un habitat
     #[Route('/{id}/delete', name: 'habitat_delete', methods: ['POST'])]
     public function delete(Request $request, Habitat $habitat, EntityManagerInterface $entityManager): Response
     {
@@ -86,6 +58,6 @@ class HabitatController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('habitat_index');
+        return $this->redirectToRoute('app_habitats'); // Redirection vers la liste dans PageController
     }
 }
