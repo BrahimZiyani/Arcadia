@@ -26,7 +26,7 @@ class ServiceController extends AbstractController
             $entityManager->persist($service);
             $entityManager->flush();
 
-            return $this->redirectToRoute('service_index');
+            return $this->redirectToRoute('app_services');
         }
 
         return $this->render('page/services/services_new.html.twig', [
@@ -44,7 +44,7 @@ class ServiceController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('service_index');
+            return $this->redirectToRoute('app_services');
         }
 
         return $this->render('page/services/services_edit.html.twig', [
@@ -61,6 +61,6 @@ class ServiceController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('service_index');
+        return $this->redirectToRoute('app_services');
     }
 }
