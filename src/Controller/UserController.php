@@ -4,82 +4,75 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\UserType;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route('/user')]
+#[Route('/admin/users')]
 class UserController extends AbstractController
 {
-    // Créer un nouvel utilisateur
+    #[Route('/', name: 'user_index', methods: ['GET'])]
+    #[IsGranted('ROLE_ADMIN')]
+    public function index(UserRepository $userRepository): Response
+    {
+        return $this->render('user/index.html.twig', [
+            'users' => $userRepository->findAll(),
+        ]);
+    }
+
     #[Route('/new', name: 'user_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
+    #[IsGranted('ROLE_ADMIN')]
+    public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Hachage du mot de passe
-            $hashedPassword = $passwordHasher->hashPassword(
-                $user, 
-                $form->get('password')->getData()
-            );
-            $user->setPassword($hashedPassword);
-
-            // Sauvegarde de l'utilisateur dans la base de données
             $entityManager->persist($user);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_profile');
+            return $this->redirectToRoute('user_index');
         }
 
         return $this->render('user/new.html.twig', [
+            'user' => $user,
             'form' => $form->createView(),
         ]);
     }
 
-    // Éditer un utilisateur existant
-    #[Route('/edit/{id}', name: 'user_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, User $user, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
+    #[Route('/{id}/edit', name: 'user_edit', methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_ADMIN')]
+    public function edit(Request $request, User $user, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Si le mot de passe a été modifié, le ré-hacher
-            if ($form->get('password')->getData()) {
-                $hashedPassword = $passwordHasher->hashPassword(
-                    $user,
-                    $form->get('password')->getData()
-                );
-                $user->setPassword($hashedPassword);
-            }
-
-            // Mettre à jour les informations de l'utilisateur
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_profile');
+            return $this->redirectToRoute('user_index');
         }
 
         return $this->render('user/edit.html.twig', [
+            'user' => $user,
             'form' => $form->createView(),
         ]);
     }
 
-    // Supprimer un utilisateur
-    #[Route('/delete/{id}', name: 'user_delete', methods: ['POST'])]
+    #[Route('/{id}', name: 'user_delete', methods: ['POST'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function delete(Request $request, User $user, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
-            // Supprimer l'utilisateur de la base de données
             $entityManager->remove($user);
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_profile');
+        return $this->redirectToRoute('user_index');
     }
 }

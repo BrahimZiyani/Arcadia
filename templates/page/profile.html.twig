@@ -104,7 +104,7 @@
                             <td>{{ compteRendu.utilisateur.nom ?? 'Non spécifié' }}</td>
                             <td>
                                 {% if 'ROLE_ADMIN' in app.user.roles or 'ROLE_USER' in app.user.roles %}
-                                    <form action="{{ path('compterendu_delete', {'id': compteRendu.id}) }}" method="post" class="d-inline" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce rapport ?');">
+                                    <form action="{{ path('compte_rendu_delete', {'id': compteRendu.id}) }}" method="post" class="d-inline" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce rapport ?');">
                                         <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ compteRendu.id) }}">
                                         <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
                                     </form>
@@ -188,7 +188,7 @@
                             <td>{{ animal.race }}</td>
                             <td>{{ animal.habitat.nom }}</td>
                             <td>
-                                {% if 'ROLE_ADMIN' in app.user.roles %}
+                                {% if 'ROLE_ADMIN' in app.user.roles or 'ROLE_VETERINAIRE' in app.user.roles %}
                                     <a href="{{ path('animal_edit', {'id': animal.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
                                     <form action="{{ path('animal_delete', {'id': animal.id}) }}" method="post" style="display:inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet animal ?');">
                                         <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ animal.id) }}">
