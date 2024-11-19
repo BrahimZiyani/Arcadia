@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Schedule;
 use App\Form\ScheduleType;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Service\ScheduleService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,15 +14,14 @@ use Symfony\Component\Routing\Annotation\Route;
 class ScheduleController extends AbstractController
 {
     #[Route('/new', name: 'schedule_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, ScheduleService $scheduleService): Response
     {
         $schedule = new Schedule();
         $form = $this->createForm(ScheduleType::class, $schedule);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($schedule);
-            $entityManager->flush();
+            $scheduleService->creerSchedule($schedule);
 
             return $this->redirectToRoute('schedule_index');
         }

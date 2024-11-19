@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Entity\CompteRendu;
 use App\Form\CompteRenduType;
 use App\Repository\CompteRenduRepository;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Service\CompteRenduService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,10 +13,12 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/admin/comptes-rendus')]
+#[IsGranted('ROLE_ADMIN')]
+#[IsGranted('ROLE_EMPLOYE')]
+#[isGranted('ROLE_VETERINAIRE')]
 class CompteRenduController extends AbstractController
 {
     #[Route('/', name: 'compte_rendu_index', methods: ['GET'])]
-    #[IsGranted('ROLE_USER')]
     public function index(CompteRenduRepository $compteRenduRepository): Response
     {
         return $this->render('compte_rendu/index.html.twig', [
@@ -25,16 +27,14 @@ class CompteRenduController extends AbstractController
     }
 
     #[Route('/new', name: 'compte_rendu_new', methods: ['GET', 'POST'])]
-    #[IsGranted('ROLE_USER')]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, CompteRenduService $compteRenduService): Response
     {
         $compteRendu = new CompteRendu();
         $form = $this->createForm(CompteRenduType::class, $compteRendu);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($compteRendu);
-            $entityManager->flush();
+            $compteRenduService->creerCompteRendu($compteRendu);
 
             return $this->redirectToRoute('compte_rendu_index');
         }
@@ -46,14 +46,13 @@ class CompteRenduController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'compte_rendu_edit', methods: ['GET', 'POST'])]
-    #[IsGranted('ROLE_USER')]
-    public function edit(Request $request, CompteRendu $compteRendu, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, CompteRendu $compteRendu, CompteRenduService $compteRenduService): Response
     {
         $form = $this->createForm(CompteRenduType::class, $compteRendu);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
+            $compteRenduService->modifierCompteRendu();
 
             return $this->redirectToRoute('compte_rendu_index');
         }
@@ -65,14 +64,13 @@ class CompteRenduController extends AbstractController
     }
 
     #[Route('/{id}', name: 'compte_rendu_delete', methods: ['POST'])]
-    #[IsGranted('ROLE_USER')]
-    public function delete(Request $request, CompteRendu $compteRendu, EntityManagerInterface $entityManager): Response
+    public function delete(Request $request, CompteRendu $compteRendu, CompteRenduService $compteRenduService): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$compteRendu->getId(), $request->request->get('_token'))) {
-            $entityManager->remove($compteRendu);
-            $entityManager->flush();
+        if ($this->isCsrfTokenValid('delete' . $compteRendu->getId(), $request->request->get('_token'))) {
+            $compteRenduService->supprimerCompteRendu($compteRendu);
         }
 
         return $this->redirectToRoute('compte_rendu_index');
     }
 }
+

@@ -1,1 +1,22 @@
-1. S'assurer que les visiteurs ne peuvent pas accéder à certaines pages
+# Liste de choses à faire pour finir le projet Symfony
+
+- Tester le Contact
+
+- Tester le projet
+    - Écrire des tests unitaires
+    - Écrire des tests fonctionnels
+    - Effectuer des tests manuels
+
+- Optimiser et déployer
+    - Optimiser les performances (cache, optimisation des requêtes)
+    - Configurer l'environnement de production
+    - Déployer le projet sur le serveur
+
+- Documentation
+    - Documenter le code
+    - Rédiger un guide d'utilisation
+    - Préparer une documentation pour les développeurs
+
+- Maintenance
+    - Mettre en place un système de suivi des bugs
+    - Planifier les mises à jour et les améliorations futures

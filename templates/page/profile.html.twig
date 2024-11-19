@@ -7,23 +7,33 @@
     <div class="row">
         <div class="col-md-3 text-center">
             {% if app.user %}
-                <h4 class="mt-3">{{ app.user.nom }} {{ app.user.prenom }}</h4>
-                <p class="text-muted">
-                    {% if 'ROLE_ADMIN' in app.user.roles %}
-                        Administrateur
-                    {% elseif 'ROLE_USER' in app.user.roles %}
-                        Vétérinaire
+                <h4 class="mt-3">
+                    {% if app.user %}
+                        {{ app.user.nom }} {{ app.user.prenom }}
+                        <p class="text-muted">
+                            {% if 'ROLE_ADMIN' in app.user.roles %}
+                                Administrateur
+                            {% elseif 'ROLE_VETERINAIRE' in app.user.roles %}
+                                Vétérinaire
+                            {% elseif 'ROLE_EMPLOYE' in app.user.roles %}
+                                Employé
+                            {% else %}
+                                Aucun rôle défini
+                            {% endif %}
+                        </p>
                     {% else %}
-                        Aucun rôle défini
+                        <p>Utilisateur non connecté.</p>
                     {% endif %}
-                </p>
+                </h4>
             {% else %}
                 <p>Utilisateur non connecté.</p>
             {% endif %}
         </div>
 
         <div class="col-md-9">
-            <!-- Section de Statistiques -->
+
+    <!-- Section de Statistiques -->
+    
             <h2 class="mb-4">Rapports Vétérinaire</h2>
             <div class="row text-center mb-4">
                 <div class="col-md-3">
@@ -53,7 +63,7 @@
             </div>
 
             <!-- Section de Création de Rapport -->
-            {% if 'ROLE_ADMIN' in app.user.roles or 'ROLE_USER' in app.user.roles %}
+            {% if 'ROLE_ADMIN' in app.user.roles or 'ROLE_VETERINAIRE' in app.user.roles %}
                 <h2 class="mb-4">Créer un rapport</h2>
                 <div class="card p-4 shadow-sm">
                     {{ form_start(formCompteRendu) }}
@@ -103,12 +113,15 @@
                             <td>{{ compteRendu.details }}</td>
                             <td>{{ compteRendu.utilisateur.nom ?? 'Non spécifié' }}</td>
                             <td>
-                                {% if 'ROLE_ADMIN' in app.user.roles or 'ROLE_USER' in app.user.roles %}
-                                    <form action="{{ path('compte_rendu_delete', {'id': compteRendu.id}) }}" method="post" class="d-inline" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce rapport ?');">
+                                {% if 'ROLE_ADMIN' in app.user.roles or 'ROLE_VETERINAIRE' in app.user.roles %}
+                                    <form action="{{ path('compte_rendu_delete', {'id': compteRendu.id}) }}" method="post" class="delete-form d-inline">
                                         <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ compteRendu.id) }}">
-                                        <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                                        <button type="button" class="btn btn-danger btn-sm delete-button" data-url="{{ path('compte_rendu_delete', {'id': compteRendu.id}) }}" data-token="{{ csrf_token('delete' ~ compteRendu.id) }}">
+                                            Supprimer
+                                        </button>
                                     </form>
                                 {% endif %}
+
                             </td>
                         </tr>
                     {% endfor %}
@@ -131,11 +144,16 @@
                             <td>{{ habitat.nom }}</td>
                             <td>{{ habitat.description }}</td>
                             <td>
-                                <a href="{{ path('habitat_edit', {'id': habitat.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
-                                <form action="{{ path('habitat_delete', {'id': habitat.id}) }}" method="post" style="display:inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet habitat ?');">
-                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ habitat.id) }}">
-                                    <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
-                                </form>
+                                {% if 'ROLE_ADMIN' in app.user.roles or 'ROLE_VETERINAIRE' in app.user.roles %}
+                                    <a href="{{ path('habitat_edit', {'id': habitat.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
+                                    <button 
+                                        type="button" 
+                                        class="btn btn-danger btn-sm delete-button" 
+                                        data-url="{{ path('habitat_delete', {'id': habitat.id}) }}" 
+                                        data-token="{{ csrf_token('delete' ~ habitat.id) }}">
+                                        Supprimer
+                                    </button>
+                                {% endif %}
                             </td>
                         </tr>
                     {% else %}
@@ -145,10 +163,13 @@
                     {% endfor %}
                 </tbody>
             </table>
-            <a href="{{ path('habitat_new') }}" class="btn btn-dark">Ajouter un nouvel habitat</a>
+            {% if 'ROLE_ADMIN' in app.user.roles or 'ROLE_VETERINAIRE' in app.user.roles %}
+                <a href="{{ path('habitat_new') }}" class="btn btn-dark">Ajouter un nouvel habitat</a>
+            {% endif %}
 
             <!-- Section de Gestion des Animaux -->
             <h3 class="mt-5">Gestion des Animaux</h3>
+            {% if 'ROLE_ADMIN' in app.user.roles or 'ROLE_VETERINAIRE' in app.user.roles %}
             <div class="card p-4 shadow-sm mb-4">
                 <form action="{{ path('animal_new') }}" method="post">
                     <div class="row">
@@ -172,6 +193,7 @@
                     </div>
                 </form>
             </div>
+            {% endif %}
             <table class="table table-striped">
                 <thead>
                     <tr>
@@ -190,10 +212,13 @@
                             <td>
                                 {% if 'ROLE_ADMIN' in app.user.roles or 'ROLE_VETERINAIRE' in app.user.roles %}
                                     <a href="{{ path('animal_edit', {'id': animal.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
-                                    <form action="{{ path('animal_delete', {'id': animal.id}) }}" method="post" style="display:inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet animal ?');">
-                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ animal.id) }}">
-                                        <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
-                                    </form>
+                                    <button 
+                                        type="button" 
+                                        class="btn btn-danger btn-sm delete-button" 
+                                        data-url="{{ path('animal_delete', {'id': animal.id}) }}" 
+                                        data-token="{{ csrf_token('delete' ~ animal.id) }}">
+                                        Supprimer
+                                    </button>
                                 {% endif %}
                             </td>
                         </tr>
@@ -231,26 +256,33 @@
                             <td>
                                 {% if 'ROLE_ADMIN' in app.user.roles %}
                                     <a href="{{ path('user_edit', {'id': user.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
-                                    <form action="{{ path('user_delete', {'id': user.id}) }}" method="post" style="display:inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet employé ?');">
-                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
-                                        <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
-                                    </form>
+                                    <button 
+                                        type="button" 
+                                        class="btn btn-danger btn-sm delete-button" 
+                                        data-url="{{ path('user_delete', {'id': user.id}) }}" 
+                                        data-token="{{ csrf_token('delete' ~ user.id) }}">
+                                        Supprimer
+                                    </button>
                                 {% endif %}
+
                             </td>
                         </tr>
                     {% endfor %}
                 </tbody>
             </table>
+            {% if 'ROLE_ADMIN' in app.user.roles or 'ROLE_VETERINAIRE' in app.user.roles %}
             <div class="mt-3">
                 <a href="{{ path('user_new') }}" class="btn btn-dark">Ajouter un employé</a>
             </div>
+            {% endif %}
 
             <div class="col-md-9">
-<!-- Section de Services -->
-<h3 class="mt-5">Gestion des Services</h3>
-<div class="card p-4 shadow-sm mb-4">
-    <form action="{{ path('service_new') }}" method="post" enctype="multipart/form-data">
-        <div class="row">
+            
+            <!-- Section de Services -->
+            <h3 class="mt-5">Gestion des Services</h3>
+            <div class="card p-4 shadow-sm mb-4">
+                <form action="{{ path('service_new') }}" method="post" enctype="multipart/form-data">
+            <div class="row">
             <div class="col">
                 <input type="text" class="form-control" name="nom" placeholder="Nom du service" required>
             </div>
@@ -292,11 +324,15 @@
                     <!-- Bouton Modifier -->
                     <a href="{{ path('service_edit', {'id': service.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
 
-                    <!-- Bouton Supprimer -->
-                    <form action="{{ path('service_delete', {'id': service.id}) }}" method="post" style="display:inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce service ?');">
-                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ service.id) }}">
-                        <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
-                    </form>
+                    {% if 'ROLE_ADMIN' in app.user.roles %}
+                        <button 
+                            type="button" 
+                            class="btn btn-danger btn-sm delete-button" 
+                            data-url="{{ path('service_delete', {'id': service.id}) }}" 
+                            data-token="{{ csrf_token('delete' ~ service.id) }}">
+                            Supprimer
+                        </button>
+                    {% endif %}
                 </td>
             </tr>
         {% else %}
@@ -342,10 +378,13 @@
                                                 <input type="hidden" name="_token" value="{{ csrf_token('valider' ~ avis.id) }}">
                                                 <button type="submit" class="btn btn-success btn-sm">Accepter</button>
                                             </form>
-                                            <form action="{{ path('app_avis_supprimer', {'id': avis.id}) }}" method="post" class="d-inline" onsubmit="return confirm('Êtes-vous sûr de vouloir refuser cet avis ?');">
-                                                <input type="hidden" name="_token" value="{{ csrf_token('supprimer' ~ avis.id) }}">
-                                                <button type="submit" class="btn btn-danger btn-sm">Refuser</button>
-                                            </form>
+                                            <button 
+                                                type="button" 
+                                                class="btn btn-danger btn-sm delete-button" 
+                                                data-url="{{ path('app_avis_supprimer', {'id': avis.id}) }}" 
+                                                data-token="{{ csrf_token('supprimer' ~ avis.id) }}">
+                                                Refuser
+                                            </button>
                                         </td>
                                     </tr>
                                 {% endfor %}

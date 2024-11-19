@@ -4,8 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Animal;
 use App\Form\AnimalType;
-use App\Repository\AnimalRepository;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Service\AnimalService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,15 +16,14 @@ class AnimalController extends AbstractController
 {
     #[Route('/new', name: 'animal_new', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_ADMIN')]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, AnimalService $animalService): Response
     {
         $animal = new Animal();
         $form = $this->createForm(AnimalType::class, $animal);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($animal);
-            $entityManager->flush();
+            $animalService->creerAnimal($animal);
 
             return $this->redirectToRoute('app_animals');
         }
@@ -38,13 +36,13 @@ class AnimalController extends AbstractController
 
     #[Route('/{id}/edit', name: 'animal_edit', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_ADMIN')]
-    public function edit(Request $request, Animal $animal, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, Animal $animal, AnimalService $animalService): Response
     {
         $form = $this->createForm(AnimalType::class, $animal);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
+            $animalService->modifierAnimal();
 
             return $this->redirectToRoute('app_animals');
         }
@@ -57,11 +55,10 @@ class AnimalController extends AbstractController
 
     #[Route('/{id}', name: 'animal_delete', methods: ['POST'])]
     #[IsGranted('ROLE_ADMIN')]
-    public function delete(Request $request, Animal $animal, EntityManagerInterface $entityManager): Response
+    public function delete(Request $request, Animal $animal, AnimalService $animalService): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$animal->getId(), $request->request->get('_token'))) {
-            $entityManager->remove($animal);
-            $entityManager->flush();
+        if ($this->isCsrfTokenValid('delete' . $animal->getId(), $request->request->get('_token'))) {
+            $animalService->supprimerAnimal($animal);
         }
 
         return $this->redirectToRoute('app_animals');

@@ -26,7 +26,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 100)]
     private ?string $prenom = null;
 
-    #[ORM\Column]
+    #[ORM\Column(type: "json")]
     private array $roles = [];
 
     #[ORM\Column]
@@ -70,19 +70,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    /**
+     * Retourne l'identifiant unique pour l'utilisateur (ici l'email).
+     */
     public function getUserIdentifier(): string
     {
         return (string) $this->email;
     }
 
+    /**
+     * Retourne les rôles de l'utilisateur.
+     */
     public function getRoles(): array
     {
-        $roles = $this->roles;
-        $roles[] = 'ROLE_USER';
-
-        return array_unique($roles);
+        return array_unique($this->roles);
     }
 
+    /**
+     * Définit les rôles de l'utilisateur.
+     */
     public function setRoles(array $roles): static
     {
         $this->roles = $roles;
@@ -100,8 +106,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    /**
+     * Supprime les données sensibles non persistées.
+     */
     public function eraseCredentials(): void
     {
-        // Clear temporary, sensitive data here, if any
+        // Si vous avez des données sensibles temporaires, nettoyez-les ici
     }
 }

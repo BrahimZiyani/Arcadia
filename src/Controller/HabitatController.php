@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Entity\Habitat;
 use App\Form\HabitatType;
 use App\Repository\HabitatRepository;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Service\HabitatService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,10 +13,12 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/admin/habitats')]
+#[IsGranted('ROLE_ADMIN')]
+#[IsGranted('ROLE_EMPLOYE')]
+#[isGranted('ROLE_VETERINAIRE')]
 class HabitatController extends AbstractController
 {
     #[Route('/', name: 'habitat_index', methods: ['GET'])]
-    #[IsGranted('ROLE_USER')]
     public function index(HabitatRepository $habitatRepository): Response
     {
         return $this->render('habitat/index.html.twig', [
@@ -25,16 +27,14 @@ class HabitatController extends AbstractController
     }
 
     #[Route('/new', name: 'habitat_new', methods: ['GET', 'POST'])]
-    #[IsGranted('ROLE_ADMIN')]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, HabitatService $habitatService): Response
     {
         $habitat = new Habitat();
         $form = $this->createForm(HabitatType::class, $habitat);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($habitat);
-            $entityManager->flush();
+            $habitatService->creerHabitat($habitat);
 
             return $this->redirectToRoute('habitat_index');
         }
@@ -46,14 +46,13 @@ class HabitatController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'habitat_edit', methods: ['GET', 'POST'])]
-    #[IsGranted('ROLE_ADMIN')]
-    public function edit(Request $request, Habitat $habitat, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, Habitat $habitat, HabitatService $habitatService): Response
     {
         $form = $this->createForm(HabitatType::class, $habitat);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
+            $habitatService->modifierHabitat();
 
             return $this->redirectToRoute('habitat_index');
         }
@@ -65,12 +64,10 @@ class HabitatController extends AbstractController
     }
 
     #[Route('/{id}', name: 'habitat_delete', methods: ['POST'])]
-    #[IsGranted('ROLE_ADMIN')]
-    public function delete(Request $request, Habitat $habitat, EntityManagerInterface $entityManager): Response
+    public function delete(Request $request, Habitat $habitat, HabitatService $habitatService): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$habitat->getId(), $request->request->get('_token'))) {
-            $entityManager->remove($habitat);
-            $entityManager->flush();
+        if ($this->isCsrfTokenValid('delete' . $habitat->getId(), $request->request->get('_token'))) {
+            $habitatService->supprimerHabitat($habitat);
         }
 
         return $this->redirectToRoute('habitat_index');

@@ -2,36 +2,24 @@
 
 namespace App\Controller;
 
-use App\Entity\CompteRendu;
 use App\Entity\Avis;
-use App\Form\CompteRenduType;
 use App\Form\AvisType;
-use App\Repository\UserRepository;
-use App\Repository\HabitatRepository;
-use App\Repository\ServiceRepository;
-use App\Repository\AnimalRepository;
-use App\Repository\CompteRenduRepository;
+use App\Service\AvisService;
+use App\Service\ProfileService;
 use App\Repository\AvisRepository;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\ServiceRepository;
+use App\Repository\HabitatRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
-use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class PageController extends AbstractController
 {
-    private EntityManagerInterface $entityManager;
-
-    public function __construct(EntityManagerInterface $entityManager)
-    {
-        $this->entityManager = $entityManager;
-    }
-
-    // ROUTES PUBLIQUES
+    public function __construct(private AvisService $avisService) {}
 
     #[Route('/', name: 'app_home')]
     public function index(AvisRepository $avisRepository): Response
@@ -41,6 +29,21 @@ class PageController extends AbstractController
         return $this->render('page/index.html.twig', [
             'avisList' => $avisList,
         ]);
+    }
+    
+    #[Route('/delete-endpoint', name: 'delete_endpoint', methods: ['POST'])]
+    public function delete(Request $request): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        $id = $data['id'] ?? null;
+        $csrfToken = $data['csrf_token'] ?? null;
+
+        if (!$this->isCsrfTokenValid('delete' . $id, $csrfToken)) {
+            return new JsonResponse(['error' => 'Invalid CSRF token'], Response::HTTP_FORBIDDEN);
+        }
+
+        // Supprimez l'élément correspondant à $id...
+        return new JsonResponse(['message' => 'Element deleted successfully']);
     }
 
     #[Route('/services', name: 'app_services')]
@@ -53,7 +56,7 @@ class PageController extends AbstractController
         ]);
     }
 
-    #[Route('/habitats', name: 'app_habitats', methods: ['GET'])]
+    #[Route('/habitats', name: 'app_habitats')]
     public function habitatsShow(HabitatRepository $habitatRepository): Response
     {
         $habitats = $habitatRepository->findAll();
@@ -64,38 +67,25 @@ class PageController extends AbstractController
     }
 
     #[Route('/avis', name: 'app_avis')]
-    public function avis(
-        Request $request,
-        AvisRepository $avisRepository,
-        PaginatorInterface $paginator
-    ): Response {
+    public function avis(Request $request, AvisRepository $avisRepository, PaginatorInterface $paginator): Response
+    {
         $query = $avisRepository->createQueryBuilder('a')
             ->where('a.valide = :valide')
             ->setParameter('valide', true)
             ->orderBy('a.dateVisite', 'DESC')
             ->getQuery();
 
-        $avisValides = $paginator->paginate(
-            $query,
-            $request->query->getInt('page', 1),
-            6
-        );
+        $avisValides = $paginator->paginate($query, $request->query->getInt('page', 1), 6);
 
         $avis = new Avis();
         $form = $this->createForm(AvisType::class, $avis);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $avis->setValide(false);
-            $this->entityManager->persist($avis);
-            $this->entityManager->flush();
+            $this->avisService->creerAvis($avis);
 
             $this->addFlash('success', 'Votre avis a été soumis et est en attente de validation.');
             return $this->redirectToRoute('app_avis');
-        }
-
-        if ($form->isSubmitted() && !$form->isValid()) {
-            $this->addFlash('error', 'Veuillez corriger les erreurs dans le formulaire.');
         }
 
         return $this->render('page/avis/avis.html.twig', [
@@ -104,124 +94,54 @@ class PageController extends AbstractController
         ]);
     }
 
-    #[Route('/contact', name: 'app_contact')]
-    public function contact(): Response
+    #[Route('/profile', name: 'app_profile')]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
+    public function profile(Request $request, ProfileService $profileService): Response
     {
-        return $this->render('page/contact.html.twig');
+    // Gère le formulaire dans le service
+    $formCompteRendu = $profileService->handleCompteRenduForm($request);
+
+    // Si le formulaire a été soumis avec succès, redirige
+    if ($formCompteRendu === null) {
+        return $this->redirectToRoute('app_profile');
     }
 
-    #[Route('/login', name: 'app_login')]
-    public function login(AuthenticationUtils $authenticationUtils): Response
-    {
-        $error = $authenticationUtils->getLastAuthenticationError();
-        $lastEmail = $authenticationUtils->getLastUsername();
+    // Récupère les données de profil
+    $profileData = $profileService->getProfileData();
 
-        return $this->render('page/login.html.twig', [
-            'last_email' => $lastEmail,
-            'error' => $error,
-        ]);
+    // Ajoute la vue du formulaire aux données
+    return $this->render('page/profile.html.twig', array_merge($profileData, [
+        'formCompteRendu' => $formCompteRendu->createView(),
+    ]));
     }
-
-    #[Route('/logout', name: 'app_logout')]
-    public function logout(): void
-    {
-        throw new \LogicException('Cette méthode peut rester vide - elle sera interceptée par le firewall.');
-    }
-
-    // ROUTES RESTREINTES AU PERSONNEL
 
     #[Route('/avis/{id}/valider', name: 'app_avis_valider', methods: ['POST'])]
-    #[IsGranted('ROLE_ADMIN', message: 'Seuls les administrateurs peuvent valider les avis.')]
+    #[IsGranted('ROLE_ADMIN')]
     public function validerAvis(Request $request, Avis $avis): Response
     {
-        if (!$this->isCsrfTokenValid('valider'.$avis->getId(), $request->request->get('_token'))) {
+        if (!$this->isCsrfTokenValid('valider' . $avis->getId(), $request->request->get('_token'))) {
             $this->addFlash('error', 'Token CSRF invalide.');
             return $this->redirectToRoute('app_profile');
         }
 
-        $avis->setValide(true);
-        $this->entityManager->flush();
+        $this->avisService->validerAvis($avis);
         $this->addFlash('success', 'L\'avis a été validé avec succès.');
 
         return $this->redirectToRoute('app_profile');
     }
 
     #[Route('/avis/{id}/supprimer', name: 'app_avis_supprimer', methods: ['POST'])]
-    #[IsGranted('ROLE_ADMIN', message: 'Seuls les administrateurs peuvent supprimer les avis.')]
+    #[IsGranted('ROLE_ADMIN')]
     public function supprimerAvis(Request $request, Avis $avis): Response
     {
-        if (!$this->isCsrfTokenValid('supprimer'.$avis->getId(), $request->request->get('_token'))) {
+        if (!$this->isCsrfTokenValid('supprimer' . $avis->getId(), $request->request->get('_token'))) {
             $this->addFlash('error', 'Token CSRF invalide.');
             return $this->redirectToRoute('app_profile');
         }
 
-        $this->entityManager->remove($avis);
-        $this->entityManager->flush();
+        $this->avisService->supprimerAvis($avis);
         $this->addFlash('success', 'L\'avis a été supprimé avec succès.');
 
         return $this->redirectToRoute('app_profile');
-    }
-
-    #[Route('/profile', name: 'app_profile')]
-    #[IsGranted('ROLE_USER', message: 'Accès réservé au personnel.')]
-    public function profile(
-        UserRepository $userRepository,
-        HabitatRepository $habitatRepository,
-        AnimalRepository $animalRepository,
-        ServiceRepository $serviceRepository,
-        CompteRenduRepository $compteRenduRepository,
-        AvisRepository $avisRepository,
-        Request $request,
-        PaginatorInterface $paginator
-    ): Response {
-        $users = $userRepository->findAll();
-        $habitats = $habitatRepository->findAll();
-        $animals = $animalRepository->findAll();
-        $services = $serviceRepository->findAll();
-
-        $compteRendusQuery = $compteRenduRepository->createQueryBuilder('cr')
-            ->orderBy('cr.date', 'DESC')
-            ->getQuery();
-
-        $compteRendus = $paginator->paginate(
-            $compteRendusQuery,
-            $request->query->getInt('page_cr', 1),
-            5
-        );
-
-        $compteRendu = new CompteRendu();
-        $formCompteRendu = $this->createForm(CompteRenduType::class, $compteRendu);
-        $formCompteRendu->handleRequest($request);
-
-        if ($formCompteRendu->isSubmitted() && $formCompteRendu->isValid()) {
-            $compteRendu->setUtilisateur($this->getUser());
-            $this->entityManager->persist($compteRendu);
-            $this->entityManager->flush();
-
-            $this->addFlash('success', 'Le compte rendu a été créé avec succès.');
-            return $this->redirectToRoute('app_profile');
-        }
-
-        $avisNonValidesQuery = $avisRepository->createQueryBuilder('a')
-            ->where('a.valide = :valide')
-            ->setParameter('valide', false)
-            ->orderBy('a.dateVisite', 'DESC')
-            ->getQuery();
-
-        $avisNonValides = $paginator->paginate(
-            $avisNonValidesQuery,
-            $request->query->getInt('page_avis', 1),
-            5
-        );
-
-        return $this->render('page/profile.html.twig', [
-            'users' => $users,
-            'habitats' => $habitats,
-            'animals' => $animals,
-            'services' => $services,
-            'compteRendus' => $compteRendus,
-            'formCompteRendu' => $formCompteRendu->createView(),
-            'avisNonValides' => $avisNonValides,
-        ]);
     }
 }
