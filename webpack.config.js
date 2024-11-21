@@ -13,6 +13,8 @@ Encore
     // Ajouter une entrée pour l'application
     .addEntry('app', './assets/js/app.js')
     // Permet de diviser les fichiers en plus petits morceaux pour une optimisation accrue
+    .addEntry('delete', './assets/js/delete.js')
+    // Ajout de delete.js
     .splitEntryChunks()
     // Active un fichier de runtime unique
     .enableSingleRuntimeChunk()

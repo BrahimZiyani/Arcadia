@@ -370,3 +370,7 @@
 </div>
 {% endblock %}
 
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/components/delete.js') }}"></script>
+{% endblock %}
