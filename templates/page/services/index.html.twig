@@ -4,23 +4,29 @@
 
 {% block body %}
 <div class="container mt-5">
-    <h2 class="text-center mb-4">Nos Services</h2>
+    <h2 class="text-center mb-4" style="color: #2A9D8F;">Nos Services</h2>
     
     <div class="row">
         {% for service in services %}
             <div class="col-md-4 mb-4">
-                <div class="card">
+                <div class="card h-100 shadow-sm" style="border: 1px solid #E0E0E0;">
                     {% if service.photo %}
-                        <img src="{{ asset(service.photo) }}" class="card-img-top" alt="Photo de {{ service.nom }}">
+                        <img src="{{ asset(service.photo) }}" class="card-img-top" alt="Photo de {{ service.nom }}" style="height: 200px; object-fit: cover;">
+                    {% else %}
+                        <div class="d-flex align-items-center justify-content-center bg-light" style="height: 200px; color: #6c757d; font-size: 14px;">
+                            Pas d'image disponible
+                        </div>
                     {% endif %}
                     <div class="card-body">
-                        <h5 class="card-title">{{ service.nom }}</h5>
-                        <p class="card-text">{{ service.description }}</p>
+                        <h5 class="card-title" style="color: #2A9D8F;">{{ service.nom }}</h5>
+                        <p class="card-text" style="color: #353535;">{{ service.description|length > 100 ? service.description|slice(0, 100) ~ '...' : service.description }}</p>
                     </div>
                 </div>
             </div>
         {% else %}
-            <p class="text-center">Aucun service disponible pour le moment.</p>
+            <div class="col-12">
+                <p class="text-center" style="color: #353535;">Aucun service disponible pour le moment.</p>
+            </div>
         {% endfor %}
     </div>
 </div>

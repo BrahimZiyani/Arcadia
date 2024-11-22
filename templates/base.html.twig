@@ -5,11 +5,10 @@
     <link rel="icon" type="image/x-icon" href="{{ asset('/images/LogoArcadia.png') }}">
     <title>Arcadia</title>
 
-    <!-- Add Google Fonts -->
+    <!-- Google Fonts pour Roboto -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 
-    <!-- Add Bootstrap CSS from CDN -->
-    <!-- Add Bootstrap CSS from CDN -->
+    <!-- Bootstrap CSS depuis un CDN -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 
     {% block stylesheets %}
@@ -17,67 +16,78 @@
     {% endblock %}
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-light">
-    <div class="logo">
-    <a class="navbar-brand" href="{{ path('app_home') }}">
-        <img src="{{ asset('/images/LogoArcadia.png') }}" height="60px">
-    </a>
+<!-- Barre de navigation -->
+<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #F1FAEE;">
+    <div class="container">
+        <!-- Logo et Nom -->
+        <a class="navbar-brand d-flex align-items-center" href="{{ path('app_home') }}">
+            <img src="{{ asset('/images/LogoArcadia.png') }}" height="50px" alt="Logo Arcadia">
+            <h3 class="ml-2 font-weight-bold" style="color: #2A9D8F; font-family: 'Roboto', sans-serif;">ARCADIA</h3>
+        </a>
 
-    <a class="navbar-brand" href="{{ path('app_home') }}">
-    <h3 href="{{ path('app_home') }}">ARCADIA</h3>
-    </a>
-    </div>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="{{ path('app_home') }}">Accueil <span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{ path('app_habitats') }}">Nos Habitats</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{ path('app_services') }}">Nos Services</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{ path('app_avis') }}">Avis</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{ path('app_contact') }}">Contact</a>
-            </li>
-            <li class="nav-item">
-                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                    <a class="nav-link btn btn-warning text-white" href="{{ path('app_profile') }}">Profil</a>
-                    <a class="nav-link btn btn-danger text-white ml-2" href="{{ path('app_logout') }}">Déconnexion</a>
-                {% else %}
-                    <a class="nav-link btn btn-warning text-white" href="{{ path('app_login') }}">Connexion Staff</a>
-                {% endif %}
-            </li>
-        </ul>
+        <!-- Bouton responsive pour les mobiles -->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Liens du menu -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto align-items-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('app_home') }}" style="color: #353535;">Accueil</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('app_habitats') }}" style="color: #353535;">Nos Habitats</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('app_services') }}" style="color: #353535;">Nos Services</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('app_avis') }}" style="color: #353535;">Avis</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('app_contact') }}" style="color: #353535;">Contact</a>
+                </li>
+                <!-- Gestion des boutons connexion/déconnexion -->
+                <li class="nav-item d-flex align-items-center">
+                    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                        <a class="btn text-white mr-2" href="{{ path('app_profile') }}" 
+                        style="background-color: #2A9D8F; width: 120px;">Profil</a>
+                        <a class="btn text-white" href="{{ path('app_logout') }}" 
+                        style="background-color: #353535; width: 120px;">Déconnexion</a>
+                    {% else %}
+                        <a class="btn text-white px-3" href="{{ path('app_login') }}" 
+                        style="background-color: #2A9D8F;">Connexion Staff</a>
+                    {% endif %}
+                </li>
+            </ul>
+        </div>
     </div>
 </nav>
 
+
+<!-- Contenu principal -->
 <div class="container mt-4">
     {% block body %}{% endblock %}
 </div>
 
-<!-- Footer Section -->
-<footer class="mt-5 text-center">
+<!-- Pied de page -->
+<footer class="mt-5 text-center" style="background-color: #F1FAEE; color: #353535;">
     <div class="container">
         <div class="row">
+            <!-- Liens rapides -->
             <div class="col">
-                <p>Nous contacter</p>
+                <p><a href="#" style="color: #2A9D8F;">Nous contacter</a></p>
             </div>
             <div class="col">
-                <p>Conditions d'utilisation</p>
+                <p><a href="#" style="color: #2A9D8F;">Conditions d'utilisation</a></p>
             </div>
             <div class="col">
-                <p>Politique de confidentialité</p>
+                <p><a href="#" style="color: #2A9D8F;">Politique de confidentialité</a></p>
             </div>
         </div>
-        <div class="row">
+        <!-- Texte du copyright -->
+        <div class="row mt-3">
             <div class="col">
                 <p>&copy; 2024 Arcadia Zoo</p>
             </div>
@@ -85,15 +95,14 @@
     </div>
 </footer>
 
-<!-- Add jQuery, Popper.js, and Bootstrap JS from CDN -->
+<!-- Scripts nécessaires pour Bootstrap -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<!-- Scripts supplémentaires -->
 {% block javascripts %}
     {{ encore_entry_script_tags('app') }}
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    {{ encore_entry_script_tags('delete') }}
 {% endblock %}
 </body>
 </html>

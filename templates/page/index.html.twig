@@ -7,44 +7,61 @@
     <!-- Swiper-->
     <div id="react-root"></div>
     <div class="container">
-        
-        <!-- Visitors' Reviews Section -->
+
+        <!-- Section des avis des visiteurs -->
         <div class="mt-5">
-            <h2 class="text-center">Avis des visiteurs</h2>
-            <p class="text-center">Retour en direct de nos visiteurs !</p>
+            <h2 class="text-center" style="color: #2A9D8F;">Avis des visiteurs</h2>
+            <p class="text-center" style="color: #353535;">Retour en direct de nos visiteurs !</p>
             <div class="row justify-content-center">
                 {% if avisList is defined and avisList|length > 0 %}
                     {% for avis in avisList %}
                         <div class="col-md-4 mb-3 d-flex align-items-stretch">
-                            <div class="card">
+                            <div class="card shadow-sm" style="border: 1px solid #E0E0E0; background-color: #F1FAEE;">
                                 <div class="card-body">
-                                    <h5 class="card-title">{{ avis.prenom }}</h5>
-                                    <p class="card-text">{{ avis.contenu }}</p>
+                                    <h5 class="card-title" style="color: #2A9D8F;">{{ avis.prenom }}</h5>
+                                    <p class="card-text" style="color: #353535;">{{ avis.contenu }}</p>
                                 </div>
                             </div>
                         </div>
                     {% endfor %}
                 {% else %}
-                    <p class="text-center">Aucun avis disponible pour le moment.</p>
+                    <p class="text-center" style="color: #353535;">Aucun avis disponible pour le moment.</p>
                 {% endif %}
             </div>
         </div>
 
-        <!-- Newsletter Section -->
+        <!-- Section de l'histoire du Zoo -->
+        <div class="mt-5">
+            <h2 class="text-center" style="color: #2A9D8F;">L'histoire du Zoo</h2>
+            <p class="text-center" style="color: #353535;">Découvrez l'histoire fascinante de notre Zoo, depuis sa création jusqu'à aujourd'hui.</p>
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card shadow-sm" style="border: 1px solid #E0E0E0; background-color: #F1FAEE;">
+                        <div class="card-body">
+                            <p style="color: #353535;">Notre Zoo a été fondé en 1920 par un groupe de passionnés d'animaux. Depuis lors, il a évolué pour devenir l'un des principaux centres de conservation et d'éducation sur la faune dans le pays. Avec plus de 500 espèces d'animaux, notre Zoo offre une expérience unique et éducative pour les visiteurs de tous âges.</p>
+                            <p style="color: #353535;">Au fil des années, nous avons développé de nombreux programmes de conservation et de recherche pour protéger les espèces menacées et sensibiliser le public à l'importance de la biodiversité. Nous sommes fiers de notre héritage et nous nous engageons à continuer à offrir un environnement sûr et enrichissant pour nos animaux et nos visiteurs.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section de la newsletter -->
         <div class="mt-5 text-center">
-            <h2>Inscrivez-vous à notre newsletter</h2>
-            <p>Pour ne rien rater des actualités du Zoo !</p>
+            <h2 style="color: #2A9D8F;">Inscrivez-vous à notre newsletter</h2>
+            <p style="color: #353535;">Pour ne rien rater des actualités du Zoo !</p>
             <form class="form-inline justify-content-center">
                 <div class="form-group mb-2">
                     <label for="email" class="sr-only">Email</label>
-                    <input type="email" class="form-control" id="email" placeholder="Entrez votre email">
+                    <input type="email" class="form-control" id="email" placeholder="Entrez votre email" style="border: 1px solid #2A9D8F;">
                 </div>
                 <div class="form-group mx-sm-3 mb-2">
                     <label for="name" class="sr-only">Nom</label>
-                    <input type="text" class="form-control" id="name" placeholder="Entrez votre nom">
+                    <input type="text" class="form-control" id="name" placeholder="Entrez votre nom" style="border: 1px solid #2A9D8F;">
                 </div>
-                <button type="submit" class="btn btn-primary mb-2">Inscription</button>
+                <button type="submit" class="btn text-white mb-2" style="background-color: #2A9D8F;">Inscription</button>
             </form>
         </div>
+
     </div>
 {% endblock %}

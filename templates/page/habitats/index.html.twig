@@ -4,18 +4,26 @@
 
 {% block body %}
 <div class="container mt-5">
-    <h2 class="mb-4 text-center">Découvrez Nos Habitats</h2>
+    <h2 class="mb-4 text-center" style="color: #2A9D8F;">Découvrez Nos Habitats</h2>
     
     <div class="row">
         {% for habitat in habitats %}
             <div class="col-md-4 mb-4">
-                <div class="card h-100 shadow-sm">
+                <div class="card h-100 shadow-sm" style="border: 1px solid #E0E0E0;">
                     {% if habitat.images is not empty %}
-                        <img src="{{ asset('uploads/habitats/' ~ habitat.images[0]) }}" class="card-img-top" alt="{{ habitat.nom }}">
+                        <img src="{{ asset('uploads/habitats/' ~ habitat.images[0]) }}" 
+                             class="card-img-top" 
+                             alt="{{ habitat.nom }}" 
+                             style="height: 200px; object-fit: cover;">
+                    {% else %}
+                        <div class="d-flex align-items-center justify-content-center bg-light" 
+                             style="height: 200px; color: #6c757d; font-size: 14px;">
+                            Pas d'image disponible
+                        </div>
                     {% endif %}
                     <div class="card-body">
-                        <h5 class="card-title">{{ habitat.nom }}</h5>
-                        <p class="card-text">{{ habitat.description }}</p>
+                        <h5 class="card-title" style="color: #2A9D8F;">{{ habitat.nom }}</h5>
+                        <p class="card-text" style="color: #353535;">{{ habitat.description|length > 100 ? habitat.description|slice(0, 100) ~ '...' : habitat.description }}</p>
                     </div>
                 </div>
             </div>

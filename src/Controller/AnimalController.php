@@ -9,13 +9,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
+
+
 
 #[Route('/admin/animals')]
 class AnimalController extends AbstractController
 {
     #[Route('/new', name: 'animal_new', methods: ['GET', 'POST'])]
-    #[IsGranted('ROLE_ADMIN')]
     public function new(Request $request, AnimalService $animalService): Response
     {
         $animal = new Animal();
@@ -35,7 +35,6 @@ class AnimalController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'animal_edit', methods: ['GET', 'POST'])]
-    #[IsGranted('ROLE_ADMIN')]
     public function edit(Request $request, Animal $animal, AnimalService $animalService): Response
     {
         $form = $this->createForm(AnimalType::class, $animal);
@@ -54,7 +53,6 @@ class AnimalController extends AbstractController
     }
 
     #[Route('/{id}', name: 'animal_delete', methods: ['POST'])]
-    #[IsGranted('ROLE_ADMIN')]
     public function delete(Request $request, Animal $animal, AnimalService $animalService): Response
     {
         if ($this->isCsrfTokenValid('delete' . $animal->getId(), $request->request->get('_token'))) {

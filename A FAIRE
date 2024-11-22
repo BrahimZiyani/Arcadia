@@ -1,11 +1,17 @@
 # Liste de choses à faire pour finir le projet Symfony
+
+22/11/2024
+- SECURITY.YAML
+- Gérer l'upload d'images
 - Respecter la DA
 
+23/11/2024
 - Tester le projet
     - Écrire des tests unitaires
     - Écrire des tests fonctionnels
     - Effectuer des tests manuels
 
+24/11/2024
 - Optimiser et déployer
     - Optimiser les performances (cache, optimisation des requêtes)
     - Configurer l'environnement de production

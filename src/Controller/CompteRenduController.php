@@ -10,12 +10,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/admin/comptes-rendus')]
-#[IsGranted('ROLE_ADMIN')]
-#[IsGranted('ROLE_EMPLOYE')]
-#[isGranted('ROLE_VETERINAIRE')]
 class CompteRenduController extends AbstractController
 {
     #[Route('/', name: 'compte_rendu_index', methods: ['GET'])]

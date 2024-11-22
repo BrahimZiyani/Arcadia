@@ -10,18 +10,16 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
+
+
 
 #[Route('/admin/habitats')]
-#[IsGranted('ROLE_ADMIN')]
-#[IsGranted('ROLE_EMPLOYE')]
-#[isGranted('ROLE_VETERINAIRE')]
 class HabitatController extends AbstractController
 {
     #[Route('/', name: 'habitat_index', methods: ['GET'])]
     public function index(HabitatRepository $habitatRepository): Response
     {
-        return $this->render('habitat/index.html.twig', [
+        return $this->render('page/habitats/index.html.twig', [
             'habitats' => $habitatRepository->findAll(),
         ]);
     }
@@ -39,7 +37,7 @@ class HabitatController extends AbstractController
             return $this->redirectToRoute('habitat_index');
         }
 
-        return $this->render('habitat/new.html.twig', [
+        return $this->render('page/habitats/habitat_new.html.twig', [
             'habitat' => $habitat,
             'form' => $form->createView(),
         ]);
@@ -57,7 +55,7 @@ class HabitatController extends AbstractController
             return $this->redirectToRoute('habitat_index');
         }
 
-        return $this->render('habitat/edit.html.twig', [
+        return $this->render('page/habitats/habitat_edit.html.twig', [
             'habitat' => $habitat,
             'form' => $form->createView(),
         ]);

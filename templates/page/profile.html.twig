@@ -101,6 +101,8 @@
                                     <button type="button" class="btn btn-danger btn-sm delete-button" data-url="{{ path('compte_rendu_delete', {'id': compteRendu.id}) }}" data-token="{{ csrf_token('delete' ~ compteRendu.id) }}">
                                         Supprimer
                                     </button>
+                                {% else %}
+                                    <span class="text-muted">Action non autorisée</span>
                                 {% endif %}
                             </td>
                         </tr>
@@ -133,6 +135,8 @@
                                         data-token="{{ csrf_token('delete' ~ habitat.id) }}">
                                         Supprimer
                                     </button>
+                                {% else %}
+                                    <span class="text-muted">Action non autorisée</span>
                                 {% endif %}
                             </td>
                         </tr>
@@ -145,34 +149,36 @@
             </table>
             {% if 'ROLE_ADMIN' in app.user.roles or 'ROLE_VETERINAIRE' in app.user.roles %}
                 <a href="{{ path('habitat_new') }}" class="btn btn-dark">Ajouter un nouvel habitat</a>
+            {% else %}
+                <span class="text-muted">Action non autorisée</span>
             {% endif %}
 
             <!-- Section de Gestion des Animaux -->
             <h3 class="mt-5">Gestion des Animaux</h3>
             {% if 'ROLE_ADMIN' in app.user.roles or 'ROLE_VETERINAIRE' in app.user.roles %}
-            <div class="card p-4 shadow-sm mb-4">
-                <form action="{{ path('animal_new') }}" method="post">
-                    <div class="row">
-                        <div class="col">
-                            <input type="text" class="form-control" name="nom" placeholder="Nom de l'animal" required>
+                <div class="card p-4 shadow-sm mb-4">
+                    <form action="{{ path('animal_new') }}" method="post">
+                        <div class="row">
+                            <div class="col">
+                                <input type="text" class="form-control" name="nom" placeholder="Nom de l'animal" required>
+                            </div>
+                            <div class="col">
+                                <input type="text" class="form-control" name="race" placeholder="Race de l'animal" required>
+                            </div>
+                            <div class="col">
+                                <select class="form-control" name="habitat_id" required>
+                                    <option value="">Sélectionner un habitat</option>
+                                    {% for habitat in habitats %}
+                                        <option value="{{ habitat.id }}">{{ habitat.nom }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col">
+                                <button type="submit" class="btn btn-dark">Ajouter un animal</button>
+                            </div>
                         </div>
-                        <div class="col">
-                            <input type="text" class="form-control" name="race" placeholder="Race de l'animal" required>
-                        </div>
-                        <div class="col">
-                            <select class="form-control" name="habitat_id" required>
-                                <option value="">Sélectionner un habitat</option>
-                                {% for habitat in habitats %}
-                                    <option value="{{ habitat.id }}">{{ habitat.nom }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="col">
-                            <button type="submit" class="btn btn-dark">Ajouter un animal</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
+                    </form>
+                </div>
             {% endif %}
             <table class="table table-striped">
                 <thead>
@@ -199,6 +205,8 @@
                                         data-token="{{ csrf_token('delete' ~ animal.id) }}">
                                         Supprimer
                                     </button>
+                                {% else %}
+                                    <span class="text-muted">Action non autorisée</span>
                                 {% endif %}
                             </td>
                         </tr>
@@ -241,8 +249,10 @@
                                         class="btn btn-danger btn-sm delete-button" 
                                         data-url="{{ path('user_delete', {'id': user.id}) }}"
                                         data-token="{{ csrf_token('delete' ~ user.id) }}">
-                                    Supprimer
+                                        Supprimer
                                     </button>
+                                {% else %}
+                                    <span class="text-muted">Action non autorisée</span>
                                 {% endif %}
                             </td>
                         </tr>
@@ -250,9 +260,11 @@
                 </tbody>
             </table>
             {% if 'ROLE_ADMIN' in app.user.roles or 'ROLE_VETERINAIRE' in app.user.roles %}
-            <div class="mt-3">
-                <a href="{{ path('user_new') }}" class="btn btn-dark">Ajouter un employé</a>
-            </div>
+                <div class="mt-3">
+                    <a href="{{ path('user_new') }}" class="btn btn-dark">Ajouter un employé</a>
+                </div>
+            {% else %}
+                <span class="text-muted">Action non autorisée</span>
             {% endif %}
 
             <!-- Section de Services -->
@@ -305,8 +317,10 @@
                                         class="btn btn-danger btn-sm delete-button" 
                                         data-url="{{ path('service_delete', {'id': service.id}) }}"
                                         data-token="{{ csrf_token('delete' ~ service.id) }}">
-                                    Supprimer
+                                        Supprimer
                                     </button>
+                                {% else %}
+                                    <span class="text-muted">Action non autorisée</span>
                                 {% endif %}
                             </td>
                         </tr>
@@ -343,18 +357,22 @@
                                         <td>{{ avis.prenom }}</td>
                                         <td>{{ avis.contenu|length > 100 ? avis.contenu|slice(0, 100) ~ '...' : avis.contenu }}</td>
                                         <td>
-                                            <form action="{{ path('app_avis_valider', {'id': avis.id}) }}" method="post" class="d-inline">
-                                                <input type="hidden" name="_token" value="{{ csrf_token('valider' ~ avis.id) }}">
-                                                <button type="submit" class="btn btn-success btn-sm">Accepter</button>
-                                            </form>
-                                            <button 
-                                                type="button" 
-                                                class="btn btn-danger btn-sm delete-button" 
-                                                data-url="{{ path('app_avis_supprimer', {'id': avis.id}) }}" 
-                                                data-token="{{ csrf_token('supprimer' ~ avis.id) }}" 
-                                                onclick="handleDelete(this)">
-                                                Refuser
-                                            </button>
+                                            {% if is_granted('ROLE_ADMIN') %}
+                                                <form action="{{ path('app_avis_valider', {'id': avis.id}) }}" method="post" class="d-inline">
+                                                    <input type="hidden" name="_token" value="{{ csrf_token('valider' ~ avis.id) }}">
+                                                    <button type="submit" class="btn btn-success btn-sm">Accepter</button>
+                                                </form>
+                                                <button 
+                                                    type="button" 
+                                                    class="btn btn-danger btn-sm delete-button" 
+                                                    data-url="{{ path('app_avis_supprimer', {'id': avis.id}) }}" 
+                                                    data-token="{{ csrf_token('supprimer' ~ avis.id) }}" 
+                                                    onclick="handleDelete(this)">
+                                                    Refuser
+                                                </button>
+                                            {% else %}
+                                                <span class="text-muted">Action non autorisée</span>
+                                            {% endif %}
                                         </td>
                                     </tr>
                                 {% endfor %}
@@ -369,4 +387,3 @@
     </div>
 </div>
 {% endblock %}
-

@@ -9,14 +9,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/admin/services')]
 class ServiceController extends AbstractController
 {
     #[Route('/new', name: 'service_new', methods: ['GET', 'POST'])]
-    #[IsGranted('ROLE_ADMIN')]
-    #[IsGranted('ROLE_EMPLOYE')]
     public function new(Request $request, ServiceManager $serviceManager): Response
     {
         $service = new Service();
@@ -36,7 +33,6 @@ class ServiceController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'service_edit', methods: ['GET', 'POST'])]
-    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function edit(Request $request, Service $service, ServiceManager $serviceManager): Response
     {
 
@@ -53,10 +49,9 @@ class ServiceController extends AbstractController
         'service' => $service,
         'form' => $form->createView(),
     ]);
-}
+    }
 
     #[Route('/{id}', name: 'service_delete', methods: ['POST'])]
-    #[IsGranted('ROLE_ADMIN')]
     public function delete(Request $request, Service $service, ServiceManager $serviceManager): Response
     {
         if ($this->isCsrfTokenValid('delete' . $service->getId(), $request->request->get('_token'))) {

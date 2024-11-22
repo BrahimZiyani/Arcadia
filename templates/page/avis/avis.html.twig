@@ -5,22 +5,31 @@
 {% block body %}
     <div class="row">
         <div class="col-lg-8 mb-4">
-            <h1 class="border-bottom pb-2 mb-4">Avis des visiteurs</h1>
+            <h1 class="border-bottom pb-2 mb-4" style="color: #2A9D8F;">Avis des visiteurs</h1>
+            
+            {# Message de succès après l'envoi d'un avis #}
+            {% for message in app.flashes('success') %}
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="fas fa-check-circle me-2"></i>
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
             
             {# Liste des avis validés #}
             <div class="row">
                 {% for avis in avisValides %}
                     <div class="col-md-6 mb-4">
-                        <div class="card h-100 shadow-sm">
+                        <div class="card h-100 shadow-sm" style="border: 1px solid #E0E0E0; background-color: #F1FAEE;">
                             <div class="card-body">
                                 <div class="d-flex justify-content-between align-items-center mb-2">
-                                    <h5 class="card-title mb-0">{{ avis.prenom }}</h5>
+                                    <h5 class="card-title mb-0" style="color: #2A9D8F;">{{ avis.prenom }}</h5>
                                     <small class="text-muted">
                                         <i class="far fa-calendar-alt me-1"></i>
                                         {{ avis.dateVisite|date('d/m/Y') }}
                                     </small>
                                 </div>
-                                <p class="card-text">{{ avis.contenu }}</p>
+                                <p class="card-text" style="color: #353535;">{{ avis.contenu }}</p>
                             </div>
                         </div>
                     </div>
@@ -42,7 +51,7 @@
 
         <div class="col-lg-4">
             <div class="card shadow-sm">
-                <div class="card-header bg-primary text-white">
+                <div class="card-header text-white" style="background-color: #2A9D8F;">
                     <h3 class="card-title h5 mb-0">
                         <i class="fas fa-pen me-2"></i>
                         Partagez votre expérience
@@ -51,24 +60,24 @@
                 <div class="card-body">
                     {{ form_start(form) }}
                         <div class="mb-3">
-                            {{ form_label(form.prenom) }}
+                            {{ form_label(form.prenom, null, {'label_attr': {'style': 'color: #353535;'}}) }}
                             {{ form_widget(form.prenom, {'attr': {'class': 'form-control'}}) }}
                             {{ form_errors(form.prenom) }}
                         </div>
 
                         <div class="mb-3">
-                            {{ form_label(form.dateVisite) }}
+                            {{ form_label(form.dateVisite, null, {'label_attr': {'style': 'color: #353535;'}}) }}
                             {{ form_widget(form.dateVisite, {'attr': {'class': 'form-control'}}) }}
                             {{ form_errors(form.dateVisite) }}
                         </div>
 
                         <div class="mb-3">
-                            {{ form_label(form.contenu) }}
+                            {{ form_label(form.contenu, null, {'label_attr': {'style': 'color: #353535;'}}) }}
                             {{ form_widget(form.contenu, {'attr': {'class': 'form-control', 'rows': '5'}}) }}
                             {{ form_errors(form.contenu) }}
                         </div>
 
-                        <button type="submit" class="btn btn-primary w-100">
+                        <button type="submit" class="btn text-white w-100" style="background-color: #2A9D8F;">
                             <i class="fas fa-paper-plane me-2"></i>
                             Envoyer mon avis
                         </button>
