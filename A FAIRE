@@ -1,6 +1,7 @@
 # Liste de choses à faire pour finir le projet Symfony
 
 23/11/2024
+- Gestion d'images pour habitat, services
 - Tester le projet
     - Écrire des tests unitaires
     - Écrire des tests fonctionnels

@@ -11,8 +11,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-
-
 #[Route('/admin/habitats')]
 class HabitatController extends AbstractController
 {
@@ -32,34 +30,43 @@ class HabitatController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $uploadedImages = $form->get('images')->getData();
+            if ($uploadedImages) {
+                $habitatService->handleUploadedImages($uploadedImages, $habitat);
+            }
+
             $habitatService->creerHabitat($habitat);
 
             return $this->redirectToRoute('habitat_index');
         }
 
         return $this->render('page/habitats/habitat_new.html.twig', [
-            'habitat' => $habitat,
             'form' => $form->createView(),
         ]);
     }
 
     #[Route('/{id}/edit', name: 'habitat_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Habitat $habitat, HabitatService $habitatService): Response
-    {
-        $form = $this->createForm(HabitatType::class, $habitat);
-        $form->handleRequest($request);
+public function edit(Request $request, Habitat $habitat, HabitatService $habitatService): Response
+{
+    $form = $this->createForm(HabitatType::class, $habitat);
+    $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $habitatService->modifierHabitat();
-
-            return $this->redirectToRoute('habitat_index');
+    if ($form->isSubmitted() && $form->isValid()) {
+        $uploadedImages = $form->get('images')->getData();
+        if ($uploadedImages) {
+            $habitatService->handleUploadedImages($uploadedImages, $habitat);
         }
 
-        return $this->render('page/habitats/habitat_edit.html.twig', [
-            'habitat' => $habitat,
-            'form' => $form->createView(),
-        ]);
+        $habitatService->modifierHabitat($habitat);
+
+        return $this->redirectToRoute('habitat_index');
     }
+
+    return $this->render('page/habitats/habitat_edit.html.twig', [
+        'form' => $form->createView(),
+        'habitat' => $habitat, // Ajout de l'objet habitat à la vue
+    ]);
+}
 
     #[Route('/{id}', name: 'habitat_delete', methods: ['POST'])]
     public function delete(Request $request, Habitat $habitat, HabitatService $habitatService): Response

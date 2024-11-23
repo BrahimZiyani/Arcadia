@@ -15,7 +15,27 @@
             {{ form_label(form.description) }}
             {{ form_widget(form.description, {'attr': {'class': 'form-control', 'rows': '3', 'placeholder': 'Description de l\'habitat'}}) }}
         </div>
+        <div class="form-group">
+            {{ form_label(form.images, 'Images de l\'habitat') }}
+            {{ form_widget(form.images, {'attr': {'class': 'form-control-file'}}) }}
+        </div>
+
+        <!-- Bouton pour ajouter des images -->
+        <div class="text-right mb-3">
+            <button type="button" class="btn btn-outline-secondary" onclick="document.querySelector('[name=\"habitat[images][]\"]').click();">
+                Ajouter des images
+            </button>
+        </div>
+
+        <!-- Bouton Créer -->
         <button type="submit" class="btn btn-dark">Créer</button>
     {{ form_end(form) }}
 </div>
+
+<!-- Script pour simuler un clic sur le champ d'upload -->
+<script>
+    document.querySelector('.btn-outline-secondary').addEventListener('click', function () {
+        document.querySelector('[name="habitat[images][]"]').click();
+    });
+</script>
 {% endblock %}
