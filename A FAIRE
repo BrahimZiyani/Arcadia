@@ -1,10 +1,5 @@
 # Liste de choses à faire pour finir le projet Symfony
 
-22/11/2024
-- SECURITY.YAML
-- Gérer l'upload d'images
-- Respecter la DA
-
 23/11/2024
 - Tester le projet
     - Écrire des tests unitaires

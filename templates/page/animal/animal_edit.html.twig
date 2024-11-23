@@ -6,54 +6,67 @@
 <div class="container mt-5">
     <h1>Modifier l'animal : {{ animal.nom }}</h1>
 
-    {{ form_start(form) }}  {# Utilise form_start pour débuter le formulaire #}
-    
+    {{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }} {# Formulaire multipart pour gérer les fichiers #}
+
+        <!-- Nom de l'animal -->
         <div class="form-group">
             <label for="animal_nom">Nom de l'animal</label>
             {{ form_widget(form.nom, {'attr': {'class': 'form-control'}}) }}
         </div>
 
+        <!-- Race de l'animal -->
         <div class="form-group">
             <label for="animal_race">Race</label>
             {{ form_widget(form.race, {'attr': {'class': 'form-control'}}) }}
         </div>
 
+        <!-- Habitat -->
         <div class="form-group">
             <label for="habitat">Habitat</label>
             {{ form_widget(form.habitat, {'attr': {'class': 'form-control'}}) }}
         </div>
 
+        <!-- État de santé -->
         <div class="form-group">
             <label for="animal_sante">État de santé</label>
             {{ form_widget(form.etatDeSante, {'attr': {'class': 'form-control'}}) }}
         </div>
 
+        <!-- Alimentation -->
         <div class="form-group">
             <label for="animal_alimentation">Alimentation</label>
             {{ form_widget(form.alimentation, {'attr': {'class': 'form-control'}}) }}
         </div>
 
+        <!-- Affichage des images existantes -->
         <div class="form-group">
-        <label for="animal_images">Images</label>
-        <div id="image-collection">
-            {% for imageField in form.images %}
-                <div class="input-group mb-2">
-                    {{ form_widget(imageField, {'attr': {'class': 'form-control'}}) }}
-                    <div class="input-group-append">
-                        <button class="btn btn-outline-danger" type="button" onclick="removeImageField(this)">Supprimer</button>
+            <label>Images existantes</label>
+            <div class="d-flex flex-wrap">
+                {% for image in animal.images %}
+                    <div class="m-2 text-center">
+                        <img src="{{ asset('uploads/' ~ image) }}" alt="{{ animal.nom }}" class="img-thumbnail" style="width: 150px; height: auto;">
+                        <form method="post" action="{{ path('animal_remove_image', { 'id': animal.id, 'image': image }) }}" class="mt-2">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ image) }}">
+                            <button type="submit" class="btn btn-outline-danger btn-sm">Supprimer</button>
+                        </form>
                     </div>
-                </div>
-        {% endfor %}
-        <button class="btn btn-outline-primary mt-2" type="button" onclick="addImageField()">Ajouter une image</button>
-        </div>
+                {% endfor %}
+            </div>
         </div>
 
+        <!-- Champ pour uploader de nouvelles images -->
+        <div class="form-group">
+            <label for="animal_uploadImages">Ajouter de nouvelles images</label>
+            <input type="file" id="animal_uploadImages" name="animal[uploadImages][]" multiple class="form-control-file">
+            <small class="form-text text-muted">Vous pouvez sélectionner plusieurs fichiers.</small>
+        </div>
 
+        <!-- Boutons d'action -->
         <div class="d-flex justify-content-between mt-3">
             <button type="reset" class="btn btn-outline-secondary">Réinitialiser</button>
             <button type="submit" class="btn btn-warning">Modifier</button>
         </div>
 
-    {{ form_end(form) }} {# Utilise form_end pour clôturer le formulaire #}
+    {{ form_end(form) }} {# Fin du formulaire Symfony #}
 </div>
 {% endblock %}

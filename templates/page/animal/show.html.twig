@@ -1,14 +1,68 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Détails de l'Animal - {{ animal.nom }}{% endblock %}
+{% block title %}Nos Animaux{% endblock %}
 
 {% block body %}
-    <div class="container">
-        <h1>Détails de {{ animal.nom }}</h1>
-        <p><strong>Race :</strong> {{ animal.race }}</p>
-        <p><strong>État de santé :</strong> {{ animal.etatDeSante }}</p>
-        <p><strong>Alimentation :</strong> {{ animal.alimentation }}</p>
-        <p><strong>Habitat :</strong> {{ animal.habitat.nom }}</p>
-        <img src="{{ asset('images/animals/' ~ animal.images) }}" alt="{{ animal.nom }}">
+    <div class="container mt-5">
+        <h1 class="text-center text-uppercase font-weight-bold mb-5" style="color: #2a9d8f;">Nos Animaux</h1>
+
+        {% for habitat, animals in animalsByHabitat %}
+            <h2 class="mt-4 text-center" style="color: #6c757d;">{{ habitat }}</h2>
+            
+            <div class="row justify-content-center">
+                {% for animal in animals %}
+                    <div class="col-md-4 col-lg-3 mb-4">
+                        <div class="card shadow-lg border-0 rounded" style="background-color: #f8f9fa; overflow: hidden;">
+                            
+                            <!-- Image principale de l'animal -->
+                            {% if animal.images is not empty %}
+                                <img src="{{ asset('uploads/' ~ animal.images[0]) }}" alt="{{ animal.nom }}" class="card-img-top" style="height: 250px; object-fit: cover; border-bottom: 5px solid #2a9d8f;">
+                            {% else %}
+                                <img src="{{ asset('uploads/default-image.jpg') }}" alt="Image par défaut" class="card-img-top" style="height: 250px; object-fit: cover; border-bottom: 5px solid #2a9d8f;">
+                            {% endif %}
+
+                            <!-- Contenu de la carte -->
+                            <div class="card-body">
+                                <h5 class="card-title text-center" style="font-size: 1.2rem; font-weight: bold;">{{ animal.nom }}</h5>
+                                
+                                <p class="card-text"><strong>Race :</strong> {{ animal.race }}</p>
+                                <p class="card-text"><strong>Alimentation :</strong> {{ animal.alimentation }}</p>
+                                <p class="card-text"><strong>Habitat :</strong> {{ animal.habitat.nom }}</p>
+
+                                <!-- Bouton pour voir les détails de l'animal -->
+                                <div class="text-center">
+                                    <a href="{{ path('animal_details', { 'id': animal.id }) }}" class="btn btn-success btn-sm mt-3 px-4 py-2">Voir les Détails</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-center text-muted">Aucun animal trouvé.</p>
+        {% endfor %}
     </div>
+
+    <!-- Ajout de quelques styles CSS pour rendre le tout plus moderne -->
+    <style>
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-success {
+            background-color: #2a9d8f;
+            border: none;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        .btn-success:hover {
+            background-color: #21867a;
+        }
+    </style>
 {% endblock %}

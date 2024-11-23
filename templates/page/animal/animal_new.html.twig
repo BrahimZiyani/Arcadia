@@ -6,40 +6,41 @@
 <div class="container mt-5">
     <h1>Ajouter un nouvel animal</h1>
 
-    <form method="post" action="{{ path('animal_new') }}">
+    {{ form_start(form) }} {# Utilise form_start pour inclure directement le formulaire Symfony #}
         <div class="form-group">
             <label for="animal_nom">Nom de l'animal</label>
-            <input type="text" class="form-control" id="animal_nom" name="animal[nom]" required>
+            {{ form_widget(form.nom, {'attr': {'class': 'form-control'}}) }}
         </div>
         
         <div class="form-group">
             <label for="animal_race">Race</label>
-            <input type="text" class="form-control" id="animal_race" name="animal[race]" required>
+            {{ form_widget(form.race, {'attr': {'class': 'form-control'}}) }}
         </div>
 
         <div class="form-group">
             <label for="habitat">Habitat</label>
-            <select class="form-control" id="habitat" name="animal[habitat]" required>
-                {% for habitat in habitats %}
-                    <option value="{{ habitat.id }}">{{ habitat.nom }}</option>
-                {% endfor %}
-            </select>
+            {{ form_widget(form.habitat, {'attr': {'class': 'form-control'}}) }}
         </div>
 
         <div class="form-group">
             <label for="animal_sante">État de santé</label>
-            <input type="text" class="form-control" id="animal_sante" name="animal[etatDeSante]" required>
+            {{ form_widget(form.etatDeSante, {'attr': {'class': 'form-control'}}) }}
         </div>
 
         <div class="form-group">
             <label for="animal_alimentation">Alimentation</label>
-            <input type="text" class="form-control" id="animal_alimentation" name="animal[alimentation]" required>
+            {{ form_widget(form.alimentation, {'attr': {'class': 'form-control'}}) }}
         </div>
 
-        <div class="d-flex justify-content-between">
+        <div class="form-group">
+            <label for="animal_uploadImages">Ajouter des images</label>
+            {{ form_widget(form.uploadImages, {'attr': {'class': 'form-control-file'}}) }}
+        </div>
+
+        <div class="d-flex justify-content-between mt-3">
             <button type="reset" class="btn btn-outline-secondary">Réinitialiser</button>
             <button type="submit" class="btn btn-primary">Ajouter</button>
         </div>
-    </form>
+    {{ form_end(form) }} {# Utilise form_end pour clore le formulaire Symfony #}
 </div>
 {% endblock %}

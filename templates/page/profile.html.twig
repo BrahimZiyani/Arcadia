@@ -148,38 +148,12 @@
                 </tbody>
             </table>
             {% if 'ROLE_ADMIN' in app.user.roles or 'ROLE_VETERINAIRE' in app.user.roles %}
-                <a href="{{ path('habitat_new') }}" class="btn btn-dark">Ajouter un nouvel habitat</a>
+                <a href="{{ path('habitat_new') }}" class="mb-4 btn btn-dark">Ajouter un nouvel habitat</a>
             {% else %}
                 <span class="text-muted">Action non autorisée</span>
             {% endif %}
 
-            <!-- Section de Gestion des Animaux -->
-            <h3 class="mt-5">Gestion des Animaux</h3>
-            {% if 'ROLE_ADMIN' in app.user.roles or 'ROLE_VETERINAIRE' in app.user.roles %}
-                <div class="card p-4 shadow-sm mb-4">
-                    <form action="{{ path('animal_new') }}" method="post">
-                        <div class="row">
-                            <div class="col">
-                                <input type="text" class="form-control" name="nom" placeholder="Nom de l'animal" required>
-                            </div>
-                            <div class="col">
-                                <input type="text" class="form-control" name="race" placeholder="Race de l'animal" required>
-                            </div>
-                            <div class="col">
-                                <select class="form-control" name="habitat_id" required>
-                                    <option value="">Sélectionner un habitat</option>
-                                    {% for habitat in habitats %}
-                                        <option value="{{ habitat.id }}">{{ habitat.nom }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                            <div class="col">
-                                <button type="submit" class="btn btn-dark">Ajouter un animal</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            {% endif %}
+            <!-- Section des Animaux -->
             <table class="table table-striped">
                 <thead>
                     <tr>
@@ -213,6 +187,14 @@
                     {% endfor %}
                 </tbody>
             </table>
+
+            <!-- Bouton Ajouter un animal -->
+            {% if 'ROLE_ADMIN' in app.user.roles or 'ROLE_VETERINAIRE' in app.user.roles %}
+                <div class="mt-4">
+                    <a href="{{ path('animal_new') }}" class="btn btn-dark">Ajouter un animal</a>
+                </div>
+            {% endif %}
+
 
             <!-- Section de Gestion des Employés -->
             <h3 class="mt-5">Gestion des Employés</h3>
@@ -268,69 +250,51 @@
             {% endif %}
 
             <!-- Section de Services -->
-            <h3 class="mt-5">Gestion des Services</h3>
-            <div class="card p-4 shadow-sm mb-4">
-                <form action="{{ path('service_new') }}" method="post" enctype="multipart/form-data">
-                    <div class="row">
-                        <div class="col">
-                            <input type="text" class="form-control" name="nom" placeholder="Nom du service" required>
-                        </div>
-                        <div class="col">
-                            <input type="text" class="form-control" name="description" placeholder="Description du service" required>
-                        </div>
-                        <div class="col">
-                            <input type="file" class="form-control" name="photo" required>
-                        </div>
-                        <div class="col">
-                            <button type="submit" class="btn btn-dark">Ajouter un service</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
+<h3 class="mt-5">Gestion des Services</h3>
 
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Nom</th>
-                        <th>Description</th>
-                        <th>Photo</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for service in services %}
-                        <tr>
-                            <td>{{ service.nom }}</td>
-                            <td>{{ service.description }}</td>
-                            <td>
-                                {% if service.photo %}
-                                    <img src="{{ asset(service.photo) }}" alt="{{ service.nom }}" style="width: 50px; height: auto;">
-                                {% else %}
-                                    Pas de photo
-                                {% endif %}
-                            </td>
-                            <td>
-                                <a href="{{ path('service_edit', {'id': service.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
-                                {% if 'ROLE_ADMIN' in app.user.roles %}
-                                    <button 
-                                        type="button" 
-                                        class="btn btn-danger btn-sm delete-button" 
-                                        data-url="{{ path('service_delete', {'id': service.id}) }}"
-                                        data-token="{{ csrf_token('delete' ~ service.id) }}">
-                                        Supprimer
-                                    </button>
-                                {% else %}
-                                    <span class="text-muted">Action non autorisée</span>
-                                {% endif %}
-                            </td>
-                        </tr>
+<!-- Bouton pour ajouter un service -->
+<div class="mb-4">
+    <a href="{{ path('service_new') }}" class="btn btn-dark">Ajouter un Service</a>
+</div>
+
+<!-- Affichage des services -->
+<div class="row">
+    {% for service in services %}
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">{{ service.nom }}</h5>
+
+                    <!-- Affichage de la photo du service -->
+                    {% if service.photo %}
+                        <img src="{{ asset(service.photo) }}" alt="{{ service.nom }}" class="img-fluid mb-3">
                     {% else %}
-                        <tr>
-                            <td colspan="4" class="text-center">Aucun service trouvé</td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                        <p>Pas de photo</p>
+                    {% endif %}
+
+                    <!-- Boutons pour Modifier et Supprimer -->
+                    <div class="d-flex justify-content-between">
+                        <a href="{{ path('service_edit', { 'id': service.id }) }}" class="btn btn-warning btn-sm">Modifier</a>
+                        {% if 'ROLE_ADMIN' in app.user.roles %}
+                            <button 
+                                type="button" 
+                                class="btn btn-danger btn-sm delete-button" 
+                                data-url="{{ path('service_delete', {'id': service.id}) }}"
+                                data-token="{{ csrf_token('delete' ~ service.id) }}">
+                                Supprimer
+                            </button>
+                        {% else %}
+                            <span class="text-muted">Action non autorisée</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <p class="text-center col-12">Aucun service trouvé.</p>
+    {% endfor %}
+</div>
+
 
             <!-- Section Avis en attente de validation -->
             <div class="card shadow-sm mt-4">

@@ -8,34 +8,53 @@ use App\Repository\CompteRenduRepository;
 #[ORM\Entity(repositoryClass: CompteRenduRepository::class)]
 class CompteRendu
 {
+    // Identifiant unique pour chaque compte-rendu
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
+    // Date du compte-rendu
     #[ORM\Column(type: "date")]
     private ?\DateTimeInterface $date = null;
 
+    // État (texte décrivant un statut ou une observation)
     #[ORM\Column(type: "text")]
     private ?string $etat = null;
 
-    #[ORM\ManyToOne(targetEntity: Animal::class)]
+    /**
+     * Relation ManyToOne avec l'entité Animal.
+     * Chaque compte-rendu est associé à un seul Animal.
+     * 
+     * - fetch="LAZY" : L'animal sera chargé uniquement si on accède à getAnimal().
+     * - nullable=false : Cette relation est obligatoire.
+     */
+    #[ORM\ManyToOne(targetEntity: Animal::class, fetch: 'LAZY')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Animal $animal = null;
 
-    #[ORM\ManyToOne(targetEntity: User::class)]
+    /**
+     * Relation ManyToOne avec l'entité User.
+     * Chaque compte-rendu est associé à un seul utilisateur (rédacteur).
+     * 
+     * - fetch="LAZY" : L'utilisateur sera chargé uniquement si on accède à getUtilisateur().
+     * - nullable=false : Cette relation est obligatoire.
+     */
+    #[ORM\ManyToOne(targetEntity: User::class, fetch: 'LAZY')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $utilisateur = null;
 
+    // Détails supplémentaires sur le compte-rendu (facultatif)
     #[ORM\Column(type: "text", nullable: true)]
     private ?string $details = null;
 
-    // Getters et setters
+    // Getter pour l'ID
     public function getId(): ?int
     {
         return $this->id;
     }
 
+    // Getter et setter pour la date
     public function getDate(): ?\DateTimeInterface
     {
         return $this->date;
@@ -48,6 +67,7 @@ class CompteRendu
         return $this;
     }
 
+    // Getter et setter pour l'état
     public function getEtat(): ?string
     {
         return $this->etat;
@@ -60,6 +80,7 @@ class CompteRendu
         return $this;
     }
 
+    // Getter et setter pour l'animal
     public function getAnimal(): ?Animal
     {
         return $this->animal;
@@ -72,6 +93,7 @@ class CompteRendu
         return $this;
     }
 
+    // Getter et setter pour l'utilisateur
     public function getUtilisateur(): ?User
     {
         return $this->utilisateur;
@@ -84,6 +106,7 @@ class CompteRendu
         return $this;
     }
 
+    // Getter et setter pour les détails
     public function getDetails(): ?string
     {
         return $this->details;

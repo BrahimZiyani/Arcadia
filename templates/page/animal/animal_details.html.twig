@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails de {{ animal.nom }}{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <div class="row">
+            <!-- Image de l'animal avec un grand affichage -->
+            <div class="col-md-6">
+                <img src="{{ asset('uploads/' ~ animal.images[0]) }}" alt="{{ animal.nom }}" class="img-fluid rounded shadow-lg">
+            </div>
+
+            <div class="col-md-6">
+                <h1 class="text-center mb-4">{{ animal.nom }}</h1>
+
+                <ul class="list-group">
+                    <li class="list-group-item"><strong>Espèce:</strong> {{ animal.race }}</li>
+                    <li class="list-group-item"><strong>Habitat:</strong> {{ animal.habitat.nom }}</li>
+                    <li class="list-group-item"><strong>Alimentation:</strong> {{ animal.alimentation }}</li>
+                    <li class="list-group-item"><strong>État de santé:</strong> {{ animal.etatDeSante }}</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Galerie d'images -->
+        <div class="mt-5 d-flex justify-content-center">
+            <div class="w-75">
+            <h2 class="text-center mb-4">Galerie d'Images</h2>
+            <div class="row">
+                {% for image in animal.images %}
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                    <img src="{{ asset('uploads/' ~ image) }}" class="card-img-top" alt="Image de {{ animal.nom }}">
+                    </div>
+                </div>
+                {% else %}
+                <p class="text-center">Aucune image disponible.</p>
+                {% endfor %}
+            </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -19,10 +19,11 @@ class Animal
     #[ORM\Column(length: 255)]
     private ?string $race = null;
 
+    // Liste d'images associées à l'animal, stockées en JSON
     #[ORM\Column(type: "json", nullable: true)]
     private array $images = [];
 
-    #[ORM\ManyToOne(targetEntity: Habitat::class)]
+    #[ORM\ManyToOne(targetEntity: Habitat::class, fetch: 'LAZY')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Habitat $habitat = null;
 
@@ -66,9 +67,24 @@ class Animal
         return $this->images;
     }
 
+    public function addImage(string $image): self
+    {
+        $this->images[] = $image;
+
+        return $this;
+    }
+
+    public function removeImage(string $image): self
+    {
+        $this->images = array_filter($this->images, fn($img) => $img !== $image);
+
+        return $this;
+    }
+
     public function setImages(array $images): self
     {
-        $this->images = $images ?? []; // Remplace null par un tableau vide
+        $this->images = $images;
+
         return $this;
     }
 

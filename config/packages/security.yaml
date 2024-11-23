@@ -32,3 +32,7 @@ security:
                 property: email  # L'authentification se fait via l'email
 
     access_control:
+        - { path: ^/admin/habitats/new, roles: [ROLE_ADMIN, ROLE_VETERINAIRE] }
+        - { path: ^/admin/habitats/\d+/edit, roles: [ROLE_ADMIN, ROLE_VETERINAIRE] }
+        - { path: ^/admin/animal/\d+/edit, roles: [ROLE_ADMIN, ROLE_VETERINAIRE] }
+        - { path: ^/admin/animal/new, roles: [ROLE_ADMIN, ROLE_VETERINAIRE] }
