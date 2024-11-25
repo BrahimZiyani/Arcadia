@@ -4,8 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Habitat;
 use App\Form\HabitatType;
-use App\Repository\HabitatRepository;
 use App\Service\HabitatService;
+use App\Repository\HabitatRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -46,27 +46,27 @@ class HabitatController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'habitat_edit', methods: ['GET', 'POST'])]
-public function edit(Request $request, Habitat $habitat, HabitatService $habitatService): Response
-{
-    $form = $this->createForm(HabitatType::class, $habitat);
-    $form->handleRequest($request);
+    public function edit(Request $request, Habitat $habitat, HabitatService $habitatService): Response
+    {
+        $form = $this->createForm(HabitatType::class, $habitat);
+        $form->handleRequest($request);
 
-    if ($form->isSubmitted() && $form->isValid()) {
-        $uploadedImages = $form->get('images')->getData();
-        if ($uploadedImages) {
-            $habitatService->handleUploadedImages($uploadedImages, $habitat);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $uploadedImages = $form->get('images')->getData();
+            if ($uploadedImages) {
+                $habitatService->handleUploadedImages($uploadedImages, $habitat);
+            }
+
+            $habitatService->modifierHabitat($habitat);
+
+            return $this->redirectToRoute('habitat_index');
         }
 
-        $habitatService->modifierHabitat($habitat);
-
-        return $this->redirectToRoute('habitat_index');
+        return $this->render('page/habitats/habitat_edit.html.twig', [
+            'form' => $form->createView(),
+            'habitat' => $habitat,
+        ]);
     }
-
-    return $this->render('page/habitats/habitat_edit.html.twig', [
-        'form' => $form->createView(),
-        'habitat' => $habitat, // Ajout de l'objet habitat à la vue
-    ]);
-}
 
     #[Route('/{id}', name: 'habitat_delete', methods: ['POST'])]
     public function delete(Request $request, Habitat $habitat, HabitatService $habitatService): Response

@@ -16,9 +16,9 @@
                             
                             <!-- Image principale de l'animal -->
                             {% if animal.images is not empty %}
-                                <img src="{{ asset('uploads/' ~ animal.images[0]) }}" alt="{{ animal.nom }}" class="card-img-top" style="height: 250px; object-fit: cover; border-bottom: 5px solid #2a9d8f;">
+                                <img src="{{ asset('uploads/animals/' ~ animal.images[0]) }}" alt="{{ animal.nom }}" class="card-img-top" style="height: 250px; object-fit: cover; border-bottom: 5px solid #2a9d8f;">
                             {% else %}
-                                <img src="{{ asset('uploads/default-image.jpg') }}" alt="Image par défaut" class="card-img-top" style="height: 250px; object-fit: cover; border-bottom: 5px solid #2a9d8f;">
+                                <img src="{{ asset('uploads/animals/default-image.jpg') }}" alt="Image par défaut" class="card-img-top" style="height: 250px; object-fit: cover; border-bottom: 5px solid #2a9d8f;">
                             {% endif %}
 
                             <!-- Contenu de la carte -->

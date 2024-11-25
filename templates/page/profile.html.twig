@@ -266,8 +266,8 @@
                     <h5 class="card-title">{{ service.nom }}</h5>
 
                     <!-- Affichage de la photo du service -->
-                    {% if service.photo %}
-                        <img src="{{ asset(service.photo) }}" alt="{{ service.nom }}" class="img-fluid mb-3">
+                    {% if service.images %}
+                        <img src="{{ asset(service.images[0]) }}" alt="{{ service.nom }}" class="img-fluid mb-3">
                     {% else %}
                         <p>Pas de photo</p>
                     {% endif %}

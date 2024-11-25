@@ -4,12 +4,14 @@ namespace App\Form;
 
 use App\Entity\Service;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Validator\Constraints\All;
 use Symfony\Component\Validator\Constraints\File;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 class ServiceType extends AbstractType
 {
@@ -24,23 +26,30 @@ class ServiceType extends AbstractType
                 'label' => 'Description',
                 'attr' => ['class' => 'form-control', 'rows' => 4],
             ])
-            ->add('photo', FileType::class, [
-                'label' => 'Photo (fichier image)',
+            ->add('images', FileType::class, [
+                'label' => 'Images',
+                'mapped' => false, // Le champ n'est pas directement lié à l'entité
+                'multiple' => true,
+                'required' => false,
+                'attr' => ['class' => 'form-control-file'],
+                'constraints' => [
+                    new All([
+                        'constraints' => [
+                            new File([
+                                'maxSize' => '8M',
+                                'mimeTypes' => ['image/jpeg', 'image/png', 'image/gif'],
+                                'mimeTypesMessage' => 'Veuillez télécharger des images valides (JPEG, PNG, GIF).',
+                            ]),
+                        ],
+                    ]),
+                ],
+            ])
+            ->add('removeImage', CheckboxType::class, [
+                'label' => 'Supprimer l\'image actuelle',
                 'mapped' => false,
                 'required' => false,
-                'constraints' => [
-                    new File([
-                        'maxSize' => '2048k',
-                        'mimeTypes' => [
-                            'image/jpeg',
-                            'image/png',
-                            'image/gif',
-                        ],
-                        'mimeTypesMessage' => 'Veuillez télécharger un fichier image valide (JPEG, PNG, GIF)',
-                    ])
-                ],
-                'attr' => ['class' => 'form-control'],
             ]);
+            ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

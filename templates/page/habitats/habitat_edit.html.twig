@@ -1,32 +1,25 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Modifier Habitat : {{ habitat.nom }}{% endblock %}
+{% block title %}Modifier Habitat{% endblock %}
 
 {% block body %}
 <div class="container mt-5">
-    <h2 class="mb-4">Modifier Habitat : {{ habitat.nom }}</h2>
+    <h2>Modifier Habitat : {{ habitat.nom }}</h2>
 
     {{ form_start(form) }}
-        <!-- Champ pour ajouter des images -->
-        <div class="form-group">
-            {{ form_label(form.images, 'Ajouter des images') }}
-            {{ form_widget(form.images, {'attr': {'class': 'form-control-file'}}) }}
-        </div>
-
-        <!-- Champ pour modifier le nom -->
         <div class="form-group">
             {{ form_label(form.nom) }}
-            {{ form_widget(form.nom, {'attr': {'class': 'form-control', 'placeholder': 'Nom de l\'habitat'}}) }}
+            {{ form_widget(form.nom) }}
         </div>
-
-        <!-- Champ pour modifier la description -->
         <div class="form-group">
             {{ form_label(form.description) }}
-            {{ form_widget(form.description, {'attr': {'class': 'form-control', 'rows': '3', 'placeholder': 'Description de l\'habitat'}}) }}
+            {{ form_widget(form.description) }}
         </div>
-
-        <!-- Bouton pour soumettre les modifications -->
-        <button type="submit" class="btn btn-dark">Modifier</button>
+        <div class="form-group">
+            {{ form_label(form.images) }}
+            {{ form_widget(form.images) }}
+        </div>
+        <button type="submit" class="btn btn-warning">Modifier</button>
     {{ form_end(form) }}
 </div>
 {% endblock %}

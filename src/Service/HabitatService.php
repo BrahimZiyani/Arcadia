@@ -4,9 +4,9 @@ namespace App\Service;
 
 use App\Entity\Habitat;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 class HabitatService
 {
@@ -29,13 +29,10 @@ class HabitatService
             $newFilename = $safeFilename . '-' . uniqid() . '.' . $image->guessExtension();
 
             try {
-                $image->move(
-                    $this->uploadsDirectory,
-                    $newFilename
-                );
+                $image->move($this->uploadsDirectory, $newFilename);
                 $habitat->addImage($newFilename);
             } catch (FileException $e) {
-                throw new \RuntimeException('Erreur lors de l\'upload de l\'image : ' . $e->getMessage());
+                throw new \RuntimeException('Erreur lors de l\'upload : ' . $e->getMessage());
             }
         }
     }
@@ -53,6 +50,13 @@ class HabitatService
 
     public function supprimerHabitat(Habitat $habitat): void
     {
+        foreach ($habitat->getImages() as $image) {
+            $filePath = $this->uploadsDirectory . '/' . $image;
+            if (file_exists($filePath)) {
+                unlink($filePath);
+            }
+        }
+
         $this->entityManager->remove($habitat);
         $this->entityManager->flush();
     }

@@ -9,9 +9,9 @@
     <div class="row">
         {% for habitat in habitats %}
             <div class="col-md-4 mb-4">
-                <div class="card h-100 shadow-sm" style="border: 1px solid #E0E0E0;">
+                <div class="card h-100 shadow-sm border-0 rounded" style="overflow: hidden; background-color: #f9f9f9;">
                     {% if habitat.images is not empty %}
-                        <img src="{{ asset('uploads/habitats/' ~ habitat.images[0]) }}" 
+                        <img src="{{ asset('uploads/' ~ habitat.images[0]) }}" 
                              class="card-img-top" 
                              alt="{{ habitat.nom }}" 
                              style="height: 200px; object-fit: cover;">
@@ -22,10 +22,16 @@
                         </div>
                     {% endif %}
                     <div class="card-body">
-                        <h5 class="card-title" style="color: #2A9D8F;">{{ habitat.nom }}</h5>
-                        <p class="card-text" style="color: #353535;">{{ habitat.description|length > 100 ? habitat.description|slice(0, 100) ~ '...' : habitat.description }}</p>
+                        <h5 class="card-title text-primary">{{ habitat.nom }}</h5>
+                        <p class="card-text text-muted">
+                            {{ habitat.description|length > 120 ? habitat.description|slice(0, 120) ~ '...' : habitat.description }}
+                        </p>
                     </div>
                 </div>
+            </div>
+        {% else %}
+            <div class="col-12 text-center">
+                <p class="text-muted">Aucun habitat disponible pour le moment.</p>
             </div>
         {% endfor %}
     </div>

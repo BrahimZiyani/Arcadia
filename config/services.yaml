@@ -2,6 +2,9 @@
 
 parameters:
     uploads_directory: '%kernel.project_dir%/public/uploads'
+    services_uploads_directory: '%kernel.project_dir%/public/uploads/services'
+    habitats_uploads_directory: '%kernel.project_dir%/public/uploads/habitats'
+    animals_uploads_directory: '%kernel.project_dir%/public/uploads/animals'
 
 services:
     # Default configuration for services in this file
@@ -9,7 +12,7 @@ services:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
         bind:
-            # Default binding for the uploads directory
+            # Default binding for the general uploads directory
             $uploadsDirectory: '%uploads_directory%'
 
     # Makes classes in src/ available to be used as services
@@ -21,10 +24,20 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
     
-    # Explicit service definition for HabitatService
+    # Explicit service definition for ServiceManager
+    App\Service\ServiceManager:
+        arguments:
+            $uploadsDirectory: '%services_uploads_directory%'
+
+    # Explicit service definition for HabitatManager
     App\Service\HabitatService:
         arguments:
-            $uploadsDirectory: '%uploads_directory%'
+            $uploadsDirectory: '%habitats_uploads_directory%'
+
+    # Explicit service definition for AnimalManager
+    App\Service\AnimalService:
+        arguments:
+            $uploadsDirectory: '%animals_uploads_directory%'
 
     # Add other specific service definitions if needed
     App\EventListener\CompteRenduListener:

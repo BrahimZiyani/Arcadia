@@ -19,9 +19,9 @@ class Animal
     #[ORM\Column(length: 255)]
     private ?string $race = null;
 
-    // Liste d'images associées à l'animal, stockées en JSON
-    #[ORM\Column(type: "json", nullable: true)]
-    private array $images = [];
+    // Liste d'images associées à l'animal, toujours un tableau
+    #[ORM\Column(type: "json", nullable: false)]
+    private array $images = []; // Initialisation par défaut
 
     #[ORM\ManyToOne(targetEntity: Habitat::class, fetch: 'LAZY')]
     #[ORM\JoinColumn(nullable: false)]
@@ -33,12 +33,17 @@ class Animal
     #[ORM\Column(type: "text")]
     private ?string $alimentation = null;
 
+    public function __construct()
+    {
+        $this->images = []; // Toujours initialisé à un tableau vide
+    }
+
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getNom(): ?string 
+    public function getNom(): ?string
     {
         return $this->nom;
     }
@@ -46,7 +51,6 @@ class Animal
     public function setNom(string $nom): self
     {
         $this->nom = $nom;
-
         return $this;
     }
 
@@ -58,7 +62,6 @@ class Animal
     public function setRace(string $race): self
     {
         $this->race = $race;
-
         return $this;
     }
 
@@ -69,22 +72,25 @@ class Animal
 
     public function addImage(string $image): self
     {
+        if (count($this->images) >= 1) {
+            throw new \InvalidArgumentException('Only one image is allowed.');
+        }
         $this->images[] = $image;
-
-        return $this;
-    }
-
-    public function removeImage(string $image): self
-    {
-        $this->images = array_filter($this->images, fn($img) => $img !== $image);
-
         return $this;
     }
 
     public function setImages(array $images): self
     {
+        if (count($images) > 1) {
+            throw new \InvalidArgumentException('Only one image is allowed.');
+        }
         $this->images = $images;
+        return $this;
+    }
 
+    public function removeImage(): self
+    {
+        $this->images = [];
         return $this;
     }
 
@@ -96,7 +102,6 @@ class Animal
     public function setHabitat(?Habitat $habitat): self
     {
         $this->habitat = $habitat;
-
         return $this;
     }
 
@@ -108,7 +113,6 @@ class Animal
     public function setEtatDeSante(string $etatDeSante): self
     {
         $this->etatDeSante = $etatDeSante;
-
         return $this;
     }
 
@@ -120,7 +124,6 @@ class Animal
     public function setAlimentation(string $alimentation): self
     {
         $this->alimentation = $alimentation;
-
         return $this;
     }
 }
