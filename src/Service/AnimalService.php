@@ -17,8 +17,13 @@ class AnimalService
     public function __construct(EntityManagerInterface $entityManager, string $uploadsDirectory, SluggerInterface $slugger)
     {
         $this->entityManager = $entityManager;
-        $this->uploadsDirectory = $uploadsDirectory;
+        $this->uploadsDirectory = rtrim($uploadsDirectory, '/'); // Retire un slash éventuel à la fin
         $this->slugger = $slugger;
+
+        // Créez le répertoire si nécessaire
+        if (!is_dir($this->uploadsDirectory)) {
+            mkdir($this->uploadsDirectory, 0777, true);
+        }
     }
 
     public function creerAnimal(Animal $animal): void
@@ -27,8 +32,9 @@ class AnimalService
         $this->entityManager->flush();
     }
 
-    public function modifierAnimal(): void
+    public function modifierAnimal(Animal $animal): void
     {
+        $this->entityManager->persist($animal);
         $this->entityManager->flush();
     }
 
@@ -46,33 +52,31 @@ class AnimalService
 
     public function handleUploadedImages(array $uploadedImages, Animal $animal): void
     {
-        // Assurez-vous que le répertoire d'upload existe
+        // Vérifie à nouveau que le répertoire existe
         if (!is_dir($this->uploadsDirectory)) {
             mkdir($this->uploadsDirectory, 0777, true);
         }
 
-        // Supprimez les anciennes images
-        foreach ($animal->getImages() as $image) {
-            $filePath = $this->uploadsDirectory . '/' . $image;
-            if (file_exists($filePath)) {
-                unlink($filePath);
-            }
-        }
-
-        $animal->setImages([]); // Réinitialisez les images
-
         foreach ($uploadedImages as $image) {
+            if (!$image instanceof UploadedFile) {
+                throw new \RuntimeException('Un fichier valide est attendu.');
+            }
+
+            // Générez un nom de fichier unique
             $originalFilename = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
             $safeFilename = $this->slugger->slug($originalFilename);
             $newFilename = $safeFilename . '-' . uniqid() . '.' . $image->guessExtension();
 
             try {
+                // Déplacez le fichier dans le répertoire d'uploads
                 $image->move($this->uploadsDirectory, $newFilename);
-            } catch (FileException $e) {
-                throw new \RuntimeException('Erreur lors de l\'upload de l\'image : ' . $e->getMessage());
-            }
 
-            $animal->addImage($newFilename);
+                // Ajoutez le fichier à l'animal
+                $animal->addImage($newFilename);
+            } catch (FileException $e) {
+                // Loggez une erreur ou affichez un message plus clair
+                throw new \RuntimeException(sprintf('Erreur lors de l\'upload de l\'image "%s": %s', $newFilename, $e->getMessage()));
+            }
         }
     }
 

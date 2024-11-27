@@ -1,68 +1,36 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Nos Animaux{% endblock %}
+{% block title %}Liste des Animaux{% endblock %}
 
 {% block body %}
-    <div class="container mt-5">
-        <h1 class="text-center text-uppercase font-weight-bold mb-5" style="color: #2a9d8f;">Nos Animaux</h1>
+<div class="container mt-5">
+    <h1>Liste des Animaux</h1>
 
+    {% if animalsByHabitat is not empty %}
         {% for habitat, animals in animalsByHabitat %}
-            <h2 class="mt-4 text-center" style="color: #6c757d;">{{ habitat }}</h2>
-            
-            <div class="row justify-content-center">
+            <h2 class="mt-4">{{ habitat }}</h2>
+            <div class="row">
                 {% for animal in animals %}
-                    <div class="col-md-4 col-lg-3 mb-4">
-                        <div class="card shadow-lg border-0 rounded" style="background-color: #f8f9fa; overflow: hidden;">
-                            
-                            <!-- Image principale de l'animal -->
-                            {% if animal.images is not empty %}
-                                <img src="{{ asset('uploads/animals/' ~ animal.images[0]) }}" alt="{{ animal.nom }}" class="card-img-top" style="height: 250px; object-fit: cover; border-bottom: 5px solid #2a9d8f;">
+                    <div class="col-md-4 mb-4">
+                        <div class="card">
+                            {% if animal.images and animal.images|length > 0 %}
+                                <img src="{{ asset('uploads/animals/' ~ animal.images[0]) }}" class="card-img-top" alt="{{ animal.nom }}">
                             {% else %}
-                                <img src="{{ asset('uploads/animals/default-image.jpg') }}" alt="Image par défaut" class="card-img-top" style="height: 250px; object-fit: cover; border-bottom: 5px solid #2a9d8f;">
+                                <img src="{{ asset('images/default-animal.jpg') }}" class="card-img-top" alt="Image par défaut">
                             {% endif %}
-
-                            <!-- Contenu de la carte -->
                             <div class="card-body">
-                                <h5 class="card-title text-center" style="font-size: 1.2rem; font-weight: bold;">{{ animal.nom }}</h5>
-                                
-                                <p class="card-text"><strong>Race :</strong> {{ animal.race }}</p>
-                                <p class="card-text"><strong>Alimentation :</strong> {{ animal.alimentation }}</p>
-                                <p class="card-text"><strong>Habitat :</strong> {{ animal.habitat.nom }}</p>
-
-                                <!-- Bouton pour voir les détails de l'animal -->
-                                <div class="text-center">
-                                    <a href="{{ path('animal_details', { 'id': animal.id }) }}" class="btn btn-success btn-sm mt-3 px-4 py-2">Voir les Détails</a>
-                                </div>
+                                <h5 class="card-title">{{ animal.nom }}</h5>
+                                <p class="card-text">Race : {{ animal.race }}</p>
+                                <p class="card-text">État de santé : {{ animal.etatDeSante }}</p>
+                                <a href="{{ path('animal_edit', { id: animal.id }) }}" class="btn btn-primary btn-sm">Modifier</a>
                             </div>
                         </div>
                     </div>
                 {% endfor %}
             </div>
-        {% else %}
-            <p class="text-center text-muted">Aucun animal trouvé.</p>
         {% endfor %}
-    </div>
-
-    <!-- Ajout de quelques styles CSS pour rendre le tout plus moderne -->
-    <style>
-        .card {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .btn-success {
-            background-color: #2a9d8f;
-            border: none;
-            text-transform: uppercase;
-            font-weight: bold;
-        }
-
-        .btn-success:hover {
-            background-color: #21867a;
-        }
-    </style>
+    {% else %}
+        <p>Aucun animal trouvé.</p>
+    {% endif %}
+</div>
 {% endblock %}

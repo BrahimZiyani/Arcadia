@@ -19,9 +19,8 @@ class Animal
     #[ORM\Column(length: 255)]
     private ?string $race = null;
 
-    // Liste d'images associées à l'animal, toujours un tableau
     #[ORM\Column(type: "json", nullable: false)]
-    private array $images = []; // Initialisation par défaut
+    private array $images = [];
 
     #[ORM\ManyToOne(targetEntity: Habitat::class, fetch: 'LAZY')]
     #[ORM\JoinColumn(nullable: false)]
@@ -32,11 +31,6 @@ class Animal
 
     #[ORM\Column(type: "text")]
     private ?string $alimentation = null;
-
-    public function __construct()
-    {
-        $this->images = []; // Toujours initialisé à un tableau vide
-    }
 
     public function getId(): ?int
     {
@@ -72,26 +66,22 @@ class Animal
 
     public function addImage(string $image): self
     {
-        if (count($this->images) >= 1) {
-            throw new \InvalidArgumentException('Only one image is allowed.');
-        }
         $this->images[] = $image;
         return $this;
     }
 
     public function setImages(array $images): self
     {
-        if (count($images) > 1) {
-            throw new \InvalidArgumentException('Only one image is allowed.');
-        }
         $this->images = $images;
         return $this;
     }
 
-    public function removeImage(): self
+    public function removeImage(string $image): void
     {
-        $this->images = [];
-        return $this;
+    if (($key = array_search($image, $this->images, true)) !== false) {
+        unset($this->images[$key]);
+        $this->images = array_values($this->images); // Réindexe le tableau
+    }
     }
 
     public function getHabitat(): ?Habitat
