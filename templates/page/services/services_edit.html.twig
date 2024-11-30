@@ -6,59 +6,47 @@
 <div class="container mt-5">
     <h2 class="text-center mb-4" style="color: #2A9D8F;">Modifier le Service : {{ service.nom }}</h2>
     
-    <!-- Section des messages flash -->
-    {% for message in app.flashes('debug') %}
-        <div class="alert alert-info">
-            {{ message }}
-        </div>
-    {% endfor %}
+    <!-- Messages Flash -->
     {% for message in app.flashes('success') %}
-        <div class="alert alert-success">
-            {{ message }}
-        </div>
+        <div class="alert alert-success">{{ message }}</div>
     {% endfor %}
     {% for message in app.flashes('error') %}
-        <div class="alert alert-danger">
-            {{ message }}
-        </div>
-    {% endfor %}
-    {% for message in app.flashes('info') %}
-        <div class="alert alert-info">
-            {{ message }}
-        </div>
+        <div class="alert alert-danger">{{ message }}</div>
     {% endfor %}
     
     <div class="card shadow-lg border-0 p-4">
+        <!-- Formulaire principal pour modifier le service -->
         {{ form_start(form) }}
             {{ form_row(form.nom) }}
             {{ form_row(form.description) }}
             {{ form_row(form.images) }}
-
-            {% if service.images is not empty %}
-                <div class="mt-3">
-                    <h5>Images actuelles :</h5>
-                    <div class="d-flex flex-wrap">
-                        {% for image in service.images %}
-                            <div class="mr-2 mb-2 text-center">
-                                <img src="{{ asset('uploads/services/' ~ image) }}" 
-                                     alt="Image actuelle" 
-                                     style="width: 100px; height: auto; object-fit: cover;">
-                                <div>
-                                    <label>
-                                        <input type="checkbox" name="remove_images[]" value="{{ image }}">
-                                        Supprimer
-                                    </label>
-                                </div>
-                            </div>
-                        {% endfor %}
-                    </div>
-                </div>
-            {% endif %}
-
             <div class="text-center mt-4">
                 <button type="submit" class="btn btn-primary">Enregistrer</button>
             </div>
         {{ form_end(form) }}
+
+        <!-- Section des images actuelles -->
+        {% if service.images is not empty %}
+            <div class="mt-5">
+                <h5>Images actuelles :</h5>
+                <div class="d-flex flex-wrap">
+                    {% for image in service.images %}
+                        <div class="m-2 text-center">
+                            <img src="{{ asset('uploads/services/' ~ image) }}" 
+                                 alt="Image actuelle" 
+                                 class="img-thumbnail" 
+                                 style="width: 150px; height: auto; object-fit: cover;">
+                            <form method="post" 
+                                  action="{{ path('service_remove_image', { 'id': service.id, 'image': image|url_encode }) }}" 
+                                  class="mt-2">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete_image' ~ service.id) }}">
+                                <button type="submit" class="btn btn-outline-danger btn-sm">Supprimer</button>
+                            </form>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
     </div>
 </div>
 {% endblock %}

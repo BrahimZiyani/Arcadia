@@ -37,7 +37,7 @@ class HabitatController extends AbstractController
 
             $habitatService->creerHabitat($habitat);
 
-            return $this->redirectToRoute('habitat_index');
+            return $this->redirectToRoute('app_profile');
         }
 
         return $this->render('page/habitats/habitat_new.html.twig', [
@@ -59,7 +59,7 @@ class HabitatController extends AbstractController
 
             $habitatService->modifierHabitat($habitat);
 
-            return $this->redirectToRoute('habitat_index');
+            return $this->redirectToRoute('app_profile');
         }
 
         return $this->render('page/habitats/habitat_edit.html.twig', [
@@ -68,13 +68,37 @@ class HabitatController extends AbstractController
         ]);
     }
 
+    #[Route('/{id}/delete-image', name: 'habitat_delete_image', methods: ['POST'])]
+    public function deleteImage(Request $request, Habitat $habitat, HabitatService $habitatService): Response
+    {
+        $image = $request->request->get('image');
+        $token = $request->request->get('_token');
+
+        if (!$this->isCsrfTokenValid('delete_image' . $habitat->getId(), $token)) {
+            throw $this->createAccessDeniedException('Token CSRF invalide.');
+        }
+
+        if ($image) {
+            $habitatService->supprimerImage($habitat, $image);
+        }
+
+        return $this->redirectToRoute('habitat_edit', ['id' => $habitat->getId()]);
+    }
+
+
     #[Route('/{id}', name: 'habitat_delete', methods: ['POST'])]
     public function delete(Request $request, Habitat $habitat, HabitatService $habitatService): Response
     {
+        // Vérification du token CSRF
         if ($this->isCsrfTokenValid('delete' . $habitat->getId(), $request->request->get('_token'))) {
             $habitatService->supprimerHabitat($habitat);
+            $this->addFlash('success', 'Habitat supprimé avec succès.');
+        } else {
+            $this->addFlash('error', 'Token CSRF invalide.');
         }
 
-        return $this->redirectToRoute('habitat_index');
+        // Redirection après la suppression
+        return $this->redirectToRoute('app_profile');
     }
+
 }

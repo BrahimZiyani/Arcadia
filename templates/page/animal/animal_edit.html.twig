@@ -45,6 +45,7 @@
     </div>
 
     {{ form_end(form) }}
+
     <div class="form-group mt-5">
         <label>Images existantes</label>
         <div class="d-flex flex-wrap">
@@ -56,6 +57,8 @@
                         <button type="submit" class="btn btn-outline-danger btn-sm">Supprimer</button>
                     </form>
                 </div>
+            {% else %}
+                <p class="text-muted">Aucune image n'est disponible pour cet animal.</p>
             {% endfor %}
         </div>
     </div>

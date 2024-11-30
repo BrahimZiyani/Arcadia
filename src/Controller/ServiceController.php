@@ -36,7 +36,7 @@ class ServiceController extends AbstractController
             }
 
             $serviceManager->saveService($service);
-            $this->addFlash('success', 'Service created successfully.');
+            $this->addFlash('success', 'Service créé avec succès.');
 
             return $this->redirectToRoute('service_index');
         }
@@ -47,47 +47,65 @@ class ServiceController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'service_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Service $service, ServiceManager $serviceManager): Response
-    {
-        $form = $this->createForm(ServiceType::class, $service);
-        $form->handleRequest($request);
+public function edit(Request $request, Service $service, ServiceManager $serviceManager): Response
+{
+    $form = $this->createForm(ServiceType::class, $service);
+    $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            if ($form->get('removeImage')->getData()) {
-                $service->setImages([]); // Remove the image
-            }
-            
-            $uploadedImages = $form->get('images')->getData();
-            if ($uploadedImages) {
-                try {
-                    $serviceManager->handleUploadedImages($uploadedImages, $service);
-                } catch (\Exception $e) {
-                    $this->addFlash('danger', 'Error uploading images: ' . $e->getMessage());
-                }
-            }
-
-            try {
-                $serviceManager->saveService($service);
-                $this->addFlash('success', 'Service updated successfully.');
-            } catch (\Exception $e) {
-                $this->addFlash('danger', 'Error saving service: ' . $e->getMessage());
-            }
-
-            return $this->redirectToRoute('service_edit', ['id' => $service->getId()]);
+    if ($form->isSubmitted() && $form->isValid()) {
+        // Gestion des nouvelles images uploadées
+        $uploadedImages = $form->get('images')->getData();
+        if ($uploadedImages) {
+            $serviceManager->handleUploadedImages($uploadedImages, $service);
         }
 
-        return $this->render('page/services/services_edit.html.twig', [
-            'service' => $service,
-            'form' => $form->createView(),
-        ]);
+        // Sauvegarde du service
+        $serviceManager->saveService($service);
+        $this->addFlash('success', 'Service modifié avec succès.');
+
+        return $this->redirectToRoute('service_edit', ['id' => $service->getId()]);
     }
 
-    #[Route('/{id}', name: 'service_delete', methods: ['POST'])]
+    return $this->render('page/services/services_edit.html.twig', [
+        'form' => $form->createView(),
+        'service' => $service,
+    ]);
+}
+
+
+
+#[Route('/{id}/delete-image/{image}', name: 'service_remove_image', methods: ['POST'])]
+public function removeImage(Request $request, Service $service, string $image, ServiceManager $serviceManager): Response
+{
+    // Vérification du token CSRF
+    if (!$this->isCsrfTokenValid('delete_image' . $service->getId(), $request->request->get('_token'))) {
+        $this->addFlash('error', 'Action non autorisée.');
+        return $this->redirectToRoute('service_edit', ['id' => $service->getId()]);
+    }
+
+    try {
+        // Utilisation du ServiceManager pour supprimer l'image
+        $serviceManager->supprimerImage($service, $image);
+        $this->addFlash('success', 'Image supprimée avec succès.');
+    } catch (\Exception $e) {
+        $this->addFlash('error', 'Erreur lors de la suppression de l\'image : ' . $e->getMessage());
+    }
+
+    return $this->redirectToRoute('service_edit', ['id' => $service->getId()]);
+}
+
+        
+
+    #[Route('/{id}/delete', name: 'service_delete', methods: ['POST'])]
     public function delete(Request $request, Service $service, ServiceManager $serviceManager): Response
     {
         if ($this->isCsrfTokenValid('delete' . $service->getId(), $request->request->get('_token'))) {
-            $serviceManager->removeService($service);
-            $this->addFlash('success', 'Service deleted successfully.');
+            try {
+                $serviceManager->removeService($service);
+                $this->addFlash('success', 'Service supprimé avec succès.');
+            } catch (\Exception $e) {
+                $this->addFlash('error', 'Erreur lors de la suppression du service : ' . $e->getMessage());
+            }
         }
 
         return $this->redirectToRoute('service_index');

@@ -37,6 +37,30 @@ class HabitatService
         }
     }
 
+    public function supprimerImage(Habitat $habitat, string $image): void
+{
+    // Supprimer l'image du disque
+    $filePath = $this->uploadsDirectory . '/' . $image;
+    if (file_exists($filePath)) {
+        unlink($filePath);
+    }
+
+    // Supprimer l'image de l'entité Habitat
+    $images = $habitat->getImages();
+    $images = array_filter($images, fn($img) => $img !== $image);
+
+    // Réindexer les clés pour éviter des problèmes dans Twig
+    $images = array_values($images);
+
+    // Mettre à jour les images de l'habitat
+    $habitat->setImages($images);
+
+    // Sauvegarder les changements
+    $this->entityManager->flush();
+}
+
+
+
     public function creerHabitat(Habitat $habitat): void
     {
         $this->entityManager->persist($habitat);

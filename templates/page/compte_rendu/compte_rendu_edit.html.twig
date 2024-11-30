@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier un Compte Rendu{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h1 class="mb-4">Modifier un Compte Rendu</h1>
+    <div class="card shadow-sm p-4">
+        {{ form_start(form) }}
+        
+        <div class="mb-3">
+            {{ form_row(form.animal, {
+                'attr': {'class': 'form-control', 'placeholder': 'Sélectionnez un animal'}
+            }) }}
+        </div>
+        <div class="mb-3">
+            {{ form_row(form.date, {
+                'attr': {'class': 'form-control', 'placeholder': 'Date (jj/mm/aaaa)'}
+            }) }}
+        </div>
+        <div class="mb-3">
+            {{ form_row(form.etat, {
+                'attr': {'class': 'form-control', 'placeholder': 'État de santé'}
+            }) }}
+        </div>
+        <div class="mb-3">
+            {{ form_row(form.details, {
+                'attr': {'class': 'form-control', 'placeholder': 'Détails supplémentaires'}
+            }) }}
+        </div>
+
+        <div class="d-flex justify-content-between">
+            <a href="{{ path('app_profile') }}" class="btn btn-secondary">Annuler</a>
+            <button type="submit" class="btn btn-success">Enregistrer les modifications</button>
+        </div>
+
+        {{ form_end(form) }}
+    </div>
+</div>
+{% endblock %}

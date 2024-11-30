@@ -3,65 +3,64 @@
 namespace App\Service;
 
 use App\Entity\Service;
-use Symfony\Component\String\Slugger\SluggerInterface;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class ServiceManager
 {
     private EntityManagerInterface $entityManager;
-    private SluggerInterface $slugger;
     private string $uploadsDirectory;
+    private SluggerInterface $slugger;
 
-    public function __construct(EntityManagerInterface $entityManager, SluggerInterface $slugger, string $uploadsDirectory)
+    public function __construct(EntityManagerInterface $entityManager, string $uploadsDirectory, SluggerInterface $slugger)
     {
         $this->entityManager = $entityManager;
+        $this->uploadsDirectory = rtrim($uploadsDirectory, '/');
         $this->slugger = $slugger;
-        $this->uploadsDirectory = $uploadsDirectory;
+
+        if (!is_dir($this->uploadsDirectory)) {
+            mkdir($this->uploadsDirectory, 0777, true);
+        }
     }
 
     public function handleUploadedImages(array $uploadedImages, Service $service): void
     {
-        // Ensure the directory exists
-        if (!is_dir($this->uploadsDirectory)) {
-            mkdir($this->uploadsDirectory, 0777, true);
-        }
-
-        // Remove existing images if any
-        $this->removeImages($service->getImages());
-
         foreach ($uploadedImages as $image) {
+            if (!$image instanceof UploadedFile) {
+                throw new \RuntimeException('Un fichier valide est attendu.');
+            }
+
             $originalFilename = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
             $safeFilename = $this->slugger->slug($originalFilename);
             $newFilename = $safeFilename . '-' . uniqid() . '.' . $image->guessExtension();
 
             try {
-                $image->move(
-                    $this->uploadsDirectory, // Upload directory path
-                    $newFilename
-                );
-
+                $image->move($this->uploadsDirectory, $newFilename);
                 $service->addImage($newFilename);
-                // Debug statement
-                error_log('Image uploaded: ' . $newFilename);
             } catch (FileException $e) {
-                throw new \RuntimeException('Erreur lors du téléchargement de l\'image : ' . $e->getMessage());
+                throw new \RuntimeException(sprintf('Erreur lors de l\'upload de l\'image "%s": %s', $newFilename, $e->getMessage()));
             }
         }
     }
 
-    public function removeImages(array $images): void
-    {
-        foreach ($images as $image) {
-            $filePath = $this->uploadsDirectory . '/' . $image;
-            if (file_exists($filePath)) {
-                unlink($filePath);
-                // Debug statement
-                error_log('Image removed: ' . $filePath);
-            }
-        }
+    public function supprimerImage(Service $service, string $image): void
+{
+    // Suppression du fichier sur le disque
+    $filePath = $this->uploadsDirectory . '/' . $image;
+    if (file_exists($filePath)) {
+        unlink($filePath);
     }
+
+    // Suppression de l'image dans l'entité Service
+    $service->removeImage();
+
+    // Sauvegarde des changements
+    $this->entityManager->flush();
+}
+
+
 
     public function saveService(Service $service): void
     {
@@ -71,7 +70,13 @@ class ServiceManager
 
     public function removeService(Service $service): void
     {
-        $this->removeImages($service->getImages());
+        foreach ($service->getImages() as $image) {
+            $filePath = $this->uploadsDirectory . '/' . $image;
+            if (file_exists($filePath)) {
+                unlink($filePath);
+            }
+        }
+
         $this->entityManager->remove($service);
         $this->entityManager->flush();
     }

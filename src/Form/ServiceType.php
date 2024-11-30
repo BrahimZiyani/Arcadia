@@ -9,9 +9,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Validator\Constraints\All;
 use Symfony\Component\Validator\Constraints\File;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 class ServiceType extends AbstractType
 {
@@ -27,8 +27,8 @@ class ServiceType extends AbstractType
                 'attr' => ['class' => 'form-control', 'rows' => 4],
             ])
             ->add('images', FileType::class, [
-                'label' => 'Images',
-                'mapped' => false, // Le champ n'est pas directement lié à l'entité
+                'label' => 'Ajouter des images',
+                'mapped' => false, // Pas lié directement à l'entité
                 'multiple' => true,
                 'required' => false,
                 'attr' => ['class' => 'form-control-file'],
@@ -38,18 +38,12 @@ class ServiceType extends AbstractType
                             new File([
                                 'maxSize' => '8M',
                                 'mimeTypes' => ['image/jpeg', 'image/png', 'image/gif'],
-                                'mimeTypesMessage' => 'Veuillez télécharger des images valides (JPEG, PNG, GIF).',
+                                'mimeTypesMessage' => 'Veuillez télécharger des images valides.',
                             ]),
                         ],
                     ]),
                 ],
-            ])
-            ->add('removeImage', CheckboxType::class, [
-                'label' => 'Supprimer l\'image actuelle',
-                'mapped' => false,
-                'required' => false,
             ]);
-            ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

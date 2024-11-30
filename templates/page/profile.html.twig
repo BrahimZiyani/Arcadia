@@ -48,7 +48,7 @@
 
             <!-- Section de Création de Rapport -->
             {% if 'ROLE_ADMIN' in app.user.roles or 'ROLE_VETERINAIRE' in app.user.roles %}
-                <h2 class="mb-4">Créer un rapport</h2>
+                <h2 class="mb-4">Créer un compte rendu</h2>
                 <div class="card p-4 shadow-sm">
                     {{ form_start(formCompteRendu) }}
                     <div class="row">
@@ -98,9 +98,13 @@
                             <td>{{ compteRendu.utilisateur.nom ?? 'Non spécifié' }}</td>
                             <td>
                                 {% if 'ROLE_ADMIN' in app.user.roles or 'ROLE_VETERINAIRE' in app.user.roles %}
-                                    <button type="button" class="btn btn-danger btn-sm delete-button" data-url="{{ path('compte_rendu_delete', {'id': compteRendu.id}) }}" data-token="{{ csrf_token('delete' ~ compteRendu.id) }}">
-                                        Supprimer
-                                    </button>
+                                    <a href="{{ path('compte_rendu_edit', {'id': compteRendu.id}) }}" class="btn btn-primary btn-sm" style="margin-right: 5px;">
+                                        Éditer
+                                    </a>
+                                    <form action="{{ path('compte_rendu_delete', {'id': compteRendu.id}) }}" method="post" style="display:inline;">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ compteRendu.id) }}">
+                                        <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                                    </form>
                                 {% else %}
                                     <span class="text-muted">Action non autorisée</span>
                                 {% endif %}
@@ -128,17 +132,16 @@
                             <td>
                                 {% if 'ROLE_ADMIN' in app.user.roles or 'ROLE_VETERINAIRE' in app.user.roles %}
                                     <a href="{{ path('habitat_edit', {'id': habitat.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
-                                    <button 
-                                        type="button" 
-                                        class="btn btn-danger btn-sm delete-button" 
-                                        data-url="{{ path('habitat_delete', {'id': habitat.id}) }}" 
-                                        data-token="{{ csrf_token('delete' ~ habitat.id) }}">
-                                        Supprimer
-                                    </button>
+
+                                    <form action="{{ path('habitat_delete', {'id': habitat.id}) }}" method="post" style="display: inline;">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ habitat.id) }}">
+                                        <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                                    </form>
                                 {% else %}
                                     <span class="text-muted">Action non autorisée</span>
                                 {% endif %}
                             </td>
+
                         </tr>
                     {% else %}
                         <tr>
@@ -266,11 +269,12 @@
                     <h5 class="card-title">{{ service.nom }}</h5>
 
                     <!-- Affichage de la photo du service -->
-                    {% if service.images %}
-                        <img src="{{ asset(service.images[0]) }}" alt="{{ service.nom }}" class="img-fluid mb-3">
-                    {% else %}
-                        <p>Pas de photo</p>
-                    {% endif %}
+{% if service.images is not empty %}
+    <img src="{{ asset('uploads/services/' ~ service.images[0]) }}" alt="{{ service.nom }}" class="img-fluid mb-3">
+{% else %}
+    <p>Pas de photo</p>
+{% endif %}
+
 
                     <!-- Boutons pour Modifier et Supprimer -->
                     <div class="d-flex justify-content-between">

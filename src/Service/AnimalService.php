@@ -38,6 +38,25 @@ class AnimalService
         $this->entityManager->flush();
     }
 
+    public function supprimerImage(Animal $animal, string $image): void
+    {
+    // Supprimer l'image du disque
+    $filePath = $this->uploadsDirectory . '/' . $image;
+    if (file_exists($filePath)) {
+        unlink($filePath);
+    }
+
+    // Supprimer l'image du tableau d'images de l'entité
+    $animal->removeImage($image);
+
+    // Réindexer les clés des images
+    $images = array_values($animal->getImages());
+    $animal->setImages($images);
+
+    // Sauvegarder les changements dans la base de données
+    $this->entityManager->flush();
+    }
+
     public function supprimerAnimal(Animal $animal): void
     {
         foreach ($animal->getImages() as $image) {

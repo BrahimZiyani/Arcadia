@@ -74,12 +74,6 @@ class AnimalController extends AbstractController
     #[Route('/animal/{id}/delete-image/{image}', name: 'animal_remove_image', methods: ['POST'])]
     public function removeImage(Request $request, Animal $animal, string $image, EntityManagerInterface $entityManager): Response
     {
-        dd([
-            'id' => $animal->getId(),
-            'image' => $image,
-            'file_path' => $this->getParameter('animals_uploads_directory') . '/' . $image,
-            'file_exists' => file_exists($this->getParameter('animals_uploads_directory') . '/' . $image),
-        ]);
 
         // Vérification du token CSRF
         if (!$this->isCsrfTokenValid('delete_image' . $animal->getId(), $request->request->get('_token'))) {
