@@ -32,6 +32,9 @@ class Animal
     #[ORM\Column(type: "text")]
     private ?string $alimentation = null;
 
+    #[ORM\Column(type: "integer", options: ["default" => 0])]
+    private int $visites = 0; // Nouvelle propriété pour le compteur de visites
+
     public function getId(): ?int
     {
         return $this->id;
@@ -78,10 +81,10 @@ class Animal
 
     public function removeImage(string $image): void
     {
-    if (($key = array_search($image, $this->images, true)) !== false) {
-        unset($this->images[$key]);
-        $this->images = array_values($this->images); // Réindexe le tableau
-    }
+        if (($key = array_search($image, $this->images, true)) !== false) {
+            unset($this->images[$key]);
+            $this->images = array_values($this->images); // Réindexe le tableau
+        }
     }
 
     public function getHabitat(): ?Habitat
@@ -114,6 +117,23 @@ class Animal
     public function setAlimentation(string $alimentation): self
     {
         $this->alimentation = $alimentation;
+        return $this;
+    }
+
+    public function getVisites(): int
+    {
+        return $this->visites;
+    }
+
+    public function setVisites(int $visites): self
+    {
+        $this->visites = $visites;
+        return $this;
+    }
+
+    public function incrementVisites(): self
+    {
+        $this->visites++;
         return $this;
     }
 }

@@ -1,13 +1,5 @@
 # Liste de choses à faire pour finir le projet Symfony
 
-Vue des services :
-- Présentation des services actuels (restauration, visite guidée, petit train).
-
-Vue des habitats et des animaux :
-- Liste des habitats avec nom et image.
-- Détails d’un habitat : description, liste d’animaux associés.
-- Détails d’un animal : prénom, race, images, état, avis vétérinaire.
-
 Statistiques de consultation :
 - Chaque clic sur un animal incrémente un compteur stocké en base NoSQL. Ces données sont utilisées dans le tableau de bord de l’administrateur.
 

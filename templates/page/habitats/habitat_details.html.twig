@@ -1,0 +1,70 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails de {{ habitat.nom }}{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <div class="row">
+            <!-- Image de l'habitat avec un grand affichage -->
+            <div class="col-md-6">
+                {% if habitat.images is not empty %}
+                    <img src="{{ asset('uploads/habitats/' ~ habitat.images[0]) }}" alt="{{ habitat.nom }}" class="img-fluid rounded shadow-lg">
+                {% else %}
+                    <div class="d-flex align-items-center justify-content-center bg-light" 
+                         style="height: 200px; color: #6c757d; font-size: 14px;">
+                        Pas d'image disponible
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="col-md-6">
+                <h1 class="text-center mb-4">{{ habitat.nom }}</h1>
+
+                <p>{{ habitat.description }}</p>
+            </div>
+        </div>
+
+        <!-- Galerie d'images -->
+        <div class="mt-5 d-flex justify-content-center">
+            <div class="w-75">
+                <h2 class="text-center mb-4">Galerie d'Images</h2>
+                <div class="row">
+                    {% for image in habitat.images %}
+                        <div class="col-md-4 mb-4">
+                            <div class="card">
+                                <img src="{{ asset('uploads/habitats/' ~ image) }}" class="card-img-top" alt="Image de {{ habitat.nom }}">
+                            </div>
+                        </div>
+                    {% else %}
+                        <p class="text-center">Aucune image disponible.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+        <!-- Section des animaux -->
+    <h2>Animaux dans cet habitat</h2>
+    <div class="row">
+        {% for animal in animals %}
+            <div class="col-md-4 mb-4">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ animal.nom }}</h5>
+
+                        {% if animal.images|length > 0 %}
+                            <img src="{{ asset('uploads/animals/' ~ animal.images[0]) }}" alt="{{ animal.nom }}" class="img-fluid mb-3">
+                        {% else %}
+                            <p class="text-muted">Pas d'image disponible</p>
+                        {% endif %}
+                        
+                        <p>Race : {{ animal.race }}</p>
+                        <p>État de santé : {{ animal.etatDeSante }}</p>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <p class="text-center col-12">Aucun animal trouvé dans cet habitat.</p>
+        {% endfor %}
+    </div>
+    </div>
+{% endblock %}

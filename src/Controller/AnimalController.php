@@ -156,8 +156,10 @@ public function show(EntityManagerInterface $entityManager): Response
 }
 
     #[Route('/animal/{id}/details', name: 'animal_details', methods: ['GET'])]
-    public function details(Animal $animal): Response
+    public function details(Animal $animal, EntityManagerInterface $entityManager): Response
     {
+        $animal->incrementVisites();
+        $entityManager->flush();
         return $this->render('page/animal/animal_details.html.twig', [
             'animal' => $animal,
         ]);

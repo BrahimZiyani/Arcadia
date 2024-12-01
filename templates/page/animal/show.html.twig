@@ -22,7 +22,14 @@
                                 <h5 class="card-title">{{ animal.nom }}</h5>
                                 <p class="card-text">Race : {{ animal.race }}</p>
                                 <p class="card-text">État de santé : {{ animal.etatDeSante }}</p>
-                                <a href="{{ path('animal_edit', { id: animal.id }) }}" class="btn btn-primary btn-sm">Modifier</a>
+                                
+                                <!-- Bouton Plus de détails -->
+                                <a href="{{ path('animal_details', { id: animal.id }) }}" class="btn btn-info btn-sm">Plus de détails</a>
+                                
+                                <!-- Bouton Modifier uniquement pour les utilisateurs connectés -->
+                                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                                    <a href="{{ path('animal_edit', { id: animal.id }) }}" class="btn btn-primary btn-sm">Modifier</a>
+                                {% endif %}
                             </div>
                         </div>
                     </div>

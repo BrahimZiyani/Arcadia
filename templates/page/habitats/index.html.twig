@@ -26,6 +26,7 @@
                         <p class="card-text text-muted">
                             {{ habitat.description|length > 120 ? habitat.description|slice(0, 120) ~ '...' : habitat.description }}
                         </p>
+                        <a href="{{ path('habitat_details', {id: habitat.id}) }}" class="btn btn-primary">En savoir plus</a>
                     </div>
                 </div>
             </div>

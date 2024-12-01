@@ -4,12 +4,14 @@ namespace App\Controller;
 
 use App\Entity\Habitat;
 use App\Form\HabitatType;
+use App\Entity\Animal;
 use App\Service\HabitatService;
 use App\Repository\HabitatRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\ORM\EntityManagerInterface;
 
 #[Route('/admin/habitats')]
 class HabitatController extends AbstractController
@@ -101,4 +103,14 @@ class HabitatController extends AbstractController
         return $this->redirectToRoute('app_profile');
     }
 
+    #[Route('/{id}', name: 'habitat_details', methods: ['GET'])]
+public function details(Habitat $habitat, EntityManagerInterface $entityManager): Response
+{
+    $animals = $entityManager->getRepository(Animal::class)->findBy(['habitat' => $habitat]);
+
+    return $this->render('page/habitats/habitat_details.html.twig', [
+        'habitat' => $habitat,
+        'animals' => $animals,
+    ]);
+}
 }
