@@ -40,7 +40,7 @@
                     <a class="nav-link" href="{{ path('app_habitats') }}" style="color: #353535;">Nos Habitats</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ path('animal_show') }}" style="color: #353535;">Animaux</a>
+                    <a class="nav-link" href="{{ path('animal_show') }}" style="color: #353535;">Nos Animaux</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ path('app_services') }}" style="color: #353535;">Nos Services</a>
@@ -49,7 +49,7 @@
                     <a class="nav-link" href="{{ path('app_avis') }}" style="color: #353535;">Avis</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ path('app_contact') }}" style="color: #353535;">Contact</a>
+                    <a class="nav-link" href="{{ path('app_contact') }}" style="color: #353535;">Contactez-nous</a>
                 </li>
                 <!-- Gestion des boutons connexion/déconnexion -->
                 <li class="nav-item d-flex align-items-center">
@@ -80,13 +80,13 @@
         <div class="row">
             <!-- Liens rapides -->
             <div class="col">
-                <p><a href="#" style="color: #2A9D8F;">Nous contacter</a></p>
+                <p><a href="{{ path('app_contact') }}" style="color: #2A9D8F;">Nous contacter</a></p>
             </div>
             <div class="col">
-                <p><a href="#" style="color: #2A9D8F;">Conditions d'utilisation</a></p>
+                <p><a href="{{ path('app_conditions_utilisation') }}" style="color: #2A9D8F;">Conditions d'utilisation</a></p>
             </div>
             <div class="col">
-                <p><a href="#" style="color: #2A9D8F;">Politique de confidentialité</a></p>
+                <p><a href="{{ path('app_politique_confidentialite') }}" style="color: #2A9D8F;">Politique de confidentialité</a></p>
             </div>
         </div>
         <!-- Texte du copyright -->

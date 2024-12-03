@@ -157,39 +157,41 @@
             {% endif %}
 
             <!-- Section des Animaux -->
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Nom</th>
-                        <th>Race</th>
-                        <th>Habitat</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for animal in animals %}
-                        <tr>
-                            <td>{{ animal.nom }}</td>
-                            <td>{{ animal.race }}</td>
-                            <td>{{ animal.habitat.nom }}</td>
-                            <td>
-                                {% if 'ROLE_ADMIN' in app.user.roles or 'ROLE_VETERINAIRE' in app.user.roles %}
-                                    <a href="{{ path('animal_edit', {'id': animal.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
-                                    <button 
-                                        type="button" 
-                                        class="btn btn-danger btn-sm delete-button" 
-                                        data-url="{{ path('animal_delete', {'id': animal.id}) }}"
-                                        data-token="{{ csrf_token('delete' ~ animal.id) }}">
-                                        Supprimer
-                                    </button>
-                                {% else %}
-                                    <span class="text-muted">Action non autorisée</span>
-                                {% endif %}
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Nom</th>
+            <th>Race</th>
+            <th>Habitat</th>
+            <th>Nombre de visites</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for animal in animals %}
+            <tr>
+                <td>{{ animal.nom }}</td>
+                <td>{{ animal.race }}</td>
+                <td>{{ animal.habitat.nom }}</td>
+                <td>{{ animal.visites }}</td> <!-- Nouvelle colonne pour afficher les visites -->
+                <td>
+                    {% if 'ROLE_ADMIN' in app.user.roles or 'ROLE_VETERINAIRE' in app.user.roles %}
+                        <a href="{{ path('animal_edit', {'id': animal.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
+                        <button 
+                            type="button" 
+                            class="btn btn-danger btn-sm delete-button" 
+                            data-url="{{ path('animal_delete', {'id': animal.id}) }}"
+                            data-token="{{ csrf_token('delete' ~ animal.id) }}">
+                            Supprimer
+                        </button>
+                    {% else %}
+                        <span class="text-muted">Action non autorisée</span>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
 
             <!-- Bouton Ajouter un animal -->
             {% if 'ROLE_ADMIN' in app.user.roles or 'ROLE_VETERINAIRE' in app.user.roles %}

@@ -7,7 +7,11 @@
         <div class="row">
             <!-- Image de l'animal avec un grand affichage -->
             <div class="col-md-6">
-                <img src="{{ asset('uploads/' ~ animal.images[0]) }}" alt="{{ animal.nom }}" class="img-fluid rounded shadow-lg">
+                {% if animal.images is not empty %}
+                <img src="{{ asset('uploads/animals/' ~ animal.images[0]) }}" alt="{{ animal.nom }}" class="img-fluid rounded shadow-lg">
+                {% else %}
+                <p class="text-center">Aucune image disponible.</p>
+                {% endif %}
             </div>
 
             <div class="col-md-6">
@@ -31,7 +35,7 @@
                 {% for image in animal.images %}
                 <div class="col-md-4 mb-4">
                     <div class="card">
-                    <img src="{{ asset('uploads/' ~ image) }}" class="card-img-top" alt="Image de {{ animal.nom }}">
+                    <img src="{{ asset('uploads/animals/' ~ image) }}" class="card-img-top" alt="Image de {{ animal.nom }}">
                     </div>
                 </div>
                 {% else %}

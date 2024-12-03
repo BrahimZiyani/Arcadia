@@ -1,16 +1,5 @@
 # Liste de choses à faire pour finir le projet Symfony
 
-Statistiques de consultation :
-- Chaque clic sur un animal incrémente un compteur stocké en base NoSQL. Ces données sont utilisées dans le tableau de bord de l’administrateur.
-
-25/11/2024
-- Vérifier les pages d'edit, new etc ... de service animal et habitats
-- Tester le projet
-    - Écrire des tests unitaires
-    - Écrire des tests fonctionnels
-    - Effectuer des tests manuels
-
-26/11/2024
 - Optimiser et déployer
     - Optimiser les performances (cache, optimisation des requêtes)
     - Configurer l'environnement de production

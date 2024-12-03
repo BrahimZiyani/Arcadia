@@ -89,7 +89,7 @@ class PageController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->avisService->creerAvis($avis);
 
-            $this->addFlash('success', 'Votre avis a été soumis et est en attente de validation.');
+            $this->addFlash('avis_success', 'Votre avis a été soumis et est en attente de validation.');
             return $this->redirectToRoute('app_avis');
         }
 
@@ -148,5 +148,17 @@ class PageController extends AbstractController
         $this->addFlash('success', 'L\'avis a été supprimé avec succès.');
 
         return $this->redirectToRoute('app_profile');
+    }
+
+    #[Route('/conditions-utilisation', name: 'app_conditions_utilisation')]
+    public function conditionsUtilisation(): Response
+    {
+        return $this->render('legal/conditions_utilisation.html.twig');
+    }
+
+    #[Route('/politique-confidentialite', name: 'app_politique_confidentialite')]
+    public function politiqueConfidentialite(): Response
+    {
+        return $this->render('legal/politique_confidentialite.html.twig');
     }
 }

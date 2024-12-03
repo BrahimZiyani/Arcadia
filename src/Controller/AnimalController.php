@@ -154,16 +154,23 @@ public function show(EntityManagerInterface $entityManager): Response
         'animalsByHabitat' => $animalsByHabitat, // Passer la variable au template
     ]);
 }
+#[Route('/animal/{id}/details', name: 'animal_details', methods: ['GET'])]
+public function details(Request $request, Animal $animal, EntityManagerInterface $entityManager): Response
+{
+    $session = $request->getSession();
+    $visitedAnimals = $session->get('visited_animals', []);
 
-    #[Route('/animal/{id}/details', name: 'animal_details', methods: ['GET'])]
-    public function details(Animal $animal, EntityManagerInterface $entityManager): Response
-    {
+    if (!$this->getUser() && !in_array($animal->getId(), $visitedAnimals)) {
         $animal->incrementVisites();
         $entityManager->flush();
-        return $this->render('page/animal/animal_details.html.twig', [
-            'animal' => $animal,
-        ]);
+        $visitedAnimals[] = $animal->getId();
+        $session->set('visited_animals', $visitedAnimals);
     }
+
+    return $this->render('page/animal/animal_details.html.twig', [
+        'animal' => $animal,
+    ]);
+}
 
     #[Route('/test-delete', name: 'test_delete', methods: ['GET', 'POST'])]
     public function testDelete(): Response
