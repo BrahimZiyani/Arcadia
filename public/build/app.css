@@ -1,0 +1,85 @@
+/*!*********************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[1].oneOf[1].use[2]!./assets/styles/app.css ***!
+  \*********************************************************************************************************************************************************************************************/
+body {
+    background-color: #F1FAEE;
+    font-family: 'Roboto', sans-serif;
+}
+
+.logo{
+    display: flex;
+    cursor: pointer;
+    align-items: center;
+}
+
+h1 {
+    font-family: 'Roboto', sans-serif;
+    color: #353535;
+    font-weight: bold;
+    font-size: 40px;
+}
+
+h3 {
+    font-family: 'Roboto', sans-serif;
+    font-weight: bold;
+}
+
+p {
+    font-family: 'Roboto', sans-serif;
+    color: #353535;
+    font-weight: normal;
+    font-size: 16px;
+}
+
+.bg-1 {
+    background-color: #2A9D8F;
+}
+
+.bg-2 {
+    background-color: #F1FAEE;
+}
+
+.bg-1 .nav-link {
+    color: #2A9D8F !important;
+}
+
+.bg-1 .nav-link:hover {
+    color: #2A9D8F !important;
+}
+
+ .custom-jumbotron {
+     background-size: cover;
+     background-position: center;
+     color: white;
+     padding: 2rem 1rem;
+     margin-top: 1rem;
+     text-align: center;
+ }
+
+/*!************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[1].oneOf[1].use[2]!./assets/styles/slider.css ***!
+  \************************************************************************************************************************************************************************************************/
+
+.swiper-container {
+    width: 100%;
+    max-height: 500px; /* Remplacez par la hauteur maximale souhaitée */
+  }
+  
+  .swiper-slide img {
+    width: 100%;
+    height: auto;
+    object-fit: cover; /* Cette propriété permet de s'assurer que l'image couvre toute la hauteur de la slide */
+  }
+  
+
+.swiper-pagination-bullet {
+    background: #F1FAEE;
+  }
+  
+  .swiper-button-next,
+  .swiper-button-prev {
+    color: #2A9D8F;
+  }
+  
+
+/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYXBwLmNzcyIsIm1hcHBpbmdzIjoiOzs7QUFBQTtJQUNJLHlCQUF5QjtJQUN6QixpQ0FBaUM7QUFDckM7O0FBRUE7SUFDSSxhQUFhO0lBQ2IsZUFBZTtJQUNmLG1CQUFtQjtBQUN2Qjs7QUFFQTtJQUNJLGlDQUFpQztJQUNqQyxjQUFjO0lBQ2QsaUJBQWlCO0lBQ2pCLGVBQWU7QUFDbkI7O0FBRUE7SUFDSSxpQ0FBaUM7SUFDakMsaUJBQWlCO0FBQ3JCOztBQUVBO0lBQ0ksaUNBQWlDO0lBQ2pDLGNBQWM7SUFDZCxtQkFBbUI7SUFDbkIsZUFBZTtBQUNuQjs7QUFFQTtJQUNJLHlCQUF5QjtBQUM3Qjs7QUFFQTtJQUNJLHlCQUF5QjtBQUM3Qjs7QUFFQTtJQUNJLHlCQUF5QjtBQUM3Qjs7QUFFQTtJQUNJLHlCQUF5QjtBQUM3Qjs7Q0FFQztLQUNJLHNCQUFzQjtLQUN0QiwyQkFBMkI7S0FDM0IsWUFBWTtLQUNaLGtCQUFrQjtLQUNsQixnQkFBZ0I7S0FDaEIsa0JBQWtCO0NBQ3RCOzs7Ozs7QUNwREQ7SUFDSSxXQUFXO0lBQ1gsaUJBQWlCLEVBQUUsZ0RBQWdEO0VBQ3JFOztFQUVBO0lBQ0UsV0FBVztJQUNYLFlBQVk7SUFDWixpQkFBaUIsRUFBRSx3RkFBd0Y7RUFDN0c7OztBQUdGO0lBQ0ksbUJBQW1CO0VBQ3JCOztFQUVBOztJQUVFLGNBQWM7RUFDaEIiLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8vLi9hc3NldHMvc3R5bGVzL2FwcC5jc3MiLCJ3ZWJwYWNrOi8vLy4vYXNzZXRzL3N0eWxlcy9zbGlkZXIuY3NzIl0sInNvdXJjZXNDb250ZW50IjpbImJvZHkge1xyXG4gICAgYmFja2dyb3VuZC1jb2xvcjogI0YxRkFFRTtcclxuICAgIGZvbnQtZmFtaWx5OiAnUm9ib3RvJywgc2Fucy1zZXJpZjtcclxufVxyXG5cclxuLmxvZ297XHJcbiAgICBkaXNwbGF5OiBmbGV4O1xyXG4gICAgY3Vyc29yOiBwb2ludGVyO1xyXG4gICAgYWxpZ24taXRlbXM6IGNlbnRlcjtcclxufVxyXG5cclxuaDEge1xyXG4gICAgZm9udC1mYW1pbHk6ICdSb2JvdG8nLCBzYW5zLXNlcmlmO1xyXG4gICAgY29sb3I6ICMzNTM1MzU7XHJcbiAgICBmb250LXdlaWdodDogYm9sZDtcclxuICAgIGZvbnQtc2l6ZTogNDBweDtcclxufVxyXG5cclxuaDMge1xyXG4gICAgZm9udC1mYW1pbHk6ICdSb2JvdG8nLCBzYW5zLXNlcmlmO1xyXG4gICAgZm9udC13ZWlnaHQ6IGJvbGQ7XHJcbn1cclxuXHJcbnAge1xyXG4gICAgZm9udC1mYW1pbHk6ICdSb2JvdG8nLCBzYW5zLXNlcmlmO1xyXG4gICAgY29sb3I6ICMzNTM1MzU7XHJcbiAgICBmb250LXdlaWdodDogbm9ybWFsO1xyXG4gICAgZm9udC1zaXplOiAxNnB4O1xyXG59XHJcblxyXG4uYmctMSB7XHJcbiAgICBiYWNrZ3JvdW5kLWNvbG9yOiAjMkE5RDhGO1xyXG59XHJcblxyXG4uYmctMiB7XHJcbiAgICBiYWNrZ3JvdW5kLWNvbG9yOiAjRjFGQUVFO1xyXG59XHJcblxyXG4uYmctMSAubmF2LWxpbmsge1xyXG4gICAgY29sb3I6ICMyQTlEOEYgIWltcG9ydGFudDtcclxufVxyXG5cclxuLmJnLTEgLm5hdi1saW5rOmhvdmVyIHtcclxuICAgIGNvbG9yOiAjMkE5RDhGICFpbXBvcnRhbnQ7XHJcbn1cclxuXHJcbiAuY3VzdG9tLWp1bWJvdHJvbiB7XHJcbiAgICAgYmFja2dyb3VuZC1zaXplOiBjb3ZlcjtcclxuICAgICBiYWNrZ3JvdW5kLXBvc2l0aW9uOiBjZW50ZXI7XHJcbiAgICAgY29sb3I6IHdoaXRlO1xyXG4gICAgIHBhZGRpbmc6IDJyZW0gMXJlbTtcclxuICAgICBtYXJnaW4tdG9wOiAxcmVtO1xyXG4gICAgIHRleHQtYWxpZ246IGNlbnRlcjtcclxuIH1cclxuIiwiXHJcbi5zd2lwZXItY29udGFpbmVyIHtcclxuICAgIHdpZHRoOiAxMDAlO1xyXG4gICAgbWF4LWhlaWdodDogNTAwcHg7IC8qIFJlbXBsYWNleiBwYXIgbGEgaGF1dGV1ciBtYXhpbWFsZSBzb3VoYWl0w6llICovXHJcbiAgfVxyXG4gIFxyXG4gIC5zd2lwZXItc2xpZGUgaW1nIHtcclxuICAgIHdpZHRoOiAxMDAlO1xyXG4gICAgaGVpZ2h0OiBhdXRvO1xyXG4gICAgb2JqZWN0LWZpdDogY292ZXI7IC8qIENldHRlIHByb3ByacOpdMOpIHBlcm1ldCBkZSBzJ2Fzc3VyZXIgcXVlIGwnaW1hZ2UgY291dnJlIHRvdXRlIGxhIGhhdXRldXIgZGUgbGEgc2xpZGUgKi9cclxuICB9XHJcbiAgXHJcblxyXG4uc3dpcGVyLXBhZ2luYXRpb24tYnVsbGV0IHtcclxuICAgIGJhY2tncm91bmQ6ICNGMUZBRUU7XHJcbiAgfVxyXG4gIFxyXG4gIC5zd2lwZXItYnV0dG9uLW5leHQsXHJcbiAgLnN3aXBlci1idXR0b24tcHJldiB7XHJcbiAgICBjb2xvcjogIzJBOUQ4RjtcclxuICB9XHJcbiAgIl0sIm5hbWVzIjpbXSwic291cmNlUm9vdCI6IiJ9*/
