@@ -79,14 +79,13 @@
     "scripts": {
         "auto-scripts": {
             "cache:clear": "symfony-cmd",
-            "assets:install %PUBLIC_DIR%": "symfony-cmd",
-            "importmap:install": "symfony-cmd"
+            "assets:install %PUBLIC_DIR%": "symfony-cmd"
         },
         "post-install-cmd": [
-            "@auto-scripts"
+            "@php -r \"if (getenv('APP_ENV') !== 'prod') { passthru('composer run auto-scripts'); }\""
         ],
         "post-update-cmd": [
-            "@auto-scripts"
+            "@php -r \"if (getenv('APP_ENV') !== 'prod') { passthru('composer run auto-scripts'); }\""
         ]
     },
     "conflict": {
