@@ -19,6 +19,7 @@ class AnimalController extends AbstractController
         $animal = new Animal();
         $form = $this->createForm(AnimalType::class, $animal);
         $form->handleRequest($request);
+        
 
         if ($form->isSubmitted() && $form->isValid()) {
             $uploadedImages = $form->get('uploadImages')->getData();
@@ -26,7 +27,6 @@ class AnimalController extends AbstractController
             if ($uploadedImages) {
                 $animalService->handleUploadedImages($uploadedImages, $animal);
             }
-
             $entityManager->persist($animal);
             $entityManager->flush();
 

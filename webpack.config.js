@@ -1,38 +1,28 @@
-const Encore = require('@symfony/webpack-encore');
+const Encore = require('@symfony/webpack-encore'); // Import the Encore library from Symfony
 
-// Configure le runtime environnement si ce n'est pas déjà fait
+// Configure the runtime environment if it is not already configured
 if (!Encore.isRuntimeEnvironmentConfigured()) {
-    Encore.configureRuntimeEnvironment(process.env.NODE_ENV || 'dev');
+    Encore.configureRuntimeEnvironment(process.env.NODE_ENV || 'dev'); // Set the runtime environment to the value of NODE_ENV or 'dev' if NODE_ENV is not set
 }
 
 Encore
-    // Répertoire où les assets compilés seront stockés
     .setOutputPath('public/build/')
-    // Chemin public utilisé par le serveur web pour accéder aux assets
     .setPublicPath('/build')
-    // Ajouter une entrée pour l'application
     .addEntry('app', './assets/js/app.js')
-    // Permet de diviser les fichiers en plus petits morceaux pour une optimisation accrue
     .addEntry('delete', './assets/js/delete.js')
-    // Ajout de delete.js
     .splitEntryChunks()
-    // Active un fichier de runtime unique
     .enableSingleRuntimeChunk()
-    // Nettoie le répertoire de sortie avant chaque build
     .cleanupOutputBeforeBuild()
-    // Active les notifications de build
     .enableBuildNotifications()
-    // Active les maps sources pour le debug (désactivé en production)
     .enableSourceMaps(!Encore.isProduction())
-    // Active les noms de fichiers avec hash pour le cache busting
     .enableVersioning(Encore.isProduction())
-    // Configure Babel pour utiliser des polyfills
     .configureBabelPresetEnv((config) => {
         config.useBuiltIns = 'usage';
         config.corejs = '3.23';
     })
-    // Active le preset React
     .enableReactPreset()
-;
+    .enablePostCssLoader() // Ajout du support pour PostCSS
+    .addStyleEntry('styles', './assets/styles/app.css'); // Ajout d'une entrée spécifique pour les styles CSS
 
-module.exports = Encore.getWebpackConfig();
+
+module.exports = Encore.getWebpackConfig(); // Export the final Webpack configuration

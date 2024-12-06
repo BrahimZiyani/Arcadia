@@ -55,6 +55,7 @@ class AnimalType extends AbstractType
                                 'image/jpeg',
                                 'image/png',
                                 'image/gif',
+                                'image/webp',
                             ],
                             'mimeTypesMessage' => 'Veuillez uploader une image valide (JPEG, PNG ou GIF).',
                         ])

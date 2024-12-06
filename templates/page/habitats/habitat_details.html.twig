@@ -52,7 +52,9 @@
                         <h5 class="card-title">{{ animal.nom }}</h5>
 
                         {% if animal.images|length > 0 %}
-                            <img src="{{ asset('uploads/animals/' ~ animal.images[0]) }}" alt="{{ animal.nom }}" class="img-fluid mb-3">
+                            <a href="{{ path('animal_details', {'id': animal.id}) }}">
+                                <img src="{{ asset('uploads/animals/' ~ animal.images[0]) }}" alt="{{ animal.nom }}" class="img-fluid mb-3">
+                            </a>
                         {% else %}
                             <p class="text-muted">Pas d'image disponible</p>
                         {% endif %}
@@ -65,6 +67,5 @@
         {% else %}
             <p class="text-center col-12">Aucun animal trouvé dans cet habitat.</p>
         {% endfor %}
-    </div>
     </div>
 {% endblock %}

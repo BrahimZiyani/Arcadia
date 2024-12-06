@@ -15,14 +15,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[Route('/admin/users')]
 class UserController extends AbstractController
 {
-    #[Route('/', name: 'user_index', methods: ['GET'])]
-    #[IsGranted('ROLE_ADMIN')]
-    public function index(UserRepository $userRepository): Response
-    {
-        return $this->render('user/index.html.twig', [
-            'users' => $userRepository->findAll(),
-        ]);
-    }
 
     #[Route('/new', name: 'user_new', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_ADMIN')]
@@ -35,7 +27,7 @@ class UserController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $userManager->creerUser($user);
 
-            return $this->redirectToRoute('user_index');
+            return $this->redirectToRoute('app_profile');
         }
 
         return $this->render('user/new.html.twig', [
@@ -52,9 +44,8 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $userManager->modifierUser();
-
-            return $this->redirectToRoute('user_index');
+            $userManager->modifierUser($user); // Passer $user ici
+            return $this->redirectToRoute('app_profile');
         }
 
         return $this->render('user/edit.html.twig', [
@@ -63,14 +54,27 @@ class UserController extends AbstractController
         ]);
     }
 
+
     #[Route('/{id}', name: 'user_delete', methods: ['POST'])]
     #[IsGranted('ROLE_ADMIN')]
     public function delete(Request $request, User $user, UserManager $userManager): Response
     {
+        dump('Suppression en cours pour l\'utilisateur : ', $user->getId());
+        
         if ($this->isCsrfTokenValid('delete' . $user->getId(), $request->request->get('_token'))) {
-            $userManager->supprimerUser($user);
+            try {
+                $userManager->supprimerUser($user);
+                $this->addFlash('success', 'Utilisateur supprimé avec succès.');
+            } catch (\Exception $e) {
+                dump('Erreur lors de la suppression : ' . $e->getMessage());
+                $this->addFlash('error', 'Erreur lors de la suppression.');
+            }
+        } else {
+            dump('Token CSRF invalide.');
+            $this->addFlash('error', 'Suppression annulée, token CSRF invalide.');
         }
 
-        return $this->redirectToRoute('user_index');
+        return $this->redirectToRoute('app_profile');
     }
+
 }

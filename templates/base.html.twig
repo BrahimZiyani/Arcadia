@@ -10,10 +10,10 @@
 
     <!-- Bootstrap CSS depuis un CDN -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+{% block stylesheets %}
+    {{ encore_entry_link_tags('app') }}
+{% endblock %}
 
-    {% block stylesheets %}
-        {{ encore_entry_link_tags('app') }}
-    {% endblock %}
 </head>
 <body>
 <!-- Barre de navigation -->
