@@ -153,12 +153,12 @@ class PageController extends AbstractController
     #[Route('/conditions-utilisation', name: 'app_conditions_utilisation')]
     public function conditionsUtilisation(): Response
     {
-        return $this->render('legal/conditions_utilisation.html.twig');
+        return $this->render('page/legal/conditions_utilisation.html.twig');
     }
 
     #[Route('/politique-confidentialite', name: 'app_politique_confidentialite')]
     public function politiqueConfidentialite(): Response
     {
-        return $this->render('legal/politique_confidentialite.html.twig');
+        return $this->render('page/legal/politique_confidentialite.html.twig');
     }
 }
