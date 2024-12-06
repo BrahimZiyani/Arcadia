@@ -13,7 +13,7 @@ return [[
         'app' => [
             'js' => [
                 '/build/runtime.js',
-                '/build/vendors-node_modules_sweetalert2_dist_sweetalert2_all_js-node_modules_core-js_internals_array-f91572.js',
+                '/build/vendors-node_modules_sweetalert2_dist_sweetalert2_all_js-node_modules_core-js_modules_es_arra-0950c8.js',
                 '/build/vendors-node_modules_swiper_modules_navigation_css-node_modules_swiper_modules_pagination_css-e0a7f9.js',
                 '/build/app.js',
             ],
@@ -25,9 +25,16 @@ return [[
         'delete' => [
             'js' => [
                 '/build/runtime.js',
-                '/build/vendors-node_modules_sweetalert2_dist_sweetalert2_all_js-node_modules_core-js_internals_array-f91572.js',
-                '/build/vendors-node_modules_core-js_modules_es_array_for-each_js-node_modules_core-js_modules_es_pro-54b034.js',
+                '/build/vendors-node_modules_sweetalert2_dist_sweetalert2_all_js-node_modules_core-js_modules_es_arra-0950c8.js',
                 '/build/delete.js',
+            ],
+        ],
+        'styles' => [
+            'js' => [
+                '/build/runtime.js',
+            ],
+            'css' => [
+                '/build/styles.css',
             ],
         ],
     ],
