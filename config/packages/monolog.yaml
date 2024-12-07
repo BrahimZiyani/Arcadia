@@ -1,7 +1,7 @@
 monolog:
     channels:
         - deprecation # Deprecations are logged in the dedicated "deprecation" channel when it exists
-        - security  # Ajout du canal de log de sécurité pour traquer les événements de sécurité
+        - security  # Canal de log de sécurité pour traquer les événements de sécurité
 
 when@dev:
     monolog:
@@ -16,14 +16,6 @@ when@dev:
                 path: "%kernel.logs_dir%/security.log"  # Les logs de sécurité seront enregistrés ici
                 level: debug
                 channels: ["security"]
-            # uncomment to get logging in your browser
-            # you may have to allow bigger header sizes in your Web server configuration
-            #firephp:
-            #    type: firephp
-            #    level: info
-            #chromephp:
-            #    type: chromephp
-            #    level: info
             console:
                 type: console
                 process_psr_3_messages: false
@@ -36,7 +28,7 @@ when@test:
                 type: fingers_crossed
                 action_level: error
                 handler: nested
-                excluded_http_codes: [404, 405]
+                excluded_http_codes: [404, 405]  # Correctement placé ici
                 channels: ["!event"]
             nested:
                 type: stream
@@ -50,8 +42,8 @@ when@prod:
                 type: fingers_crossed
                 action_level: error
                 handler: nested
-                excluded_http_codes: [404, 405]
-                buffer_size: 50 # How many messages should be saved? Prevent memory leaks
+                excluded_http_codes: [404, 405]  # Correctement placé ici
+                buffer_size: 50 # Pour limiter la taille en mémoire
             nested:
                 type: stream
                 path: php://stderr
