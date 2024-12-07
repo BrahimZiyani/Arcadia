@@ -26,7 +26,7 @@ class ContactController extends AbstractController
             try {
                 // Création de l'e-mail à envoyer
                 $email = (new Email())
-                    ->from('arcadia.zooapp@gmail.com') // Adresse validée dans SendGrid
+                    ->from('brahimziyani@gmail.com') // Adresse validée dans SendGrid
                     ->to('arcadia.zooapp@gmail.com') // Adresse de réception
                     ->replyTo($contact->getEmail()) // Email du visiteur pour permettre une réponse directe
                     ->subject('Nouveau message via le formulaire de contact')
