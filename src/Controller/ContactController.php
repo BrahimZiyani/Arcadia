@@ -26,27 +26,29 @@ class ContactController extends AbstractController
             try {
                 // Création de l'e-mail à envoyer
                 $email = (new Email())
-                    ->from($contact->getEmail()) // Email de l'expéditeur (l'utilisateur qui remplit le formulaire)
-                    ->to('arcadia.zooapp@gmail.com') // Adresse de réception (remplace par une adresse de test)
+                    ->from('arcadia.zooapp@gmail.com') // Adresse validée dans SendGrid
+                    ->to('arcadia.zooapp@gmail.com') // Adresse de réception (remplace par ton email personnel ou celui du support)
+                    ->replyTo($contact->getEmail()) // Email du visiteur pour permettre une réponse directe
                     ->subject('Nouveau message via le formulaire de contact')
                     ->text(sprintf(
                         "Vous avez reçu un message de : %s\n\nMessage:\n%s",
                         $contact->getEmail(),
                         $contact->getMessage()
                     ));
-
+        
                 // Envoi de l'e-mail avec le Mailer
                 $mailer->send($email);
-
+        
                 // Notification de succès pour l'utilisateur
                 $this->addFlash('success', 'Votre message a été envoyé avec succès.');
-
+        
                 return $this->redirectToRoute('app_contact');
             } catch (TransportExceptionInterface $e) {
                 // Gestion des erreurs d'envoi
                 $this->addFlash('error', 'Une erreur est survenue lors de l\'envoi de votre message. Veuillez réessayer plus tard.');
             }
         }
+        
 
         // Rendu du formulaire de contact
         return $this->render('page/contact/index.html.twig', [
