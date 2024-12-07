@@ -33,6 +33,6 @@ monolog:
 
         mailer:
             type: stream
-            path: php://stderr  # Logs envoyés directement dans les logs Heroku
+            path: php://stderr
             level: debug
             channels: ["mailer"]
