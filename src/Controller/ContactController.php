@@ -27,7 +27,7 @@ class ContactController extends AbstractController
                 // Création de l'e-mail à envoyer
                 $email = (new Email())
                     ->from($contact->getEmail()) // Email de l'expéditeur (l'utilisateur qui remplit le formulaire)
-                    ->to('test@example.com') // Adresse de réception (remplace par une adresse de test)
+                    ->to('arcadia.zooapp@gmail.com') // Adresse de réception (remplace par une adresse de test)
                     ->subject('Nouveau message via le formulaire de contact')
                     ->text(sprintf(
                         "Vous avez reçu un message de : %s\n\nMessage:\n%s",
