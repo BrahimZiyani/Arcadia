@@ -30,3 +30,9 @@ monolog:
             type: stream
             path: php://stderr
             channels: [deprecation]
+
+        mailer:
+            type: stream
+            path: php://stderr  # Logs envoyés directement dans les logs Heroku
+            level: debug
+            channels: ["mailer"]
