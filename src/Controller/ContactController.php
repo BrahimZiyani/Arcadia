@@ -26,14 +26,10 @@ class ContactController extends AbstractController
             try {
                 // Création de l'e-mail à envoyer
                 $email = (new Email())
-                    ->from('brahimziyani@gmail.com') // Adresse validée dans SendGrid
-                    ->to('arcadia.zooapp@gmail.com') // Adresse de réception
-                    ->subject('Nouveau message via le formulaire de contact')
-                    ->text(sprintf(
-                        "Vous avez reçu un message de : %s\n\nMessage:\n%s",
-                        $contact->getEmail(),
-                        $contact->getMessage()
-                    ));
+                ->from('brahimziyani@gmail.com') // Adresse valide
+                ->to('arcadia.zooapp@gmail.com') // Adresse de destination
+                ->subject('Test e-mail statique depuis /contact')
+                ->text('Ceci est un message de test statique.');
 
                 // Envoi de l'e-mail avec le Mailer
                 $mailer->send($email);
