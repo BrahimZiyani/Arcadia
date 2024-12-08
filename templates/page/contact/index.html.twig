@@ -29,6 +29,8 @@
                                 <label for="message" class="form-label" style="color: #353535;">Votre message</label>
                                 <textarea id="message" name="message" class="form-control" placeholder="Votre message" rows="5" required></textarea>
                             </div>
+                            {# Champ caché pour redirection après soumission #}
+                            <input type="hidden" name="_redirect" value="{{ path('app_thank_you') }}">
                             <button type="submit" class="btn text-white w-100" style="background-color: #2A9D8F;">
                                 Envoyer
                             </button>
