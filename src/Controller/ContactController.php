@@ -27,8 +27,7 @@ class ContactController extends AbstractController
 
             // Envoi de l'email
             $mailer->send($email);
-            throw new \Exception('Test d\'erreur contrôlé.');
-            
+           
 
             // Ajout de logs supplémentaires pour confirmer l'envoi
             error_log('Email envoyé avec succès à SendGrid.');
