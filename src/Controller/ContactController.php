@@ -2,7 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\ContactMessage;
+use App\Form\ContactMessageType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
@@ -12,29 +15,40 @@ use Symfony\Component\Routing\Annotation\Route;
 class ContactController extends AbstractController
 {
     #[Route('/contact', name: 'app_contact')]
-    public function index(MailerInterface $mailer): Response
+    public function index(Request $request, MailerInterface $mailer): Response
     {
-        try {
-            $email = (new Email())
-                ->from('brahimziyani@gmail.com') // Adresse validée dans SendGrid
-                ->to('arcadia.zooapp@gmail.com') // Adresse de réception
-                ->subject('Test direct depuis le contrôleur statique')
-                ->html('<p>Ceci est un test d\'envoi statique depuis le contrôleur Symfony.</p>');
-        
-            error_log('Tentative d\'envoi d\'email statique...');
-            $mailer->send($email);
-            error_log('E-mail statique envoyé avec succès.');
-        
-            $this->addFlash('success', 'L\'email statique a été envoyé avec succès.');
-        } catch (TransportExceptionInterface $e) {
-            error_log('Erreur d\'envoi d\'e-mail statique : ' . $e->getMessage());
-            $this->addFlash('error', 'Erreur lors de l\'envoi de l\'email statique.');
-        }
-        
+        // Création du formulaire et gestion de la soumission
+        $contact = new ContactMessage();
+        $form = $this->createForm(ContactMessageType::class, $contact);
+        $form->handleRequest($request);
 
-        // Rendu d'une page simple (ou formulaire si vous souhaitez tester)
+        if ($form->isSubmitted() && $form->isValid()) {
+            try {
+                // Création de l'e-mail
+                $email = (new Email())
+                    ->from('brahimziyani@gmail.com') // Adresse validée dans SendGrid
+                    ->replyTo($contact->getEmail()) // Email de l'utilisateur pour réponse
+                    ->to('arcadia.zooapp@gmail.com') // Adresse de réception
+                    ->subject('Nouveau message via le formulaire de contact')
+                    ->html("
+                        <p><strong>Email de l'utilisateur :</strong> {$contact->getEmail()}</p>
+                        <p><strong>Message :</strong><br>{$contact->getMessage()}</p>
+                    ");
+
+                $mailer->send($email);
+
+                // Notification de succès pour l'utilisateur
+                $this->addFlash('success', 'Votre message a été envoyé avec succès.');
+            } catch (TransportExceptionInterface $e) {
+                // Gestion des erreurs d'envoi
+                $this->addFlash('error', 'Une erreur est survenue lors de l\'envoi de votre message.');
+                error_log('Erreur d\'envoi : ' . $e->getMessage());
+            }
+        }
+
+        // Rendu du formulaire de contact
         return $this->render('page/contact/index.html.twig', [
-            'form' => null,
+            'form' => $form->createView(), // Important pour afficher le formulaire
         ]);
     }
 }
