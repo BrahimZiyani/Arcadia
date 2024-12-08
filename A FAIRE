@@ -1,10 +1,5 @@
 # Liste de choses à faire pour finir le projet Symfony
 
-- Optimiser et déployer
-    - Optimiser les performances (cache, optimisation des requêtes)
-    - Configurer l'environnement de production
-    - Déployer le projet sur le serveur
-
 - Documentation
     - Documenter le code
     - Rédiger un guide d'utilisation

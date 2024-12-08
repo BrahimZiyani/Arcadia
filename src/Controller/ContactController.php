@@ -13,11 +13,4 @@ class ContactController extends AbstractController
         // Rendu de la page de contact avec le formulaire Formspree intégré dans le template
         return $this->render('page/contact/index.html.twig');
     }
-
-        
-    #[Route('/merci', name: 'app_thank_you')]
-    public function thankYou(): Response
-    {
-        return $this->render('page/merci.html.twig');
-    }
 }
