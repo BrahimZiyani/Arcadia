@@ -1,4 +1,9 @@
 framework:
     mailer:
         dsn: '%env(MAILER_DSN)%'
-        
+        messenger: false
+
+    messenger:
+        transports:
+            async: null
+        default_bus: messenger.bus.default
