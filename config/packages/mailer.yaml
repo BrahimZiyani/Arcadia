@@ -1,9 +1,8 @@
 framework:
     mailer:
-        dsn: '%env(MAILER_DSN)%'
-        messenger: false
+        dsn: 'null://localhost' # Si tu n'utilises pas de service d'envoi d'e-mails, mais veux éviter des erreurs.
+        enabled: true # Active le mailer
+        transports: { } # Pas de transports configurés
 
     messenger:
-        transports:
-            async: null
-        default_bus: messenger.bus.default
+        enabled: false # Désactive Messenger si tu n'as pas besoin de file d'attente ou traitement asynchrone
