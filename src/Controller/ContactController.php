@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
@@ -12,30 +13,28 @@ use Symfony\Component\Routing\Annotation\Route;
 class ContactController extends AbstractController
 {
     #[Route('/contact', name: 'app_contact')]
-    public function index(MailerInterface $mailer): Response
+    public function index(Request $request, MailerInterface $mailer): Response
     {
+        // Test d'envoi direct d'un email statique
         try {
-            // Création d'un email statique
             $email = (new Email())
                 ->from('brahimziyani@gmail.com') // Adresse validée dans SendGrid
                 ->to('arcadia.zooapp@gmail.com') // Adresse de réception
-                ->subject('Test direct depuis le contrôleur')
-                ->html('<p>Ceci est un test d\'envoi direct depuis le contrôleur.</p>');
+                ->subject('Test depuis Symfony ContactController')
+                ->html('<p>Ceci est un test d\'email envoyé depuis le contrôleur.</p>');
 
-            // Envoi de l'email
             $mailer->send($email);
 
-            // Notification pour succès
-            $this->addFlash('success', 'Email statique envoyé avec succès.');
+            $this->addFlash('success', 'L\'email a été envoyé avec succès.');
         } catch (TransportExceptionInterface $e) {
-            // Gestion des erreurs
-            $this->addFlash('error', 'Erreur lors de l\'envoi de l\'email statique.');
-            error_log('Erreur d\'envoi statique : ' . $e->getMessage());
+            $this->addFlash('error', 'Une erreur est survenue lors de l\'envoi de l\'email : ' . $e->getMessage());
+        } catch (\Throwable $e) {
+            $this->addFlash('error', 'Erreur inattendue : ' . $e->getMessage());
         }
 
-        // Rendu de la vue
+        // Rendu de la page avec message flash
         return $this->render('page/contact/index.html.twig', [
-            'form' => null, // Pas de formulaire dans ce cas
+            'form' => null, // Si aucun formulaire, on affiche juste le message
         ]);
     }
 }
