@@ -35,6 +35,9 @@ class ContactController extends AbstractController
                         <p><strong>Message :</strong><br>{$contact->getMessage()}</p>
                     ");
 
+                // Log the email content for debugging
+                error_log('Email content: ' . $email->getHtmlBody());
+
                 // Envoi de l'email
                 $mailer->send($email);
 
