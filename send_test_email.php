@@ -13,7 +13,7 @@ $transport = Transport::fromDsn($dsn);
 $mailer = new Mailer($transport);
 
 $email = (new Email())
-    ->from('arcadia.zooapp@gmail.com') // Adresse validée dans SendGrid
+    ->from('brahimziyani@gmail.com') // Adresse validée dans SendGrid
     ->to('arcadia.zooapp@gmail.com')   // Adresse de destination
     ->subject('Test Symfony Mailer')
     ->text('Ceci est un e-mail de test depuis Symfony Mailer.');
