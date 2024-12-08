@@ -15,26 +15,22 @@ class ContactController extends AbstractController
     public function index(MailerInterface $mailer): Response
     {
         try {
-            // Création de l'e-mail statique
             $email = (new Email())
                 ->from('brahimziyani@gmail.com') // Adresse validée dans SendGrid
                 ->to('arcadia.zooapp@gmail.com') // Adresse de réception
-                ->subject('Test d\'envoi statique depuis le contrôleur')
-                ->html('<p>Ceci est un test d\'envoi d\'e-mail statique depuis le contrôleur Symfony.</p>');
-
-            // Envoi de l'email
+                ->subject('Test direct depuis le contrôleur statique')
+                ->html('<p>Ceci est un test d\'envoi statique depuis le contrôleur Symfony.</p>');
+        
+            error_log('Tentative d\'envoi d\'email statique...');
             $mailer->send($email);
-
-            // Log de confirmation
-            error_log('Email statique envoyé avec succès.');
-
-            // Affichage d’un message de confirmation à l’utilisateur
+            error_log('E-mail statique envoyé avec succès.');
+        
             $this->addFlash('success', 'L\'email statique a été envoyé avec succès.');
         } catch (TransportExceptionInterface $e) {
-            // Gestion des erreurs d'envoi
-            $this->addFlash('error', 'Erreur lors de l\'envoi de l\'email statique.');
             error_log('Erreur d\'envoi d\'e-mail statique : ' . $e->getMessage());
+            $this->addFlash('error', 'Erreur lors de l\'envoi de l\'email statique.');
         }
+        
 
         // Rendu d'une page simple (ou formulaire si vous souhaitez tester)
         return $this->render('page/contact/index.html.twig', [
