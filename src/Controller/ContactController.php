@@ -24,14 +24,18 @@ class ContactController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             try {
-                // Création de l'e-mail à envoyer
+                // Création de l'e-mail
                 $email = (new Email())
-                ->from('brahimziyani@gmail.com') // Adresse valide
-                ->to('arcadia.zooapp@gmail.com') // Adresse de destination
-                ->subject('Test e-mail statique depuis /contact')
-                ->text('Ceci est un message de test statique.');
+                    ->from('brahimziyani@gmail.com') // Adresse validée dans SendGrid
+                    ->replyTo($contact->getEmail()) // Email de l'utilisateur pour réponse
+                    ->to('arcadia.zooapp@gmail.com') // Adresse de réception
+                    ->subject('Nouveau message via le formulaire de contact')
+                    ->html("
+                        <p><strong>Email de l'utilisateur :</strong> {$contact->getEmail()}</p>
+                        <p><strong>Message :</strong><br>{$contact->getMessage()}</p>
+                    ");
 
-                // Envoi de l'e-mail avec le Mailer
+                // Envoi de l'email
                 $mailer->send($email);
 
                 // Notification de succès pour l'utilisateur
@@ -41,8 +45,6 @@ class ContactController extends AbstractController
             } catch (TransportExceptionInterface $e) {
                 // Gestion des erreurs d'envoi
                 $this->addFlash('error', 'Une erreur est survenue lors de l\'envoi de votre message. Veuillez réessayer plus tard.');
-                
-                // Ajout de l'erreur dans les logs pour diagnostic
                 error_log('Erreur d\'envoi d\'e-mail : ' . $e->getMessage());
             }
         }
